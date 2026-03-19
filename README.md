@@ -1,50 +1,134 @@
-# Welcome to your Expo app 👋
+# 🛠️ Auravision – Proyecto Expo de Programación Móvil
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+¡Bienvenido al repositorio de **Auravision**!
 
-## Get started
+Aplicación móvil desarrollada con **Expo / React Native**, orientada a funcionar para gafas inteligentes. Este proyecto integra tecnologías modernas enfocadas en accesibilidad e interacción.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 📦 Acerca del Proyecto
 
-2. Start the app
+**Auravision** es una aplicación móvil creada con `create-expo-app`, diseñada como base para el desarrollo de soluciones enfocadas en asistencia para personas no videntes.
 
-   ```bash
-   npx expo start
-   ```
+El proyecto contempla la integración de:
 
-In the output, you'll find options to open the app in a
+- 🔵 Conectividad **Bluetooth**
+- 🗣️ **Text-to-Speech (TTS)**
+- ♿ **Accesibilidad** (TalkBack)
+- 🤖 Integración con **LLM**
+- 📱 Compatibilidad con Android e iOS mediante Expo
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🚀 Requisitos Previos
 
-## Get a fresh project
+Antes de comenzar, asegúrate de tener instalado:
 
-When you're ready, run:
+- Node.js (versión LTS recomendada)
+- npm o yarn
+- 📱 **Expo Go** en tu dispositivo:
+  - Android (Google Play)
+  - iOS (App Store)
+- (Opcional) Android Studio + SDK (para emulador)
+
+---
+
+## ⚙️ Instalación y Ejecución
+
+Sigue estos pasos para levantar el proyecto en tu entorno local.
+
+### 1️⃣ Clonar el repositorio
 
 ```bash
-npm run reset-project
+git clone https://github.com/xtron3r/AuraVision_2.0.git
+cd AuraVision_2.0
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2️⃣ Instalar dependencias
 
-## Learn more
+Con npm:
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npm install
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Con yarn:
 
-## Join the community
+```bash
+yarn
+```
 
-Join our community of developers creating universal apps.
+### 3️⃣ Iniciar servidor de desarrollo
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npx expo start
+```
+
+Esto abrirá el panel de Expo (Metro Bundler) con código QR para ejecutar la app en un dispositivo físico usando Expo Go.
+
+---
+
+## 📱 Ejecutar en dispositivo o emulador
+
+### Android
+
+```bash
+npx expo start --android
+```
+
+### iOS (solo macOS o Expo Go)
+
+```bash
+npx expo start --ios
+```
+
+### Web (opcional)
+
+```bash
+npx expo start --web
+```
+
+---
+
+## 🧪 Comandos útiles durante desarrollo
+
+```bash
+# Instalar una librería compatible con Expo
+npx expo install nombre-paquete
+
+# Limpiar cache de Metro en caso de errores
+npx expo start -c
+```
+
+---
+
+## 🗂️ Flujo de trabajo sugerido
+
+1. Edita pantallas y rutas dentro de `app/`.
+2. Usa Expo Router para navegación basada en archivos.
+3. Prueba en Android/iOS con Expo Go y valida accesibilidad (TalkBack).
+4. Mantén dependencias compatibles usando `expo install`.
+
+---
+
+## 📌 Estado del Proyecto
+
+🚧 En desarrollo - Proyecto académico / Capstone.
+
+---
+
+## 📫 Contacto
+
+Si deseas colaborar, reportar un bug o proponer mejoras para Auravision, puedes escribirme en:
+
+- GitHub: [xtron3r](https://github.com/xtron3r)
+- LinkedIn: [Aron Exequiel](https://www.linkedin.com/in/arone)
+
+<p align="left">
+	<a href="https://github.com/xtron3r">
+		<img src="https://img.shields.io/badge/GitHub-Perfil-181717?logo=github&logoColor=white" alt="GitHub" />
+	</a>
+	<a href="https://www.linkedin.com/in/arone">
+		<img src="https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?logo=linkedin&logoColor=white" alt="LinkedIn" />
+	</a>
+</p>

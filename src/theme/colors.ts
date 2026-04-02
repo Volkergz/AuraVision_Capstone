@@ -37,6 +37,14 @@ export const appColors = {
 } as const;
 
 export const appGradients = {
-  home: [appColors.backgroundTop, appColors.backgroundMid, appColors.backgroundBottom],
-  chat: [appColors.backgroundTop, appColors.backgroundMid, appColors.backgroundBottom],
+  home: [
+    appColors.backgroundTop,
+    appColors.backgroundMid,
+    appColors.backgroundBottom,
+  ],
+  chat: [
+    appColors.backgroundTop,
+    appColors.backgroundMid,
+    appColors.backgroundBottom,
+  ],
 } as const;

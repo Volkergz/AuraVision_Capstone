@@ -9,7 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import {
     KeyboardAvoidingView,
     Platform,
-  ScrollView,
+    ScrollView,
     StyleSheet,
     View,
     useWindowDimensions,
@@ -42,7 +42,9 @@ export default function ChatScreen() {
         : null;
 
       const responseText = payload.reply ?? payload.message ?? payload.text;
-      const summaryText = payload.summary ? `Resumen: ${payload.summary}` : null;
+      const summaryText = payload.summary
+        ? `Resumen: ${payload.summary}`
+        : null;
       const objectsText = objectLabels ? `Objetos: ${objectLabels}` : null;
 
       if (responseText) {
@@ -63,10 +65,14 @@ export default function ChatScreen() {
     ? Math.max(680, height - 40)
     : 560;
 
-  const chatGradient: [string, string, string] =
-    (appGradients?.chat as [string, string, string] | undefined) ??
-    (appGradients?.home as [string, string, string] | undefined) ??
-    [appColors.backgroundTop, appColors.backgroundMid, appColors.backgroundBottom];
+  const chatGradient: [string, string, string] = (appGradients?.chat as
+    | [string, string, string]
+    | undefined) ??
+    (appGradients?.home as [string, string, string] | undefined) ?? [
+      appColors.backgroundTop,
+      appColors.backgroundMid,
+      appColors.backgroundBottom,
+    ];
 
   if (!fontsLoaded) {
     return null;

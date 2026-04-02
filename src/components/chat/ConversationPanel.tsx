@@ -31,7 +31,6 @@ function ConversationPanelComponent({
     <View style={[styles.panel, { height: panelHeight }]}>
       <View style={styles.chatHeader}>
         <Text style={styles.chatTitle}>Chat</Text>
-        <Text style={styles.chatSubtitle}>{CHAT_COPY.emptyStateText}</Text>
       </View>
 
       {errorText ? (

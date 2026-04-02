@@ -31,7 +31,7 @@ export function CameraStreamPanel({
     <View style={styles.panel}>
       <View style={styles.topBar}>
         <View style={styles.topTitleBlock}>
-          <Text style={styles.pageTitle}>AuraVision Live</Text>
+          <Text style={styles.pageTitle}>Live</Text>
           <Text style={styles.pageSubtitle}>{CHAT_COPY.subtitle}</Text>
         </View>
 

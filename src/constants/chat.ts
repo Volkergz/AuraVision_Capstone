@@ -1,9 +1,8 @@
 export const CHAT_COPY = {
   title: "AuraVision",
-  subtitle: "Vista en tiempo real del lente y chat conectado al backend.",
+  subtitle: "Conexión en tiempo real",
   composerPlaceholder: "Escribe tu mensaje...",
   emptyStateTitle: "Sin mensajes aún",
-  emptyStateText: "Empieza una conversación y el backend responderá aquí.",
   permissionTitle: "Habilita la camara",
   permissionText:
     "La app necesita acceso a la camara para enviar frames al backend YOLO.",
@@ -18,9 +17,4 @@ export const YOLO_STREAM = {
   reconnectDelayMs: 1800,
   captureQuality: 0.2,
   pictureSize: "640x480",
-} as const;
-
-export const CHAT_BACKEND = {
-  apiUrl: "",
-  requestTimeoutMs: 15000,
 } as const;

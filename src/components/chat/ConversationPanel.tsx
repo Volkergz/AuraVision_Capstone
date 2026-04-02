@@ -1,10 +1,10 @@
 import { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { CHAT_COPY } from "../../constants/chat";
+import { appColors } from "../../theme/colors";
 import { ChatMessage } from "../../types/chat";
 import { ChatComposer } from "./ChatComposer";
 import { ChatMessageList } from "./ChatMessageList";
-import { appColors } from "../../theme/colors";
 
 type ConversationPanelProps = {
   panelHeight: number;

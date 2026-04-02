@@ -13,6 +13,7 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+import { appColors, appGradients } from "../theme/colors";
 
 export default function HomeScreen() {
   const { width } = useWindowDimensions();
@@ -36,7 +37,7 @@ export default function HomeScreen() {
 
   return (
     <LinearGradient
-      colors={["#2A134A", "#4A1F79", "#FFFFFF"]}
+      colors={appGradients.home as unknown as [string, string, string]}
       locations={[0, 0.58, 1]}
       style={styles.page}
     >
@@ -147,28 +148,28 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   headerCard: {
-    backgroundColor: "rgba(255, 255, 255, 0.14)",
+    backgroundColor: appColors.surfaceMuted,
     borderRadius: 24,
     padding: 20,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.28)",
+    borderColor: appColors.surfaceBorder,
   },
   brand: {
-    color: "#FFFFFF",
+    color: appColors.textInverse,
     fontFamily: "Sora_700Bold",
     fontSize: 30,
     marginBottom: 10,
     letterSpacing: 0.4,
   },
   heroTitle: {
-    color: "#F8ECFF",
+    color: appColors.accentWarm,
     fontFamily: "Sora_600SemiBold",
     fontSize: 21,
     lineHeight: 28,
     marginBottom: 8,
   },
   heroSubtitle: {
-    color: "#EEE4FF",
+    color: appColors.textSoft,
     fontFamily: "Sora_400Regular",
     fontSize: 14,
     lineHeight: 22,
@@ -188,11 +189,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   connectionCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: appColors.surfaceCard,
     borderRadius: 22,
     padding: 16,
     elevation: 3,
-    boxShadow: "0px 4px 8px rgba(40, 15, 74, 0.08)", // ← SOMBRA SUAVE
+    boxShadow: "0px 4px 8px rgba(40, 15, 74, 0.08)",
   },
   connectionRow: {
     flexDirection: "row",
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#EFE5FF",
+    backgroundColor: appColors.surfaceTint,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -212,12 +213,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   connectionLabel: {
-    color: "#5C3F86",
+    color: appColors.textStrong,
     fontFamily: "Sora_600SemiBold",
     fontSize: 14,
   },
   connectionValue: {
-    color: "#9B89B7",
+    color: appColors.textBody,
     fontFamily: "Sora_400Regular",
     fontSize: 12,
     marginTop: 2,
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
     borderRadius: 999,
-    backgroundColor: "#6B3AB2",
+    backgroundColor: appColors.accent,
     paddingHorizontal: 10,
     paddingVertical: 6,
   },
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
   metricCard: {
     flex: 1,
     borderRadius: 16,
-    backgroundColor: "#F7F2FF",
+    backgroundColor: appColors.surfaceSoft,
     alignItems: "center",
     paddingVertical: 12,
     gap: 4,

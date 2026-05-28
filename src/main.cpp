@@ -1,17 +1,22 @@
 #include <Arduino.h>
 
 // ==========================================
-// CONFIGURACIÓN Y PINES
+// CONFIGURACIÓN DE PINES (ESP32-S3 NATIVO)
 // ==========================================
-#define RX_PIN D0  
-#define TX_PIN D1  
-const int MUESTRAS = 5; // Cantidad de muestras para el filtro de precisión
+// Sensor 1
+#define S1_RX_PIN D0  
+#define S1_TX_PIN D1  
+
+// Sensor 2 (Pines limpios en la protoboard)
+#define S2_RX_PIN D6  
+#define S2_TX_PIN D7  
+
+// Optimización para movimiento
+const int MUESTRAS = 3; 
 
 // ==========================================
-// FUNCIONES INTERNAS (AUXILIARES)
+// FUNCIONES AUXILIARES (FILTRADO)
 // ==========================================
-
-// Función simple para ordenar los datos de menor a mayor
 void ordenarArray(float arr[], int n) {
   for (int i = 0; i < n - 1; i++) {
     for (int j = 0; j < n - i - 1; j++) {
@@ -24,79 +29,88 @@ void ordenarArray(float arr[], int n) {
   }
 }
 
-// Obtiene una sola lectura en cm del US-100
-float lecturaIndividualDistancia() {
-  while (Serial1.available()) Serial1.read(); // Limpiar ruidos
-  
-  Serial1.write(0x55); // Comando de distancia
-  delay(40);           // Tiempo de procesamiento del sensor
-  
-  if (Serial1.available() >= 2) {
-    byte alta = Serial1.read();
-    byte baja = Serial1.read();
-    int mm = (alta << 8) + baja;
-    return mm / 10.0; // Convertir a cm
-  }
-  return -1.0; // Retorna -1 si hubo error de lectura
-}
-
-
 // ==========================================
-// TU NUEVA FUNCIÓN PRINCIPAL DE DISTANCIA
+// FUNCIÓN CENTRAL DE LECTURA (UNIVERSAL)
 // ==========================================
-// Esta es la función que vas a llamar desde el loop o cualquier otra parte.
-// Devuelve la distancia filtrada en cm, o -1.0 si falla.
-float obtenerDistanciaPrecisa() {
+float medirDistanciaSensor(HardwareSerial &puertoSerial) {
   float lecturas[MUESTRAS];
   int lecturasValidas = 0;
-  
-  // Tomar la ráfaga de muestras para el filtro
+
   for (int i = 0; i < MUESTRAS; i++) {
-    float dist = lecturaIndividualDistancia();
-    if (dist > 1.5 && dist < 450.0) { // Filtrar rangos imposibles
-      lecturas[lecturasValidas] = dist;
-      lecturasValidas++;
+    // Limpiar basura del búfer antes de pedir datos
+    while (puertoSerial.available()) puertoSerial.read(); 
+    
+    puertoSerial.write(0x55); // Solicitar distancia por UART
+    delay(40);                // Tiempo físico que requiere el US-100 para calcular
+    
+    if (puertoSerial.available() >= 2) {
+      byte alta = puertoSerial.read();
+      byte baja = puertoSerial.read();
+      int mm = (alta << 8) + baja;
+      float cm = mm / 10.0;
+      
+      // Filtramos el rango de interés en movimiento (de 2 cm a 250 cm)
+      if (cm > 2.0 && cm < 250.0) { 
+        lecturas[lecturasValidas] = cm;
+        lecturasValidas++;
+      }
     }
     delay(15); 
   }
 
-  // Si logramos tomar lecturas estables, calculamos la mediana
   if (lecturasValidas > 0) {
     ordenarArray(lecturas, lecturasValidas);
-    return lecturas[lecturasValidas / 2]; // Devuelve el valor central (filtrado)
+    return lecturas[lecturasValidas / 2]; 
   }
   
-  return -1.0; // Si todo falló, devuelve error
+  return -1.0; 
 }
 
-
 // ==========================================
-// ESTRUCTURA PRINCIPAL DE ARDUINO
+// CONFIGURACIÓN PRINCIPAL
 // ==========================================
-
 void setup() {
-  Serial.begin(115200);
-  Serial1.begin(9600, SERIAL_8N1, RX_PIN, TX_PIN);
-  Serial.println("--- Sistema Modular Inicializado ---");
+  // OJO: En el XIAO ESP32-S3, 'Serial' es el USB nativo hacia la PC.
+  Serial.begin(115200); 
+  delay(1000); 
+  
+  // Inicializar Sensor 1 usando el puerto de hardware Serial1
+  Serial1.begin(9600, SERIAL_8N1, S1_RX_PIN, S1_TX_PIN);
+  
+  // Inicializar Sensor 2 usando el puerto de hardware Serial0 (remapeado a D6 y D7)
+  Serial0.begin(9600, SERIAL_8N1, S2_RX_PIN, S2_TX_PIN);
+  
+  Serial.println("--- Sistema Doble UART Inicializado con Éxito ---");
 }
 
+// ==========================================
+// BUCLE PRINCIPAL
+// ==========================================
 void loop() {
-  // Llamamos a tu función de forma súper limpia
-  float distanciaActual = obtenerDistanciaPrecisa();
+  // Medimos secuencialmente ambos sensores
+  float distSensor1 = medirDistanciaSensor(Serial1);
   
-  // Evaluamos el resultado de la función
-  if (distanciaActual != -1.0) {
-    Serial.print("Distancia: ");
-    Serial.print(distanciaActual, 2);
+  delay(20); // Micro pausa para evitar interferencia acústica en el aire
+  
+  float distSensor2 = medirDistanciaSensor(Serial0);
+
+  // --- Imprimir Resultados Sensor 1 ---
+  Serial.print("Sensor 1: ");
+  if (distSensor1 != -1.0) {
+    Serial.print(distSensor1, 1);
+    Serial.print(" cm | ");
+  } else {
+    Serial.print("Fuera de rango | ");
+  }
+
+  // --- Imprimir Resultados Sensor 2 ---
+  Serial.print("Sensor 2: ");
+  if (distSensor2 != -1.0) {
+    Serial.print(distSensor2, 1);
     Serial.println(" cm");
   } else {
-    Serial.println("Error al medir distancia.");
+    Serial.println("Fuera de rango");
   }
 
-  // Aquí abajo podrás meter las llamadas a tus futuras funciones, por ejemplo:
-  // controlarMotorVibrador(distanciaActual);
-  // reproducirAudio(distanciaActual);
-  // leerGiroscopio();
-
-  delay(300); // Pausa global del ciclo
+  delay(100); 
 }

@@ -6,14 +6,14 @@ export const styles = StyleSheet.create({
     backgroundColor: '#7B2CBF',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
   },
 
   bienvenido: {
     color: '#FFFFFF',
-    fontSize: 42,
-    fontWeight: 'bold',
-    marginBottom: 25,
+    fontSize: 48,
+    fontWeight: 600,
+    marginBottom: 20,
   },
 
   card: {
@@ -21,12 +21,19 @@ export const styles = StyleSheet.create({
     maxWidth: 420,
     backgroundColor: '#FFFFFF',
     borderRadius: 35,
-    padding: 30,
+    paddingTop: 10,
+    paddingBottom: 30,
+    paddingRight: 35,
+    paddingLeft: 35,
+
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: -5 },
+    shadowOpacity:0.5,
+    shadowRadius: 15,
     elevation: 5,
+
+    borderTopWidth: 10,
+    borderTopColor: '#2A134A',
   },
 
   logo: {
@@ -34,13 +41,12 @@ export const styles = StyleSheet.create({
     height: 180,
     alignSelf: 'center',
     resizeMode: 'contain',
-    marginBottom: 10,
   },
 
   title: {
     textAlign: 'center',
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontWeight: 600,
     color: '#24123A',
     marginBottom: 25,
   },

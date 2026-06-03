@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -5 },
-    shadowOpacity:0.5,
+    shadowOpacity: 0.5,
     shadowRadius: 15,
     elevation: 5,
 
@@ -46,46 +46,63 @@ export const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: 32,
-    fontWeight: 600,
+    fontWeight: 700,
     color: '#24123A',
     marginBottom: 25,
   },
 
   label: {
-    fontSize: 15,
+    fontSize: 20,
     fontWeight: '600',
     color: '#24123A',
     marginBottom: 6,
   },
 
   input: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#D8D8D8',
+    flex: 1,
+    fontSize: 14,
+  },
+
+  inputGradient: {
     borderRadius: 25,
+    height: 35,
+    justifyContent: 'center',
     paddingHorizontal: 18,
-    marginBottom: 15,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#000000',
+  },
+
+  inputWrapper: {
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: '#000000',
+    overflow: 'hidden',
   },
 
   forgotPassword: {
-    textAlign: 'right',
-    color: '#666',
-    fontSize: 12,
+    textAlign: 'center',
+    fontWeight: '700',
+    color: '#24123A',
+    fontSize: 14,
     marginBottom: 20,
+    marginTop: 20,
   },
 
   button: {
     backgroundColor: '#24123A',
-    height: 50,
+    height: 40,
+    width: 180,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
   },
 
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '600',
   },
 
   registerContainer: {
@@ -94,8 +111,9 @@ export const styles = StyleSheet.create({
   },
 
   registerText: {
-    color: '#555',
-    marginBottom: 5,
+    color: '#24123A',
+    fontWeight: '700',
+    fontSize: 14,
   },
 
   registerLink: {

@@ -1,12 +1,17 @@
 // Importación de hook para manejar estados
 import { useState } from 'react';
 
+// Importación para fondo degradado
+import { LinearGradient } from 'expo-linear-gradient';
+
 // Importación de estilos
 import { styles } from '../constants/styles';
 
 // Importación de componentes para interfaz
-import {View, Text, TextInput, TouchableOpacity, Image, ScrollView,
-  KeyboardAvoidingView, Platform} from 'react-native';
+import {
+  View, Text, TextInput, TouchableOpacity, Image, ScrollView,
+  KeyboardAvoidingView, Platform
+} from 'react-native';
 
 // Definición de estados
 export default function Login() {
@@ -14,7 +19,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-// Función simulada para manejar el inicio de sesión (evitar enviar campos vacíos)
+  // Función simulada para manejar el inicio de sesión (evitar enviar campos vacíos)
   const handleLogin = () => {
     setError('');
 
@@ -35,9 +40,14 @@ export default function Login() {
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
+        
+        <LinearGradient
+          colors={['#DEAFFF', '#773DC7']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.container}
+        >
 
-     {/* Contenedor principal */}
-        <View style={styles.container}>
           <Text style={styles.bienvenido}>¡Bienvenido!</Text>
 
           <View style={styles.card}>
@@ -52,28 +62,40 @@ export default function Login() {
               <Text style={styles.errorText}>{error}</Text>
             )}
 
-           {/* Campo Email */}
             <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              placeholder=""
-              placeholderTextColor="#999"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
 
-            {/* Campo Contraseña */}
+            <LinearGradient
+              colors={['#D7CFCF', '#EBEBEB']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.inputGradient}
+            >
+              <TextInput
+                style={styles.input}
+                placeholder=""
+                placeholderTextColor="#999"
+                value={email}
+                onChangeText={setEmail}
+              />
+            </LinearGradient>
+
             <Text style={styles.label}>Contraseña</Text>
-            <TextInput
-              style={styles.input}
-              placeholder=""
-              placeholderTextColor="#999"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
+
+            <LinearGradient
+              colors={['#D7CFCF', '#EBEBEB']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.inputGradient}
+            >
+              <TextInput
+                style={styles.input}
+                placeholder=""
+                placeholderTextColor="#999"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+            </LinearGradient>
 
             <TouchableOpacity>
               <Text style={styles.forgotPassword}>
@@ -97,7 +119,9 @@ export default function Login() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+
+        </LinearGradient>
+
       </ScrollView>
     </KeyboardAvoidingView>
   );

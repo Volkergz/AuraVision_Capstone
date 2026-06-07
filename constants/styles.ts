@@ -1,19 +1,13 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: '#7B2CBF',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 30,
-  },
-
-  bienvenido: {
-    color: '#FFFFFF',
-    fontSize: 48,
-    fontWeight: 600,
-    marginBottom: 20,
   },
 
   card: {
@@ -25,30 +19,41 @@ export const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingRight: 35,
     paddingLeft: 35,
-
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -5 },
     shadowOpacity: 0.5,
     shadowRadius: 15,
     elevation: 5,
-
     borderTopWidth: 10,
     borderTopColor: '#2A134A',
   },
 
+  tittle: {
+    color: '#FFFFFF',
+    fontSize: 48,
+    fontWeight: 600,
+    marginBottom: 20,
+  },
+
   logo: {
-    width: 180,
+    width: '60%',
     height: 180,
     alignSelf: 'center',
     resizeMode: 'contain',
   },
 
-  title: {
+  subtittle: {
     textAlign: 'center',
     fontSize: 32,
-    fontWeight: 700,
+    fontWeight: 600,
     color: '#24123A',
     marginBottom: 25,
+    textShadowColor: 'rgba(0,0,0,0.45)',
+    textShadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    textShadowRadius: 4,
   },
 
   label: {
@@ -60,23 +65,17 @@ export const styles = StyleSheet.create({
 
   input: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 16,
   },
 
   inputGradient: {
-    borderRadius: 25,
-    height: 35,
-    justifyContent: 'center',
+    height: 36,
+    borderRadius: 19,
+    borderWidth: 1.5,
+    borderColor: '#000',
     paddingHorizontal: 18,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#000000',
-  },
-
-  inputWrapper: {
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: '#000000',
+    justifyContent: 'center',
+    marginBottom: 20,
     overflow: 'hidden',
   },
 
@@ -87,6 +86,12 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 20,
     marginTop: 20,
+  },
+
+  buttonContainer: {
+    alignSelf: 'center',
+    position: 'relative',
+    marginTop: 10,
   },
 
   button: {
@@ -105,26 +110,54 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  leftEdge: {
+    position: 'absolute',
+    top: -3,
+    left: -6,
+    width: 16,
+    height: 16,
+    borderTopWidth: 2,
+    borderLeftWidth: 2,
+    borderColor: '#24123A',
+    borderTopLeftRadius: 35,
+  },
+
+  rightEdge: {
+    position: 'absolute',
+    bottom: -3,
+    right: -6,
+    width: 16,
+    height: 16,
+    borderBottomWidth: 2,
+    borderRightWidth: 2,
+    borderColor: '#24123A',
+    borderBottomRightRadius: 35,
+  },
+
   registerContainer: {
     marginTop: 20,
     alignItems: 'center',
   },
 
-  registerText: {
+  textBelow: {
     color: '#24123A',
     fontWeight: '700',
     fontSize: 14,
   },
 
-  registerLink: {
-    color: '#24123A',
-    fontWeight: 'bold',
-  },
-
   errorText: {
     color: 'red',
-    fontSize: 12,
+    fontSize: 16,
+    fontWeight: 600,
     marginBottom: 10,
     textAlign: 'center',
+  },
+
+  backButton: {
+    position: 'absolute',
+    top: 15,
+    left: 15,
+    zIndex: 1,
+    padding: 5,
   },
 });

@@ -4,14 +4,14 @@ import { useState } from 'react';
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
 
+// Importación para navegación entre pantallas
+import { router } from 'expo-router';
+
 // Importación de estilos
 import { styles } from '../constants/styles';
 
 // Importación de componentes para interfaz
-import {
-  View, Text, TextInput, TouchableOpacity, Image, ScrollView,
-  KeyboardAvoidingView, Platform
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 
 // Definición de estados
 export default function Login() {
@@ -19,109 +19,127 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  // Función simulada para manejar el inicio de sesión (evitar enviar campos vacíos)
+  // Función para manejar el inicio de sesión (evitar enviar campos vacíos)
   const handleLogin = () => {
     setError('');
-
     if (!email || !password) {
-      setError('Completa todos los campos');
+      setError('Completa todos los campos.');
       return;
     }
 
-    console.log('Inicio de sesión correcta');
+    // Validación  email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      setError('Ingresa un email válido.');
+      return;
+    }
+
+    // Validar longitud mínima de contraseña
+    if (password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres.');
+      return;
+    }
+
+    console.log('Inicio de sesión con éxito.');
+    router.replace('/home');
   };
 
   return (
+
+    // Comportamiento de la interfaz en dispositivos
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        
+        keyboardShouldPersistTaps="handled">
+
+        {/* Fondo degrade */}
         <LinearGradient
           colors={['#DEAFFF', '#773DC7']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={styles.container}
-        >
+          style={styles.container}>
 
-          <Text style={styles.bienvenido}>¡Bienvenido!</Text>
+          {/* Título principal */}
+          <Text style={styles.tittle}>¡Bienvenido!</Text>
 
+          {/* Logo */}
           <View style={styles.card}>
             <Image
               source={require('../assets/images/logo.png')}
-              style={styles.logo}
-            />
+              style={styles.logo} />
 
-            <Text style={styles.title}>Inicio de sesión</Text>
+            {/* Subtítulo inicio de sesión */}
+            <Text style={styles.subtittle}>Inicio de sesión</Text>
 
+            {/* Campo email */}
+            <Text style={styles.label}>Email</Text>
+            <LinearGradient
+              colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+              locations={[0, 0.15, 0.5, 0.85, 1]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.inputGradient}>
+              <TextInput
+                style={styles.input}
+                placeholder=""
+                placeholderTextColor=""
+                value={email}
+                onChangeText={setEmail} />
+            </LinearGradient>
+
+            {/* Campo contraseña */}
+            <Text style={styles.label}>Contraseña</Text>
+            <LinearGradient
+              colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+              locations={[0, 0.15, 0.5, 0.85, 1]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.inputGradient}>
+              <TextInput
+                style={styles.input}
+                placeholder=""
+                placeholderTextColor=""
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry />
+            </LinearGradient>
+
+            {/* Mensaje de error campos vacíos */}
             {error !== '' && (
               <Text style={styles.errorText}>{error}</Text>
             )}
 
-            <Text style={styles.label}>Email</Text>
-
-            <LinearGradient
-              colors={['#D7CFCF', '#EBEBEB']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.inputGradient}
-            >
-              <TextInput
-                style={styles.input}
-                placeholder=""
-                placeholderTextColor="#999"
-                value={email}
-                onChangeText={setEmail}
-              />
-            </LinearGradient>
-
-            <Text style={styles.label}>Contraseña</Text>
-
-            <LinearGradient
-              colors={['#D7CFCF', '#EBEBEB']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.inputGradient}
-            >
-              <TextInput
-                style={styles.input}
-                placeholder=""
-                placeholderTextColor="#999"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-            </LinearGradient>
-
+            {/* Enlace para recuperar contraseña */}
             <TouchableOpacity>
               <Text style={styles.forgotPassword}>
                 ¿Olvidaste tu contraseña?
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-              <Text style={styles.buttonText}>Aceptar</Text>
-            </TouchableOpacity>
+            {/* Botón aceptar */}
+            <View style={styles.buttonContainer}>
+              <View style={styles.leftEdge} />
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleLogin}
+                activeOpacity={0.8}>
+                <Text style={styles.buttonText}>Aceptar</Text>
+              </TouchableOpacity>
+              <View style={styles.rightEdge} />
+            </View>
 
+            {/* Enlace registro */}
             <View style={styles.registerContainer}>
-              <Text style={styles.registerText}>
-                ¿No tienes cuenta?
-              </Text>
-
-              <TouchableOpacity>
-                <Text style={styles.registerLink}>
-                  Regístrate aquí
-                </Text>
+              <Text style={styles.textBelow}>¿No tienes cuenta?</Text>
+              <TouchableOpacity onPress={() => router.push('/register')}>
+                <Text style={styles.textBelow}>Regístrate aquí.</Text>
               </TouchableOpacity>
             </View>
           </View>
-
         </LinearGradient>
-
       </ScrollView>
     </KeyboardAvoidingView>
   );

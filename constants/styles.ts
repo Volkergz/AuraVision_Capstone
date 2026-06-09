@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 
+  //Estilo para contenedor principal
   container: {
     flex: 1,
     backgroundColor: '#7B2CBF',
@@ -10,6 +11,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
 
+  //Estilo para card
   card: {
     width: '100%',
     maxWidth: 420,
@@ -28,18 +30,30 @@ export const styles = StyleSheet.create({
     borderTopColor: '#2A134A',
   },
 
-  tittle: {
-    color: '#FFFFFF',
-    fontSize: 48,
-    fontWeight: 600,
-    marginBottom: 20,
-  },
-
+  //Estilos logo
   logo: {
     width: '60%',
     height: 180,
     alignSelf: 'center',
     resizeMode: 'contain',
+  },
+
+  //Estilos para logo pequeño 
+  logoSmall: {
+    position: 'absolute',
+    top: 15,
+    right: 20,
+    width: 80,
+    height: 60,
+    resizeMode: 'contain',
+  },
+
+  //Estilos para título y subtítulo
+  tittle: {
+    color: '#FFFFFF',
+    fontSize: 48,
+    fontWeight: 600,
+    marginBottom: 20,
   },
 
   subtittle: {
@@ -56,6 +70,22 @@ export const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
 
+  subtittleForgot: {
+    textAlign: 'center',
+    fontSize: 32,
+    fontWeight: 600,
+    color: '#24123A',
+    marginBottom: 25,
+    marginTop: 25,
+    textShadowColor: 'rgba(0,0,0,0.45)',
+    textShadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    textShadowRadius: 4,
+  },
+
+  //Estilos label
   label: {
     fontSize: 20,
     fontWeight: '600',
@@ -63,6 +93,7 @@ export const styles = StyleSheet.create({
     marginBottom: 6,
   },
 
+  //Estilos input
   input: {
     flex: 1,
     fontSize: 16,
@@ -79,6 +110,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
 
+  //Estilos para enlace de olvidaste tu contraseña
   forgotPassword: {
     textAlign: 'center',
     fontWeight: '700',
@@ -88,10 +120,18 @@ export const styles = StyleSheet.create({
     marginTop: 20,
   },
 
+  //Estilos botón
   buttonContainer: {
     alignSelf: 'center',
     position: 'relative',
     marginTop: 10,
+  },
+
+  buttonForgot: {
+    alignSelf: 'center',
+    position: 'relative',
+    marginTop: 20,
+    marginBottom: 15,
   },
 
   button: {
@@ -110,6 +150,7 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  //Estilos para bordes de botón
   leftEdge: {
     position: 'absolute',
     top: -3,
@@ -134,6 +175,7 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 35,
   },
 
+  //Estilos para ya tienes una cuenta (iniciar sesión)
   registerContainer: {
     marginTop: 20,
     alignItems: 'center',
@@ -145,6 +187,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
 
+  //Estilos para mensaje de error
   errorText: {
     color: 'red',
     fontSize: 16,
@@ -153,11 +196,237 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  //Estilo para botón volver
   backButton: {
     position: 'absolute',
     top: 15,
     left: 15,
     zIndex: 1,
     padding: 5,
+  },
+
+  //Estilos para texto de información en olvidaste tu contraseña
+  infoText: {
+    color: '#8A00FF',
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 20,
+
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    textShadowRadius: 4,
+  },
+
+  // Estilos para modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+
+  modalCard: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    paddingVertical: 45,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    position: 'relative',
+  },
+
+  closeModal: {
+    position: 'absolute',
+    top: 5,
+    right: 8,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  closeModalText: {
+    color: '#000',
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 22,
+  },
+
+  modalTitle: {
+    color: '#9B00FF',
+    fontSize: 26,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 35,
+    textShadowColor: 'rgba(0,0,0,0.35)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 3,
+  },
+
+  codeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 6,
+    marginBottom: 35,
+  },
+
+  codeInput: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1.5,
+    borderColor: '#000',
+    backgroundColor: '#EFEFEF',
+    textAlign: 'center',
+    fontSize: 18,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+
+  modalButton: {
+    backgroundColor: '#9B00FF',
+    width: 150,
+    height: 30,
+    borderRadius: 4,
+    borderWidth: 1.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  modalButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+
+  modalErrorText: {
+    color: 'red',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 25,
+  },
+
+  //Estilos home
+  homeContainer: {
+    flex: 1,
+    paddingHorizontal: 25,
+    paddingTop: 45,
+    paddingBottom: 20,
+    justifyContent: 'center',
+  },
+
+  homeCard: {
+    width: '100%',
+    height: 150,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+    marginBottom: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+
+  homeTextBox: {
+    flex: 1,
+    alignItems: 'center',
+  },
+
+  homeTitle: {
+    color: '#9B00FF',
+    fontSize: 22,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 12,
+    textShadowColor: 'rgba(0,0,0,0.35)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 3,
+  },
+
+  homeValue: {
+    color: '#24123A',
+    fontSize: 24,
+    fontWeight: '700',
+    marginRight: 25,
+  },
+
+  bottomNav: {
+    position: 'absolute',
+    bottom: 18,
+    left: 25,
+    right: 25,
+    height: 50,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+
+  },
+
+  bottomHome: {
+    paddingTop: 9,
+  },
+
+  navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  navTextActive: {
+    color: '#9B00FF',
+    fontSize: 11,
+    fontWeight: '700',
+  },
+
+  navText: {
+    color: '#555',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+
+  navItemActive: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 0,
+  },
+
+  activeLine: {
+    width: 55,
+    height: 4,
+    backgroundColor: '#9B00FF',
+    borderRadius: 2,
+    marginTop: 0,
   },
 });

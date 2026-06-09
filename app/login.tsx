@@ -113,7 +113,7 @@ export default function Login() {
             )}
 
             {/* Enlace para recuperar contraseña */}
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/forgot_password')}>
               <Text style={styles.forgotPassword}>
                 ¿Olvidaste tu contraseña?
               </Text>

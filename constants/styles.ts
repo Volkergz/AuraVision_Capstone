@@ -323,7 +323,7 @@ export const styles = StyleSheet.create({
     marginBottom: 25,
   },
 
-  //Estilos home
+  //Estilos i33nicio
   homeContainer: {
     flex: 1,
     paddingHorizontal: 25,
@@ -428,5 +428,119 @@ export const styles = StyleSheet.create({
     backgroundColor: '#9B00FF',
     borderRadius: 2,
     marginTop: 0,
+  },
+
+  //Estilos ajustes
+  settingCard: {
+    width: '86%',
+    height: 160,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginBottom: 26,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+
+  settingCardSmall: {
+    width: '86%',
+    height: 110,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginBottom: 26,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+
+  settingTitle: {
+    color: '#9B00FF',
+    fontSize: 22,
+    marginTop: 8,
+    fontWeight: '600',
+    textAlign: 'center',
+    textShadowColor: 'rgba(0,0,0,0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 3,
+  },
+
+  settingNumber: {
+    color: '#9B00FF',
+    fontSize: 42,
+    fontWeight: '700',
+    lineHeight: 45,
+  },
+
+  settingButton: {
+    minWidth: 102,
+    height: 24,
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+
+  settingButtonText: {
+    color: '#9B00FF',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  settingModalCard: {
+    width: '85%',
+    maxWidth: 330,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    paddingVertical: 35,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    position: 'relative',
+  },
+
+  settingModalTitle: {
+    color: '#9B00FF',
+    fontSize: 22,
+    fontWeight: '500',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+
+  settingCounterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '75%',
+    marginBottom: 25,
+  },
+
+  settingCounterButton: {
+    color: '#9B00FF',
+    fontSize: 36,
+    fontWeight: '800',
+    textShadowColor: 'rgba(0,0,0,0.35)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 4,
+  },
+
+  settingCounterNumber: {
+    color: '#9B00FF',
+    fontSize: 46,
+    fontWeight: '700',
+    textShadowColor: 'rgba(0,0,0,0.35)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 4,
   },
 });

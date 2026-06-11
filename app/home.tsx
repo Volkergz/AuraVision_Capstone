@@ -6,6 +6,8 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 // Importación de estilos
 import { styles } from '../constants/styles';
+//Importaciín navegación entre pantallas
+import { router } from 'expo-router';
 
 export default function Home() {
   return (
@@ -21,7 +23,7 @@ export default function Home() {
         source={require('../assets/images/logo.png')}
         style={styles.logoSmall} />
 
-      {/* Cards */}
+      {/* Card estado de conexión */}
       <View style={styles.homeCard}>
         <Ionicons name="git-network-outline" size={58} color="#9B00FF" />
         <View style={styles.homeTextBox}>
@@ -30,6 +32,7 @@ export default function Home() {
         </View>
       </View>
 
+      {/* Card porcentaje de batería */}
       <View style={styles.homeCard}>
         <Ionicons name="battery-half-outline" size={58} color="#9B00FF" />
         <View style={styles.homeTextBox}>
@@ -38,6 +41,7 @@ export default function Home() {
         </View>
       </View>
 
+      {/* Card tiempo restante de funcionamiento */}
       <View style={styles.homeCard}>
         <Ionicons name="time-outline" size={58} color="#9B00FF" />
         <View style={styles.homeTextBox}>
@@ -46,6 +50,7 @@ export default function Home() {
         </View>
       </View>
 
+      {/* Card última alerta detectada */}
       <View style={styles.homeCard}>
         <Ionicons name="notifications-outline" size={52} color="#9B00FF" />
         <View style={styles.homeTextBox}>
@@ -56,18 +61,24 @@ export default function Home() {
 
       {/* Nav Bar */}
       <View style={styles.bottomNav}>
+
+        {/* Botón inicio */}
         <TouchableOpacity style={[styles.navItem, styles.bottomHome]}>
           <Ionicons name="home-outline" size={22} color="#9B00FF" />
           <Text style={styles.navTextActive}>Inicio</Text>
           <View style={styles.activeLine} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem}>
+        {/* Botón ajustes */}
+        <TouchableOpacity style={styles.navItem}
+          onPress={() => router.push('/settings')}>
           <Ionicons name="options-outline" size={22} color="#555" />
           <Text style={styles.navText}>Ajustes</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem}>
+        {/* Botón perfil */}
+        <TouchableOpacity style={styles.navItem}
+          onPress={() => router.push('/profile')}>
           <Ionicons name="person-circle-outline" size={24} color="#555" />
           <Text style={styles.navText}>Perfil</Text>
         </TouchableOpacity>

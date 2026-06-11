@@ -14,19 +14,19 @@
 // ==========================================
 // CONFIGURACIÓN GENERAL
 // ==========================================
-const int MUESTRAS = 1;   // menor latencia
+const int MUESTRAS = 1;
 HardwareSerial SerialSensor2(2);
 
-// PWM por hardware (LEDC) - Core 2.x
+// PWM por hardware (LEDC)
 const int PWM_FREQ = 5000;
-const int PWM_RES = 8;      // 0 a 255
+const int PWM_RES = 8;
 const int PWM_CH_IZQ = 0;
 const int PWM_CH_DER = 1;
 
-// Variables para suavizar
+// Variables de suavizado
 float pwmSuaveIzq = 0.0;
 float pwmSuaveDer = 0.0;
-const float FACTOR_SUAVIZADO = 0.75;  // respuesta mucho más rápida
+const float FACTOR_SUAVIZADO = 0.75;
 
 // ==========================================
 // FUNCIONES AUXILIARES
@@ -53,12 +53,15 @@ float medirDistanciaSensor(HardwareSerial &puertoSerial) {
 
   puertoSerial.write(0x55);
   puertoSerial.flush();
-  delay(12);   // antes 40 ms
+
+  delay(12);
 
   for (int i = 0; i < MUESTRAS; i++) {
     if (puertoSerial.available() >= 2) {
+
       byte alta = puertoSerial.read();
       byte baja = puertoSerial.read();
+
       int mm = (alta << 8) + baja;
       float cm = mm / 10.0;
 
@@ -81,33 +84,33 @@ float medirDistanciaSensor(HardwareSerial &puertoSerial) {
 // INTENSIDAD SEGÚN DISTANCIA
 // ==========================================
 int calcularIntensidadRecomendada(float distancia) {
-  if (distancia == -1.0 || distancia > 200.0) {
+
+  // Sin lectura válida
+  if (distancia == -1.0) {
     return 0;
   }
 
-  if (distancia < 20.0) {
+  // Ignorar objetos demasiado cerca o lejos
+  if (distancia < 20.0 || distancia > 180.0) {
     return 0;
   }
 
-  if (distancia >= 20.0 && distancia < 80.0) {
+  if (distancia < 80.0) {
     return 225;
   }
 
-  if (distancia >= 80.0 && distancia < 140.0) {
+  if (distancia < 140.0) {
     return 175;
   }
 
-  if (distancia >= 140.0 && distancia <= 200.0) {
-    return 130;
-  }
-
-  return 0;
+  return 130;
 }
 
 // ==========================================
 // SETUP
 // ==========================================
 void setup() {
+
   Serial.begin(115200);
   delay(300);
 
@@ -117,8 +120,6 @@ void setup() {
   pinMode(MOTOR_IZQ_PIN, OUTPUT);
   pinMode(MOTOR_DER_PIN, OUTPUT);
 
-  // Configuración LEDC Core 2.x:
-  // primero setup del canal, luego attach del pin
   ledcSetup(PWM_CH_IZQ, PWM_FREQ, PWM_RES);
   ledcSetup(PWM_CH_DER, PWM_FREQ, PWM_RES);
 
@@ -128,44 +129,46 @@ void setup() {
   ledcWrite(PWM_CH_IZQ, 0);
   ledcWrite(PWM_CH_DER, 0);
 
-  Serial.println("=== MODO PWM LEDC RAPIDO INICIADO ===");
+  Serial.println("=== SISTEMA INICIADO ===");
 }
 
 // ==========================================
 // LOOP
 // ==========================================
 void loop() {
+
   float distIzq = medirDistanciaSensor(Serial1);
   float distDer = medirDistanciaSensor(SerialSensor2);
 
   int pwmObjetivoIzq = calcularIntensidadRecomendada(distIzq);
   int pwmObjetivoDer = calcularIntensidadRecomendada(distDer);
 
-  pwmSuaveIzq = pwmSuaveIzq + FACTOR_SUAVIZADO * (pwmObjetivoIzq - pwmSuaveIzq);
-  pwmSuaveDer = pwmSuaveDer + FACTOR_SUAVIZADO * (pwmObjetivoDer - pwmSuaveDer);
+  // Si no hay obstáculo, apagar inmediatamente
+  if (pwmObjetivoIzq == 0) {
+    pwmSuaveIzq = 0;
+  } else {
+    pwmSuaveIzq += FACTOR_SUAVIZADO * (pwmObjetivoIzq - pwmSuaveIzq);
+  }
+
+  if (pwmObjetivoDer == 0) {
+    pwmSuaveDer = 0;
+  } else {
+    pwmSuaveDer += FACTOR_SUAVIZADO * (pwmObjetivoDer - pwmSuaveDer);
+  }
 
   ledcWrite(PWM_CH_IZQ, (int)pwmSuaveIzq);
   ledcWrite(PWM_CH_DER, (int)pwmSuaveDer);
 
+  // DEPURACIÓN
   Serial.print("IZQ: ");
-  if (distIzq != -1.0) {
-    Serial.print(distIzq, 1);
-    Serial.print(" cm (PWM Real: ");
-    Serial.print((int)pwmSuaveIzq);
-    Serial.print(") | ");
-  } else {
-    Serial.print("Despejado | ");
-  }
+  Serial.print(distIzq);
+  Serial.print(" cm | PWM: ");
+  Serial.print((int)pwmSuaveIzq);
 
-  Serial.print("DER: ");
-  if (distDer != -1.0) {
-    Serial.print(distDer, 1);
-    Serial.print(" cm (PWM Real: ");
-    Serial.print((int)pwmSuaveDer);
-    Serial.println(")");
-  } else {
-    Serial.println("Despejado");
-  }
+  Serial.print(" || DER: ");
+  Serial.print(distDer);
+  Serial.print(" cm | PWM: ");
+  Serial.println((int)pwmSuaveDer);
 
   delay(10);
 }

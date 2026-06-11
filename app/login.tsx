@@ -1,43 +1,61 @@
 // Importación de hook para manejar estados
 import { useState } from 'react';
-
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
-
 // Importación para navegación entre pantallas
 import { router } from 'expo-router';
-
 // Importación de estilos
 import { styles } from '../constants/styles';
-
 // Importación de componentes para interfaz
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 
-// Definición de estados
+// Definición de estados para guardar los datos del usuario
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // Estado para mostrar mensajes de error
   const [error, setError] = useState('');
 
-  // Función para manejar el inicio de sesión (evitar enviar campos vacíos)
+  // Función para manejar el inicio de sesión
   const handleLogin = () => {
     setError('');
-    if (!email || !password) {
+
+    // Validación para que los campos no esten vacios
+    if (!email.trim() || !password.trim()) {
       setError('Completa todos los campos.');
       return;
     }
 
-    // Validación  email
+    // Validar email
+    const cleanEmail = email.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(cleanEmail)) {
       setError('Ingresa un email válido.');
       return;
     }
+    if (email !== cleanEmail) {
+      setError('El email no debe contener espacios.');
+      return;
+    }
 
-    // Validar longitud mínima de contraseña
-    if (password.length < 8) {
-      setError('La contraseña debe tener al menos 8 caracteres.');
+    // Validar longitud de contraseña (8  caracteres)
+    if (password.length !== 8) {
+      setError('La contraseña debe tener 8 caracteres.');
+      return;
+    }
+    // Validar que tenga al menos una letra (evitar que sean solo números)
+    if (!/[a-zA-Z]/.test(password)) {
+      setError('La contraseña debe tener al menos una letra.');
+      return;
+    }
+    // Validar que la contraseña tenga al menos un número
+    if (!/\d/.test(password)) {
+      setError('La contraseña debe tener al menos un número.');
+      return;
+    }
+    // Validar que la contraseña no tenga espacios
+    if (password.includes(' ')) {
+      setError('La contraseña no debe tener espacios.');
       return;
     }
 
@@ -46,7 +64,6 @@ export default function Login() {
   };
 
   return (
-
     // Comportamiento de la interfaz en dispositivos
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -87,7 +104,8 @@ export default function Login() {
                 placeholder=""
                 placeholderTextColor=""
                 value={email}
-                onChangeText={setEmail} />
+                onChangeText={setEmail}
+                autoCapitalize="none" />
             </LinearGradient>
 
             {/* Campo contraseña */}

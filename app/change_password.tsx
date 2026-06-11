@@ -1,38 +1,60 @@
 // Importación de hook para manejar estados
 import { useState } from 'react';
-
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
-
 // Importación de estilos
 import { styles } from '../constants/styles';
-
 // Importación de componentes para interfaz
 import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-
-//Importaciín navegación entre pantallas
+//Importación navegación entre pantallas
 import { router } from 'expo-router';
+// Importación para iconos
+import { Ionicons } from '@expo/vector-icons';
 
 // Definición de estados
 export default function ChangePassword() {
+  // Estado para guardar la nueva contraseña
   const [password, setPassword] = useState('');
+  // Estado para guardar la repetición de la contraseña 
   const [repeatPassword, setRepeatPassword] = useState('');
+  // Estado para mostrar mensajes de error
   const [error, setError] = useState('');
 
+  // Función para validar y actualizar contraseña
   const handleChangePassword = () => {
     setError('');
-    if (!password || !repeatPassword) {
+
+    // Validación para que los campos no esten vacios
+    if (!password.trim() || !repeatPassword.trim()) {
       setError('Completa todos los campos.');
       return;
     }
-    if (password.length < 8) {
-      setError('La contraseña debe tener al menos 8 caracteres.');
+    // Validar longitud de contraseña (8  caracteres)
+    if (password.length !== 8 || repeatPassword.length !== 8) {
+      setError('Las contraseñas deben tener 8 caracteres.');
       return;
     }
+    // Validar que la contraseña no tenga espacios
+    if (password.includes(' ') || repeatPassword.includes(' ')) {
+      setError('La contraseña no debe tener espacios.');
+      return;
+    }
+    // Validar que tenga al menos una letra (evitar que sean solo números)
+    if (!/[a-zA-Z]/.test(password)) {
+      setError('La contraseña debe tener al menos una letra.');
+      return;
+    }
+    // Validar que tenga al menos un número
+    if (!/\d/.test(password)) {
+      setError('La contraseña debe tener al menos un número.');
+      return;
+    }
+    // Validar que las contraseñas coincidan
     if (password !== repeatPassword) {
       setError('Las contraseñas no coinciden.');
       return;
     }
+
     console.log('Contraseña actualizada correctamente.');
     router.replace('/login');
   };
@@ -57,9 +79,19 @@ export default function ChangePassword() {
           <Image
             source={require('../assets/images/logo.png')}
             style={styles.logoSmall} />
-
-          {/* Título principal */}
           <View style={styles.card}>
+
+            {/* Icono volver */}
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => router.push('/forgot_password')}>
+              <Ionicons
+                name="arrow-back"
+                size={28}
+                color="#2A134A"/>
+            </TouchableOpacity>
+
+            {/* Título principal */}
             <Text style={styles.subtittleForgot}>
               Cambiar contraseña
             </Text>

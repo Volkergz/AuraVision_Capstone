@@ -1,36 +1,35 @@
 // Importación de hook para manejar estados
 import { useState } from 'react';
-
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
-
 // Importación de estilos
 import { styles } from '../constants/styles';
-
 // Importación de componentes para interfaz
-import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Platform, Modal } from 'react-native';
-
+import { Image, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 //Importaciín navegación entre pantallas
 import { router } from 'expo-router';
+// Importación para iconos
+import { Ionicons } from '@expo/vector-icons';
 
 // Definición de estados
 export default function ForgotPassword() {
+  // Estado para guardar los datos del usuario
   const [email, setEmail] = useState('');
+  // Estado para mostrar mensajes de error
   const [error, setError] = useState('');
-
-  // Modal
+  // Estado que muestra el modal
   const [showModal, setShowModal] = useState(false);
+  // Estado para guardar el código de verificación
   const [code, setCode] = useState(['', '', '', '', '', '']);
-
   //Función para manejar error de modal
   const [modalError, setModalError] = useState('');
 
   //Función para verificar código este completo antes de enviar
   const handleVerifyCode = () => {
     const verificationCode = code.join('');
-
     setModalError('');
 
+    // Validar que los campos esten completos
     if (verificationCode.length !== 6) {
       setModalError('Ingresa el código completo.');
       return;
@@ -44,19 +43,29 @@ export default function ForgotPassword() {
   const handleSend = () => {
     setError('');
 
-    //Función para validar campo completo y formato de email
-    if (!email) {
+    //Función para validar email
+    const cleanEmail = email.trim();
+    if (!cleanEmail) {
       setError('Ingresa tu email.');
       return;
     }
+    if (email !== cleanEmail) {
+      setError('El email no debe contener espacios.');
+      return;
+    }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(cleanEmail)) {
       setError('Ingresa un email válido.');
       return;
     }
+
     console.log('Código enviado al email.');
 
-    //Se abre elmodal al email ser válido
+    // Limpiar modal antes de abrirlo
+    setModalError('');
+    setCode(['', '', '', '', '', '']);
+
+    //Se abre el modal al email ser válido
     setShowModal(true);
   };
 
@@ -79,7 +88,7 @@ export default function ForgotPassword() {
           {/* Logo pequeño en derecha superior */}
           <Image
             source={require('../assets/images/logo.png')}
-            style={styles.logoSmall}/>
+            style={styles.logoSmall} />
 
           {/* Título principal */}
           <View style={styles.card}>
@@ -124,6 +133,16 @@ export default function ForgotPassword() {
               </TouchableOpacity>
               <View style={styles.rightEdge} />
             </View>
+
+            {/* Icono volver */}
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => router.push('/login')}>
+              <Ionicons
+                name="arrow-back"
+                size={28}
+                color="#2A134A" />
+            </TouchableOpacity>
           </View>
 
           {/* Modal */}
@@ -133,14 +152,19 @@ export default function ForgotPassword() {
             animationType="fade">
             <View style={styles.modalOverlay}>
               <View style={styles.modalCard}>
+
+                {/* Botón para cerrar el modal */}
                 <TouchableOpacity
                   style={styles.closeModal}
                   onPress={() => setShowModal(false)}>
                   <Text style={styles.closeModalText}>×</Text>
                 </TouchableOpacity>
+
                 <Text style={styles.modalTitle}>
                   Ingresa el código de verificación
                 </Text>
+
+                {/* Contenedor de código de verificación */}
                 <View style={styles.codeContainer}>
                   {code.map((value, index) => (
                     <TextInput
@@ -148,17 +172,20 @@ export default function ForgotPassword() {
                       style={styles.codeInput}
                       value={value}
                       onChangeText={(text) => {
+                        const onlyNumber = text.replace(/[^0-9]/g, '');
                         const newCode = [...code];
-                        newCode[index] = text.slice(-1);
+                        newCode[index] = onlyNumber.slice(-1);
                         setCode(newCode);
                       }}
                       keyboardType="number-pad"
-                      maxLength={1}/>
+                      maxLength={1} />
                   ))}
                 </View>
                 {modalError !== '' && (
                   <Text style={styles.modalErrorText}>{modalError}</Text>
                 )}
+
+                {/* Botón aceptar */}
                 <TouchableOpacity
                   style={styles.modalButton}
                   activeOpacity={0.8}

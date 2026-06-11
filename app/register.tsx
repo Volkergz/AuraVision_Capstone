@@ -1,70 +1,70 @@
 // Importación de hook para manejar estados
 import { useState } from 'react';
-
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
-
 // Importación para navegación
 import { router } from 'expo-router';
-
 // Importación para iconos
 import { Ionicons } from '@expo/vector-icons';
-
 // Importación de estilos
 import { styles } from '../constants/styles';
-
 // Importación de componentes
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-// Definición de estados
+// Definición de estados para guardar los datos del usuario
 export default function Register() {
-
-  // Visualización de cards
   const [showPasswordCard, setShowPasswordCard] = useState(false);
   const [names, setNames] = useState('');
   const [surnames, setSurnames] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [email, setEmail] = useState('');
-
   // Contraseña
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
-
-  // Errores
+  // Estado para mostrar mensajes de error
   const [error, setError] = useState('');
 
-  // Navegar a la siguiente card
+  // Validar los datos
   const handleNext = () => {
     setError('');
 
+    // Eliminar espacios de los campos
     const valNames = names.trim();
     const valSurnames = surnames.trim();
     const valDate = birthdate.trim();
     const valEmail = email.trim();
 
+    // Formato de email
     const valEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Validación permitir solo números
     const valNumbers = /^[0-9]+$/;
 
+    // Validar todos los campos completados
     if (!valNames || !valSurnames || !valDate || !valEmail) {
       setError('Completa todos los campos.');
       return;
     }
 
+    // Validar al menos 1 nombre ingresado
     if (valNames.split(/\s+/).length < 1) {
       setError('Ingresa al menos un nombre.');
       return;
     }
 
+
+    // Validar que se ingresen ambos apellidos
     if (valSurnames.split(/\s+/).length < 2) {
       setError('Ingresa ambos apellidos.');
       return;
     }
 
+    // Validar que la fecha solo tenga números
     if (!valNumbers.test(valDate)) {
       setError('La fecha de nacimiento debe contener solo números.');
       return;
     }
 
+    // Validar que el email tenga el formato correcto
     if (!valEmailRegex.test(valEmail)) {
       setError('Ingresa un email válido.');
       return;
@@ -73,33 +73,46 @@ export default function Register() {
     setShowPasswordCard(true);
   };
 
-  // Registrar usuario
+  // Función para validar contraseña y terminar el registro
   const handleRegister = () => {
     setError('');
 
-    if (!password || !repeatPassword) {
+    // Validación para que los campos no esten vacios
+    if (!password.trim() || !repeatPassword.trim()) {
       setError('Completa todos los campos.');
       return;
     }
-
-    // Validación para contraseña y repetir contraseña
-    if (password.length < 8 || repeatPassword.length < 8) {
-      setError('Las contraseñas deben tener al menos 8 caracteres.');
+    // Validación para longitud de contraseña (8  caracteres)
+    if (password.length !== 8 || repeatPassword.length !== 8) {
+      setError('Las contraseñas deben tener 8 caracteres.');
       return;
     }
-
+    // Validar que las contraseñas coincidan
     if (password !== repeatPassword) {
       setError('Las contraseñas no coinciden.');
       return;
     }
+    // Verificar que no hayan espacios
+    if (password.includes(' ') || repeatPassword.includes(' ')) {
+      setError('La contraseña no debe tener espacios.');
+      return;
+    }
+    // Validar que tenga al menos una letra (evitar que sean solo números)
+    if (!/[a-zA-Z]/.test(password)) {
+      setError('La contraseña debe tener al menos una letra.');
+      return;
+    }
+    // Validar que la contraseña tenga al menos un número
+    if (!/\d/.test(password)) {
+      setError('La contraseña debe tener al menos un número.');
+      return;
+    }
 
     console.log('Usuario registrado con éxito.');
-
     router.replace('/home');
   };
 
   return (
-
     // Comportamiento de la interfaz en dispositivos
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -126,8 +139,7 @@ export default function Register() {
             <Text style={styles.subtittle}>Registro</Text>
 
             {/* Cambiar entre cards */}
-            {!showPasswordCard ? (
-              <>
+            {!showPasswordCard ? ( <>
 
                 {/* Campo nombres */}
                 <Text style={styles.label}>Nombres</Text>
@@ -214,10 +226,8 @@ export default function Register() {
                   <TouchableOpacity onPress={() => router.push('/login')}>
                     <Text style={styles.textBelow}>Entra aquí.</Text>
                   </TouchableOpacity>
-                </View>
-              </>
-            ) : (
-              <>
+                </View> </>
+            ) : ( <>
 
                 {/* Campo contraseña */}
                 <Text style={styles.label}>Contraseña</Text>

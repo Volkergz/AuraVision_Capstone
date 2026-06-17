@@ -1,110 +1,179 @@
 // Importación de hook para manejar estados
 import { useState } from 'react';
+
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
+
 // Importación para navegación
 import { router } from 'expo-router';
+
 // Importación para iconos
 import { Ionicons } from '@expo/vector-icons';
+
 // Importación de estilos
 import { styles } from '../constants/styles';
+
 // Importación de componentes
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-// Definición de estados para guardar los datos del usuario
 export default function Register() {
+  // Controlar la primera y segunda parte del registro (contraseña)
   const [showPasswordCard, setShowPasswordCard] = useState(false);
+
+  //Datos personales
   const [names, setNames] = useState('');
   const [surnames, setSurnames] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [email, setEmail] = useState('');
-  // Contraseña
+
+  // Datos contraseña
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+
   // Estado para mostrar mensajes de error
   const [error, setError] = useState('');
 
-  // Validar los datos
+  // Formato automático a la fecha de nacimiento
+  const handleBirthdateChange = (text: string) => {
+    // Solo números
+    const numbers = text.replace(/\D/g, '');
+
+    let formatted = numbers;
+
+    if (numbers.length > 2) {
+      formatted = `${numbers.slice(0, 2)}-${numbers.slice(2)}`;
+    }
+
+    if (numbers.length > 4) {
+      formatted = `${numbers.slice(0, 2)}-${numbers.slice(2, 4)}-${numbers.slice(4, 8)}`;
+    }
+
+    setBirthdate(formatted);
+  };
+
+  // Validar los primeros datos del registro
   const handleNext = () => {
     setError('');
 
-    // Eliminar espacios de los campos
+    // Eliminar espacios vacíos
     const valNames = names.trim();
     const valSurnames = surnames.trim();
     const valDate = birthdate.trim();
     const valEmail = email.trim();
 
     // Formato de email
-    const valEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // Validación permitir solo números
-    const valNumbers = /^[0-9]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Validar todos los campos completados
+    // Formato fecha de nacimiento
+    const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+
+    // Validar campos vacíos
     if (!valNames || !valSurnames || !valDate || !valEmail) {
       setError('Completa todos los campos.');
       return;
     }
 
-    // Validar al menos 1 nombre ingresado
-    if (valNames.split(/\s+/).length < 1) {
-      setError('Ingresa al menos un nombre.');
+    // Validación nombres
+    if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(valNames)) {
+      setError('Los nombres solo pueden contener letras.');
       return;
     }
 
+    // Validación apellidos
+    const surnameCount = valSurnames.trim().split(/\s+/).length;
 
-    // Validar que se ingresen ambos apellidos
-    if (valSurnames.split(/\s+/).length < 2) {
-      setError('Ingresa ambos apellidos.');
+    if (surnameCount > 2) {
+      setError('Ingresa máximo dos apellidos.');
       return;
     }
 
-    // Validar que la fecha solo tenga números
-    if (!valNumbers.test(valDate)) {
-      setError('La fecha de nacimiento debe contener solo números.');
+    if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(valSurnames)) {
+      setError('Los apellidos solo pueden contener letras.');
       return;
     }
 
-    // Validar que el email tenga el formato correcto
-    if (!valEmailRegex.test(valEmail)) {
+    // Validación formato fecha (DD-MM-AAAA)
+    if (!dateRegex.test(valDate)) {
+      setError('Ingresa la fecha en formato DD-MM-AAAA.');
+      return;
+    }
+
+    // Separar día, mes y año
+    const [day, month, year] = valDate.split('-').map(Number);
+
+    // Crear fecha
+    const birthDate = new Date(year, month - 1, day);
+
+    // Validar que la fecha exista
+    if (
+      birthDate.getFullYear() !== year ||
+      birthDate.getMonth() !== month - 1 ||
+      birthDate.getDate() !== day
+    ) {
+      setError('Ingresa una fecha válida.');
+      return;
+    }
+
+    // Validar que la fecha no sea futura
+    const today = new Date();
+
+    if (birthDate > today) {
+      setError('La fecha de nacimiento no puede ser posterior a la fecha actual.');
+      return;
+    }
+
+    // Validar formato email
+    if (!emailRegex.test(valEmail)) {
       setError('Ingresa un email válido.');
       return;
     }
-
+    // Si esta todo correcto se muestra la segunda parte del registro (contraseñas)
     setShowPasswordCard(true);
   };
 
-  // Función para validar contraseña y terminar el registro
+  // Validar contraseña y terminar el registro
   const handleRegister = () => {
     setError('');
 
-    // Validación para que los campos no esten vacios
+    // Validación campos vacios
     if (!password.trim() || !repeatPassword.trim()) {
       setError('Completa todos los campos.');
       return;
     }
-    // Validación para longitud de contraseña (8  caracteres)
-    if (password.length !== 8 || repeatPassword.length !== 8) {
-      setError('Las contraseñas deben tener 8 caracteres.');
+
+    // Validación longitud mínimo 8 caracteres y máximo 20
+    if (password.length < 8 || password.length > 20) {
+      setError('La contraseña debe tener entre 8 y 20 caracteres.');
       return;
     }
-    // Validar que las contraseñas coincidan
+
+    // Validación para no permitir espacios
+    if (password.includes(' ')) {
+      setError('La contraseña no debe contener espacios.');
+      return;
+    }
+
+    // Validación que al menos debe contener una letra
+    if (!/[a-zA-Z]/.test(password)) {
+      setError('La contraseña debe contener al menos una letra.');
+      return;
+    }
+
+    // Validación que al menos debe contener un número
+    if (!/\d/.test(password)) {
+      setError('La contraseña debe contener al menos un número.');
+      return;
+    }
+
+    // Validación que al menos debe contener un caracter especial
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=/\\[\];'`~]/.test(password)) {
+      setError('La contraseña debe contener al menos un carácter especial.');
+      return;
+    }
+
+    // Validación coincidencia de contraseñas ingresadas
     if (password !== repeatPassword) {
       setError('Las contraseñas no coinciden.');
-      return;
-    }
-    // Verificar que no hayan espacios
-    if (password.includes(' ') || repeatPassword.includes(' ')) {
-      setError('La contraseña no debe tener espacios.');
-      return;
-    }
-    // Validar que tenga al menos una letra (evitar que sean solo números)
-    if (!/[a-zA-Z]/.test(password)) {
-      setError('La contraseña debe tener al menos una letra.');
-      return;
-    }
-    // Validar que la contraseña tenga al menos un número
-    if (!/\d/.test(password)) {
-      setError('La contraseña debe tener al menos un número.');
       return;
     }
 
@@ -139,7 +208,8 @@ export default function Register() {
             <Text style={styles.subtittle}>Registro</Text>
 
             {/* Cambiar entre cards */}
-            {!showPasswordCard ? ( <>
+            {!showPasswordCard ? (
+              <>
 
                 {/* Campo nombres */}
                 <Text style={styles.label}>Nombres</Text>
@@ -179,10 +249,12 @@ export default function Register() {
                   style={styles.inputGradient}>
                   <TextInput
                     style={styles.input}
-                    placeholder="DD/MM/AAAA"
+                    placeholder="DD-MM-AAAA"
                     placeholderTextColor="#666"
+                    keyboardType="numeric"
+                    maxLength={10}
                     value={birthdate}
-                    onChangeText={setBirthdate} />
+                    onChangeText={handleBirthdateChange} />
                 </LinearGradient>
 
                 {/* Campo email */}
@@ -226,8 +298,10 @@ export default function Register() {
                   <TouchableOpacity onPress={() => router.push('/login')}>
                     <Text style={styles.textBelow}>Entra aquí.</Text>
                   </TouchableOpacity>
-                </View> </>
-            ) : ( <>
+                </View>
+              </>
+            ) : (
+              <>
 
                 {/* Campo contraseña */}
                 <Text style={styles.label}>Contraseña</Text>

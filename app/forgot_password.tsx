@@ -1,26 +1,35 @@
 // Importación de hook para manejar estados
 import { useState } from 'react';
+
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
+
 // Importación de estilos
 import { styles } from '../constants/styles';
+
 // Importación de componentes para interfaz
 import { Image, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+
 //Importaciín navegación entre pantallas
 import { router } from 'expo-router';
+
 // Importación para iconos
 import { Ionicons } from '@expo/vector-icons';
 
-// Definición de estados
 export default function ForgotPassword() {
+
   // Estado para guardar los datos del usuario
   const [email, setEmail] = useState('');
+
   // Estado para mostrar mensajes de error
   const [error, setError] = useState('');
+
   // Estado que muestra el modal
   const [showModal, setShowModal] = useState(false);
+
   // Estado para guardar el código de verificación
   const [code, setCode] = useState(['', '', '', '', '', '']);
+
   //Función para manejar error de modal
   const [modalError, setModalError] = useState('');
 
@@ -49,11 +58,14 @@ export default function ForgotPassword() {
       setError('Ingresa tu email.');
       return;
     }
+
     if (email !== cleanEmail) {
       setError('El email no debe contener espacios.');
       return;
     }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
     if (!emailRegex.test(cleanEmail)) {
       setError('Ingresa un email válido.');
       return;

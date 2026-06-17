@@ -1,30 +1,41 @@
 // Importación de hook para manejar estados
 import { useState } from 'react';
+
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
+
 // Importación de componentes para interfaz
 import { View, Text, Image, TouchableOpacity, Modal } from 'react-native';
+
 //Importación de iconos
 import { Ionicons } from '@expo/vector-icons';
+
 // Importación para navegación entre pantallas
 import { router } from 'expo-router';
+
 // Importación de estilos
 import { styles } from '../constants/styles';
 
-// Definición de estados
 export default function Settings() {
+
   // Modal volumen
   const [showVolumeModal, setShowVolumeModal] = useState(false);
+
   // Valor guardado volumen
   const [volume, setVolume] = useState(40);
+
   // Valor temporal volumen
   const [tempVolume, setTempVolume] = useState(40);
+
   // Modal vibración
   const [showVibrationModal, setShowVibrationModal] = useState(false);
+
   // Valor guardado vibración
   const [vibration, setVibration] = useState(15);
+
   // Valor temporalvibración
   const [tempVibration, setTempVibration] = useState(15);
+
   return (
     // Fondo degrade 
     <LinearGradient

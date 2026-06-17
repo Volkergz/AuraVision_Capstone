@@ -97,10 +97,13 @@ export const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
+    paddingLeft: 1,
+    paddingVertical: 0,
+    includeFontPadding: false
   },
 
   inputGradient: {
-    height: 36,
+    height: 40,
     borderRadius: 19,
     borderWidth: 1.5,
     borderColor: '#000',

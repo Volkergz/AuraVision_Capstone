@@ -1,11 +1,15 @@
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
+
 // Importación de componentes para interfaz
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+
 //Importación de iconos
 import { Ionicons } from '@expo/vector-icons';
+
 // Importación de estilos
 import { styles } from '../constants/styles';
+
 //Importaciín navegación entre pantallas
 import { router } from 'expo-router';
 

@@ -148,14 +148,14 @@ export default function Login() {
 
             {/* Botón aceptar */}
             <View style={styles.buttonContainer}>
-              <View style={styles.leftEdge} />
+              <View style={[styles.leftEdge, styles.edge]} />
               <TouchableOpacity
                 style={styles.button}
                 onPress={handleLogin}
                 activeOpacity={0.8}>
                 <Text style={styles.buttonText}>Aceptar</Text>
               </TouchableOpacity>
-              <View style={styles.rightEdge} />
+              <View style={[styles.rightEdge, styles.edge]} />
             </View>
 
             {/* Enlace registro */}

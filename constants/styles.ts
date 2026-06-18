@@ -22,10 +22,10 @@ export const styles = StyleSheet.create({
     paddingRight: 35,
     paddingLeft: 35,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -5 },
-    shadowOpacity: 0.5,
-    shadowRadius: 15,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 8,
     borderTopWidth: 10,
     borderTopColor: '#2A134A',
   },
@@ -71,18 +71,7 @@ export const styles = StyleSheet.create({
   },
 
   subtittleForgot: {
-    textAlign: 'center',
-    fontSize: 32,
-    fontWeight: 600,
-    color: '#24123A',
-    marginBottom: 25,
     marginTop: 25,
-    textShadowColor: 'rgba(0,0,0,0.45)',
-    textShadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    textShadowRadius: 4,
   },
 
   //Estilos label
@@ -154,27 +143,27 @@ export const styles = StyleSheet.create({
   },
 
   //Estilos para bordes de botón
-  leftEdge: {
+  edge: {
     position: 'absolute',
-    top: -3,
-    left: -6,
+    borderColor: '#24123A',
     width: 16,
     height: 16,
+  },
+
+  leftEdge: {
+
+    top: -3,
+    left: -6,
     borderTopWidth: 2,
     borderLeftWidth: 2,
-    borderColor: '#24123A',
     borderTopLeftRadius: 35,
   },
 
   rightEdge: {
-    position: 'absolute',
     bottom: -3,
     right: -6,
-    width: 16,
-    height: 16,
     borderBottomWidth: 2,
     borderRightWidth: 2,
-    borderColor: '#24123A',
     borderBottomRightRadius: 35,
   },
 
@@ -214,7 +203,6 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 20,
-
     textShadowColor: 'rgba(0,0,0,0.4)',
     textShadowOffset: {
       width: 0,
@@ -312,12 +300,6 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
 
-  modalButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-
   modalErrorText: {
     color: 'red',
     fontSize: 14,
@@ -326,7 +308,7 @@ export const styles = StyleSheet.create({
     marginBottom: 25,
   },
 
-  //Estilos i33nicio
+  //Estilos inicio
   homeContainer: {
     flex: 1,
     paddingHorizontal: 25,
@@ -335,29 +317,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  homeCard: {
-    width: '100%',
-    height: 150,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 15,
-    paddingVertical: 25,
-    paddingHorizontal: 20,
-    marginBottom: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
-    elevation: 10,
-  },
-
   homeTextBox: {
     flex: 1,
-    alignItems: 'center',
   },
 
   homeTitle: {
@@ -434,24 +395,6 @@ export const styles = StyleSheet.create({
   },
 
   //Estilos ajustes
-  settingCard: {
-    width: '86%',
-    height: 160,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignSelf: 'center',
-    alignItems: 'center',
-    marginBottom: 26,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    elevation: 8,
-    borderWidth: 1,
-    borderColor: '#000',
-  },
-
   settingCardSmall: {
     width: '86%',
     height: 110,
@@ -462,10 +405,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 26,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    elevation: 8,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 10,
+    borderWidth: 1,
+    borderColor: '#000',
   },
 
   settingTitle: {
@@ -502,6 +450,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
   },
+
   settingModalCard: {
     width: '85%',
     maxWidth: 330,
@@ -529,21 +478,103 @@ export const styles = StyleSheet.create({
     marginBottom: 25,
   },
 
-  settingCounterButton: {
+  settingButtons: {
     color: '#9B00FF',
-    fontSize: 36,
-    fontWeight: '800',
     textShadowColor: 'rgba(0,0,0,0.35)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 4,
   },
 
+  settingCounterButton: {
+    fontSize: 36,
+    fontWeight: '800',
+
+  },
+
   settingCounterNumber: {
-    color: '#9B00FF',
     fontSize: 46,
     fontWeight: '700',
-    textShadowColor: 'rgba(0,0,0,0.35)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 4,
+  },
+
+  secondaryCard: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    alignItems: 'center',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+
+  homeCard: {
+    width: '100%',
+    height: 150,
+    borderRadius: 15,
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+    marginBottom: 30,
+    flexDirection: 'row',
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+
+  settingCard: {
+    width: '86%',
+    height: 160,
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignSelf: 'center',
+    marginBottom: 26,
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+
+  profileCard: {
+    width: '100%',
+    height: 400,
+    borderRadius: 15,
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+    marginBottom: 30,
+    flexDirection: 'row',
+  },
+
+  profileCardT: {
+    width: '100%',
+    height: 250,
+    borderRadius: 15,
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+    marginBottom: 30,
+    flexDirection: 'row',
+  },
+
+  profileInput: {
+    width: '100%',
+    height: 30,
+    backgroundColor: '#EFEFEF',
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 15,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+    marginBottom: 12,
+  },
+
+  profileInputText: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  
+  profileLabel: {
+    color: '#9B00FF',
+    fontSize: 22,
+    marginTop: 8,
+    fontWeight: '600',
+    textShadowColor: 'rgba(0,0,0,0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 3,
   },
 });

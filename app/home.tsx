@@ -28,7 +28,7 @@ export default function Home() {
         style={styles.logoSmall} />
 
       {/* Card estado de conexión */}
-      <View style={styles.homeCard}>
+      <View style={[styles.homeCard, styles.secondaryCard]}>
         <Ionicons name="git-network-outline" size={58} color="#9B00FF" />
         <View style={styles.homeTextBox}>
           <Text style={styles.homeTitle}>Dispositivo conectado</Text>
@@ -37,7 +37,7 @@ export default function Home() {
       </View>
 
       {/* Card porcentaje de batería */}
-      <View style={styles.homeCard}>
+      <View style={[styles.homeCard, styles.secondaryCard]}>
         <Ionicons name="battery-half-outline" size={58} color="#9B00FF" />
         <View style={styles.homeTextBox}>
           <Text style={styles.homeTitle}>Porcentaje de batería</Text>
@@ -46,7 +46,7 @@ export default function Home() {
       </View>
 
       {/* Card tiempo restante de funcionamiento */}
-      <View style={styles.homeCard}>
+      <View style={[styles.homeCard, styles.secondaryCard]}>
         <Ionicons name="time-outline" size={58} color="#9B00FF" />
         <View style={styles.homeTextBox}>
           <Text style={styles.homeTitle}>Tiempo restante</Text>
@@ -55,7 +55,7 @@ export default function Home() {
       </View>
 
       {/* Card última alerta detectada */}
-      <View style={styles.homeCard}>
+      <View style={[styles.homeCard, styles.secondaryCard]}>
         <Ionicons name="notifications-outline" size={52} color="#9B00FF" />
         <View style={styles.homeTextBox}>
           <Text style={styles.homeTitle}>Última alerta detectada</Text>

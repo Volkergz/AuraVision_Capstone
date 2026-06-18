@@ -60,7 +60,7 @@ export default function ChangePassword() {
       setError('La contraseña debe tener al menos un número.');
       return;
     }
-    
+
     // Validar que las contraseñas coincidan
     if (password !== repeatPassword) {
       setError('Las contraseñas no coinciden.');
@@ -100,11 +100,11 @@ export default function ChangePassword() {
               <Ionicons
                 name="arrow-back"
                 size={28}
-                color="#2A134A"/>
+                color="#2A134A" />
             </TouchableOpacity>
 
             {/* Título principal */}
-            <Text style={styles.subtittleForgot}>
+            <Text style={[styles.subtittle, styles.subtittleForgot]}>
               Cambiar contraseña
             </Text>
 
@@ -150,7 +150,7 @@ export default function ChangePassword() {
 
             {/* Botón aceptar */}
             <View style={styles.buttonForgot}>
-              <View style={styles.leftEdge} />
+              <View style={[styles.leftEdge, styles.edge]} />
               <TouchableOpacity
                 style={styles.button}
                 onPress={handleChangePassword}
@@ -159,7 +159,7 @@ export default function ChangePassword() {
                   Aceptar
                 </Text>
               </TouchableOpacity>
-              <View style={styles.rightEdge} />
+              <View style={[styles.rightEdge, styles.edge]} />
             </View>
           </View>
         </LinearGradient>

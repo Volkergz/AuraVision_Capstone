@@ -282,14 +282,15 @@ export default function Register() {
 
                 {/* Botón siguiente */}
                 <View style={styles.buttonContainer}>
-                  <View style={styles.leftEdge} />
+                  <View style={[styles.leftEdge, styles.edge]
+                  } />
                   <TouchableOpacity
                     style={styles.button}
                     onPress={handleNext}
                     activeOpacity={0.8}>
                     <Text style={styles.buttonText}>Siguiente</Text>
                   </TouchableOpacity>
-                  <View style={styles.rightEdge} />
+                  <View style={[styles.rightEdge, styles.edge]} />
                 </View>
 
                 {/* Enlace inicio de sesión */}
@@ -342,14 +343,14 @@ export default function Register() {
 
                 {/* Botón aceptar */}
                 <View style={styles.buttonContainer}>
-                  <View style={styles.leftEdge} />
+                  <View style={[styles.leftEdge, styles.edge]} />
                   <TouchableOpacity
                     style={styles.button}
                     onPress={handleRegister}
                     activeOpacity={0.8}>
                     <Text style={styles.buttonText}>Aceptar</Text>
                   </TouchableOpacity>
-                  <View style={styles.rightEdge} />
+                  <View style={[styles.rightEdge, styles.edge]} />
                 </View>
 
                 {/* Icono volver */}

@@ -50,7 +50,7 @@ export default function Settings() {
         style={styles.logoSmall} />
 
       {/* Card nivel de volumen */}
-      <View style={styles.settingCard}>
+      <View style={[styles.settingCard, styles.secondaryCard]}>
         <Text style={styles.settingTitle}>Nivel de volumen</Text>
         <Text style={styles.settingNumber}>{volume}</Text>
 
@@ -91,16 +91,16 @@ export default function Settings() {
               {/* Botón bajar volumen */}
               <TouchableOpacity
                 onPress={() => setTempVolume(tempVolume > 0 ? tempVolume - 1 : 0)}>
-                <Text style={styles.settingCounterButton}>-</Text>
+                <Text style={[styles.settingButton, styles.settingCounterButton]}>-</Text>
               </TouchableOpacity>
-              <Text style={styles.settingCounterNumber}>
+              <Text style={[styles.settingButton, styles.settingCounterNumber]}>
                 {tempVolume}
               </Text>
 
               {/*Botón subir volumen (limite 100) */}
               <TouchableOpacity
                 onPress={() => setTempVolume(tempVolume < 100 ? tempVolume + 1 : 100)}>
-                <Text style={styles.settingCounterButton}>+</Text>
+                <Text style={[styles.settingButton, styles.settingCounterButton]}>+</Text>
               </TouchableOpacity>
             </View>
 
@@ -111,14 +111,14 @@ export default function Settings() {
                 setVolume(tempVolume);
                 setShowVolumeModal(false);
               }}>
-              <Text style={styles.modalButtonText}>Aceptar</Text>
+              <Text style={styles.buttonText}>Aceptar</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
       {/* Card nivel de vibración */}
-      <View style={styles.settingCard}>
+      <View style={[styles.settingCard, styles.secondaryCard]}>
         <Text style={styles.settingTitle}>Nivel de vibración</Text>
         <Text style={styles.settingNumber}>{vibration}</Text>
 
@@ -157,17 +157,17 @@ export default function Settings() {
               {/*  Botón bajar vibración */}
               <TouchableOpacity
                 onPress={() => setTempVibration(tempVibration > 0 ? tempVibration - 1 : 0)}>
-                <Text style={styles.settingCounterButton}>-</Text>
+                <Text style={[styles.settingButton, styles.settingCounterButton]}>-</Text>
               </TouchableOpacity>
 
-              <Text style={styles.settingCounterNumber}>
+              <Text style={[styles.settingButton, styles.settingCounterNumber]}>
                 {tempVibration}
               </Text>
 
               {/*  Botón subir vibración */}
               <TouchableOpacity
                 onPress={() => setTempVibration(tempVibration < 100 ? tempVibration + 1 : 100)}>
-                <Text style={styles.settingCounterButton}>+</Text>
+                <Text style={[styles.settingButton, styles.settingCounterButton]}>+</Text>
               </TouchableOpacity>
             </View>
 
@@ -178,14 +178,14 @@ export default function Settings() {
                 setVibration(tempVibration);
                 setShowVibrationModal(false);
               }}>
-              <Text style={styles.modalButtonText}>Aceptar</Text>
+              <Text style={styles.buttonText}>Aceptar</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
       {/* Card agregar dispositivo */}
-      <View style={styles.settingCardSmall}>
+      <View style={[styles.settingCardSmall, styles.secondaryCard]}>
         <Text style={styles.settingTitle}>Nuevo dispositivo</Text>
 
         {/* Botón añadir */}
@@ -195,7 +195,7 @@ export default function Settings() {
       </View>
 
       {/* Card eliminar dispositivo */}
-      <View style={styles.settingCardSmall}>
+      <View style={[styles.settingCardSmall, styles.secondaryCard]}>
         <Text style={styles.settingTitle}>Eliminar dispositivo</Text>
 
         {/* Botón ver dispositivos */}

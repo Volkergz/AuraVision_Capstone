@@ -65,7 +65,7 @@ export default function ForgotPassword() {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     if (!emailRegex.test(cleanEmail)) {
       setError('Ingresa un email válido.');
       return;
@@ -104,7 +104,7 @@ export default function ForgotPassword() {
 
           {/* Título principal */}
           <View style={styles.card}>
-            <Text style={styles.subtittleForgot}>
+            <Text style={[styles.subtittle, styles.subtittleForgot]}>
               ¿Olvidaste tu contraseña?
             </Text>
 
@@ -136,14 +136,14 @@ export default function ForgotPassword() {
 
             {/* Botón enviar */}
             <View style={styles.buttonForgot}>
-              <View style={styles.leftEdge} />
+              <View style={[styles.leftEdge, styles.edge]} />
               <TouchableOpacity
                 style={styles.button}
                 onPress={handleSend}
                 activeOpacity={0.8}>
                 <Text style={styles.buttonText}>Enviar</Text>
               </TouchableOpacity>
-              <View style={styles.rightEdge} />
+              <View style={[styles.rightEdge, styles.edge]} />
             </View>
 
             {/* Icono volver */}
@@ -202,7 +202,7 @@ export default function ForgotPassword() {
                   style={styles.modalButton}
                   activeOpacity={0.8}
                   onPress={handleVerifyCode}>
-                  <Text style={styles.modalButtonText}>Aceptar</Text>
+                  <Text style={styles.buttonText}>Aceptar</Text>
                 </TouchableOpacity>
               </View>
             </View>

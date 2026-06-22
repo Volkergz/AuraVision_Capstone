@@ -58,7 +58,7 @@ float medirDistanciaSensor(HardwareSerial &puertoSerial)
 
     puertoSerial.write(0x55);
 
-    delay(60);   // US-100 necesita más tiempo
+    delay(80);   // Más tiempo para que el US-100 procese mejor
 
     if (puertoSerial.available() >= 2)
     {
@@ -66,7 +66,6 @@ float medirDistanciaSensor(HardwareSerial &puertoSerial)
         uint8_t baja = puertoSerial.read();
 
         int distancia_mm = (alta << 8) | baja;
-
         float distancia_cm = distancia_mm / 10.0;
 
         if (distancia_cm >= 2.0 && distancia_cm <= 450.0)
@@ -141,6 +140,8 @@ void setup() {
 // ==========================================
 void loop() {
 
+  unsigned long inicioLoop = millis();
+
   // Parpadeo LED cada 500 ms
   if (millis() - ultimoParpadeo >= 500) {
     ultimoParpadeo = millis();
@@ -181,5 +182,9 @@ void loop() {
   Serial.print(" cm | PWM: ");
   Serial.println((int)pwmSuaveDer);
 
-  delay(10);
+  // Ajuste para quedar cerca de 12 registros por segundo
+  unsigned long tiempoLoop = millis() - inicioLoop;
+  if (tiempoLoop < 83) {
+    delay(83 - tiempoLoop);
+  }
 }

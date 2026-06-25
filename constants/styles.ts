@@ -12,22 +12,25 @@ export const styles = StyleSheet.create({
   },
 
   //Estilo para card
-  card: {
+  cardWrapper: {
     width: '100%',
     maxWidth: 420,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#2A134A',
     borderRadius: 35,
     paddingTop: 10,
-    paddingBottom: 30,
-    paddingRight: 35,
-    paddingLeft: 35,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 8,
-    borderTopWidth: 10,
-    borderTopColor: '#2A134A',
+  },
+
+  card: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 35,
+    paddingTop: 10,
+    paddingBottom: 30,
+    paddingHorizontal: 35,
   },
 
   //Estilos logo
@@ -567,7 +570,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  
+
   profileLabel: {
     color: '#9B00FF',
     fontSize: 22,

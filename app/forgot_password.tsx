@@ -103,58 +103,60 @@ export default function ForgotPassword() {
             style={styles.logoSmall} />
 
           {/* Título principal */}
-          <View style={styles.card}>
-            <Text style={[styles.subtittle, styles.subtittleForgot]}>
-              ¿Olvidaste tu contraseña?
-            </Text>
+          <View style={styles.cardWrapper}>
+            <View style={styles.card}>
+              <Text style={[styles.subtittle, styles.subtittleForgot]}>
+                ¿Olvidaste tu contraseña?
+              </Text>
 
-            {/* Texto de información */}
-            <Text style={styles.infoText}>
-              Ingresa tu email y te enviaremos un código de verificación.
-            </Text>
+              {/* Texto de información */}
+              <Text style={styles.infoText}>
+                Ingresa tu email y te enviaremos un código de verificación.
+              </Text>
 
-            {/* Campo email */}
-            <Text style={styles.label}>Email</Text>
-            <LinearGradient
-              colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-              locations={[0, 0.15, 0.5, 0.85, 1]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.inputGradient}>
-              <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none" />
-            </LinearGradient>
+              {/* Campo email */}
+              <Text style={styles.label}>Email</Text>
+              <LinearGradient
+                colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+                locations={[0, 0.15, 0.5, 0.85, 1]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={styles.inputGradient}>
+                <TextInput
+                  style={styles.input}
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none" />
+              </LinearGradient>
 
-            {/* Mensaje de error campos vacíos */}
-            {error !== '' && (
-              <Text style={styles.errorText}>{error}</Text>
-            )}
+              {/* Mensaje de error campos vacíos */}
+              {error !== '' && (
+                <Text style={styles.errorText}>{error}</Text>
+              )}
 
-            {/* Botón enviar */}
-            <View style={styles.buttonForgot}>
-              <View style={[styles.leftEdge, styles.edge]} />
+              {/* Botón enviar */}
+              <View style={styles.buttonForgot}>
+                <View style={[styles.leftEdge, styles.edge]} />
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleSend}
+                  activeOpacity={0.8}>
+                  <Text style={styles.buttonText}>Enviar</Text>
+                </TouchableOpacity>
+                <View style={[styles.rightEdge, styles.edge]} />
+              </View>
+
+              {/* Icono volver */}
               <TouchableOpacity
-                style={styles.button}
-                onPress={handleSend}
-                activeOpacity={0.8}>
-                <Text style={styles.buttonText}>Enviar</Text>
+                style={styles.backButton}
+                onPress={() => router.push('/login')}>
+                <Ionicons
+                  name="arrow-back"
+                  size={28}
+                  color="#2A134A" />
               </TouchableOpacity>
-              <View style={[styles.rightEdge, styles.edge]} />
             </View>
-
-            {/* Icono volver */}
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => router.push('/login')}>
-              <Ionicons
-                name="arrow-back"
-                size={28}
-                color="#2A134A" />
-            </TouchableOpacity>
           </View>
 
           {/* Modal */}

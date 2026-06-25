@@ -92,78 +92,80 @@ export default function Login() {
           <Text style={styles.tittle}>¡Bienvenido!</Text>
 
           {/* Logo */}
-          <View style={styles.card}>
-            <Image
-              source={require('../assets/images/logo.png')}
-              style={styles.logo} />
+          <View style={styles.cardWrapper}>
+            <View style={styles.card}>
+              <Image
+                source={require('../assets/images/logo.png')}
+                style={styles.logo} />
 
-            {/* Subtítulo inicio de sesión */}
-            <Text style={styles.subtittle}>Inicio de sesión</Text>
+              {/* Subtítulo inicio de sesión */}
+              <Text style={styles.subtittle}>Inicio de sesión</Text>
 
-            {/* Campo email */}
-            <Text style={styles.label}>Email</Text>
-            <LinearGradient
-              colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-              locations={[0, 0.15, 0.5, 0.85, 1]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.inputGradient}>
-              <TextInput
-                style={styles.input}
-                placeholder=""
-                placeholderTextColor=""
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none" />
-            </LinearGradient>
+              {/* Campo email */}
+              <Text style={styles.label}>Email</Text>
+              <LinearGradient
+                colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+                locations={[0, 0.15, 0.5, 0.85, 1]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={styles.inputGradient}>
+                <TextInput
+                  style={styles.input}
+                  placeholder=""
+                  placeholderTextColor=""
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCapitalize="none" />
+              </LinearGradient>
 
-            {/* Campo contraseña */}
-            <Text style={styles.label}>Contraseña</Text>
-            <LinearGradient
-              colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-              locations={[0, 0.15, 0.5, 0.85, 1]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.inputGradient}>
-              <TextInput
-                style={styles.input}
-                placeholder=""
-                placeholderTextColor=""
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry />
-            </LinearGradient>
+              {/* Campo contraseña */}
+              <Text style={styles.label}>Contraseña</Text>
+              <LinearGradient
+                colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+                locations={[0, 0.15, 0.5, 0.85, 1]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={styles.inputGradient}>
+                <TextInput
+                  style={styles.input}
+                  placeholder=""
+                  placeholderTextColor=""
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry />
+              </LinearGradient>
 
-            {/* Mensaje de error campos vacíos */}
-            {error !== '' && (
-              <Text style={styles.errorText}>{error}</Text>
-            )}
+              {/* Mensaje de error campos vacíos */}
+              {error !== '' && (
+                <Text style={styles.errorText}>{error}</Text>
+              )}
 
-            {/* Enlace para recuperar contraseña */}
-            <TouchableOpacity onPress={() => router.push('/forgot_password')}>
-              <Text style={styles.forgotPassword}>
-                ¿Olvidaste tu contraseña?
-              </Text>
-            </TouchableOpacity>
-
-            {/* Botón aceptar */}
-            <View style={styles.buttonContainer}>
-              <View style={[styles.leftEdge, styles.edge]} />
-              <TouchableOpacity
-                style={styles.button}
-                onPress={handleLogin}
-                activeOpacity={0.8}>
-                <Text style={styles.buttonText}>Aceptar</Text>
+              {/* Enlace para recuperar contraseña */}
+              <TouchableOpacity onPress={() => router.push('/forgot_password')}>
+                <Text style={styles.forgotPassword}>
+                  ¿Olvidaste tu contraseña?
+                </Text>
               </TouchableOpacity>
-              <View style={[styles.rightEdge, styles.edge]} />
-            </View>
 
-            {/* Enlace registro */}
-            <View style={styles.registerContainer}>
-              <Text style={styles.textBelow}>¿No tienes cuenta?</Text>
-              <TouchableOpacity onPress={() => router.push('/register')}>
-                <Text style={styles.textBelow}>Regístrate aquí.</Text>
-              </TouchableOpacity>
+              {/* Botón aceptar */}
+              <View style={styles.buttonContainer}>
+                <View style={[styles.leftEdge, styles.edge]} />
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleLogin}
+                  activeOpacity={0.8}>
+                  <Text style={styles.buttonText}>Aceptar</Text>
+                </TouchableOpacity>
+                <View style={[styles.rightEdge, styles.edge]} />
+              </View>
+
+              {/* Enlace registro */}
+              <View style={styles.registerContainer}>
+                <Text style={styles.textBelow}>¿No tienes cuenta?</Text>
+                <TouchableOpacity onPress={() => router.push('/register')}>
+                  <Text style={styles.textBelow}>Regístrate aquí.</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </LinearGradient>

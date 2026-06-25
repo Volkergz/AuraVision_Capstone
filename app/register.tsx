@@ -197,173 +197,175 @@ export default function Register() {
           end={{ x: 1, y: 1 }}
           style={styles.container}>
 
-          <View style={styles.card}>
+          <View style={styles.cardWrapper}>
+            <View style={styles.card}>
 
-            {/* Logo */}
-            <Image
-              source={require('../assets/images/logo.png')}
-              style={styles.logo} />
+              {/* Logo */}
+              <Image
+                source={require('../assets/images/logo.png')}
+                style={styles.logo} />
 
-            {/* Subtítulo registro */}
-            <Text style={styles.subtittle}>Registro</Text>
+              {/* Subtítulo registro */}
+              <Text style={styles.subtittle}>Registro</Text>
 
-            {/* Cambiar entre cards */}
-            {!showPasswordCard ? (
-              <>
+              {/* Cambiar entre cards */}
+              {!showPasswordCard ? (
+                <>
 
-                {/* Campo nombres */}
-                <Text style={styles.label}>Nombres</Text>
-                <LinearGradient
-                  colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-                  locations={[0, 0.15, 0.5, 0.85, 1]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={styles.inputGradient}>
-                  <TextInput
-                    style={styles.input}
-                    value={names}
-                    onChangeText={setNames} />
-                </LinearGradient>
+                  {/* Campo nombres */}
+                  <Text style={styles.label}>Nombres</Text>
+                  <LinearGradient
+                    colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+                    locations={[0, 0.15, 0.5, 0.85, 1]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={styles.inputGradient}>
+                    <TextInput
+                      style={styles.input}
+                      value={names}
+                      onChangeText={setNames} />
+                  </LinearGradient>
 
-                {/* Campo apellidos */}
-                <Text style={styles.label}>Apellidos</Text>
-                <LinearGradient
-                  colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-                  locations={[0, 0.15, 0.5, 0.85, 1]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={styles.inputGradient}>
-                  <TextInput
-                    style={styles.input}
-                    value={surnames}
-                    onChangeText={setSurnames} />
-                </LinearGradient>
+                  {/* Campo apellidos */}
+                  <Text style={styles.label}>Apellidos</Text>
+                  <LinearGradient
+                    colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+                    locations={[0, 0.15, 0.5, 0.85, 1]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={styles.inputGradient}>
+                    <TextInput
+                      style={styles.input}
+                      value={surnames}
+                      onChangeText={setSurnames} />
+                  </LinearGradient>
 
-                {/* Campo fecha de nacimiento */}
-                <Text style={styles.label}>Fecha de nacimiento</Text>
-                <LinearGradient
-                  colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-                  locations={[0, 0.15, 0.5, 0.85, 1]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={styles.inputGradient}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="DD-MM-AAAA"
-                    placeholderTextColor="#666"
-                    keyboardType="numeric"
-                    maxLength={10}
-                    value={birthdate}
-                    onChangeText={handleBirthdateChange} />
-                </LinearGradient>
+                  {/* Campo fecha de nacimiento */}
+                  <Text style={styles.label}>Fecha de nacimiento</Text>
+                  <LinearGradient
+                    colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+                    locations={[0, 0.15, 0.5, 0.85, 1]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={styles.inputGradient}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="DD-MM-AAAA"
+                      placeholderTextColor="#666"
+                      keyboardType="numeric"
+                      maxLength={10}
+                      value={birthdate}
+                      onChangeText={handleBirthdateChange} />
+                  </LinearGradient>
 
-                {/* Campo email */}
-                <Text style={styles.label}>Email</Text>
-                <LinearGradient
-                  colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-                  locations={[0, 0.15, 0.5, 0.85, 1]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={styles.inputGradient}>
-                  <TextInput
-                    style={styles.input}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    value={email}
-                    onChangeText={setEmail} />
-                </LinearGradient>
+                  {/* Campo email */}
+                  <Text style={styles.label}>Email</Text>
+                  <LinearGradient
+                    colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+                    locations={[0, 0.15, 0.5, 0.85, 1]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={styles.inputGradient}>
+                    <TextInput
+                      style={styles.input}
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      value={email}
+                      onChangeText={setEmail} />
+                  </LinearGradient>
 
-                {/* Mensaje de error campos vacíos */}
-                {error !== '' && (
-                  <Text style={styles.errorText}>
-                    {error}
-                  </Text>
-                )}
+                  {/* Mensaje de error campos vacíos */}
+                  {error !== '' && (
+                    <Text style={styles.errorText}>
+                      {error}
+                    </Text>
+                  )}
 
-                {/* Botón siguiente */}
-                <View style={styles.buttonContainer}>
-                  <View style={[styles.leftEdge, styles.edge]
-                  } />
+                  {/* Botón siguiente */}
+                  <View style={styles.buttonContainer}>
+                    <View style={[styles.leftEdge, styles.edge]
+                    } />
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={handleNext}
+                      activeOpacity={0.8}>
+                      <Text style={styles.buttonText}>Siguiente</Text>
+                    </TouchableOpacity>
+                    <View style={[styles.rightEdge, styles.edge]} />
+                  </View>
+
+                  {/* Enlace inicio de sesión */}
+                  <View style={styles.registerContainer}>
+                    <Text style={styles.textBelow}>¿Ya tienes una cuenta?</Text>
+                    <TouchableOpacity onPress={() => router.push('/login')}>
+                      <Text style={styles.textBelow}>Entra aquí.</Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              ) : (
+                <>
+
+                  {/* Campo contraseña */}
+                  <Text style={styles.label}>Contraseña</Text>
+                  <LinearGradient
+                    colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+                    locations={[0, 0.15, 0.5, 0.85, 1]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={styles.inputGradient}>
+                    <TextInput
+                      style={styles.input}
+                      secureTextEntry
+                      value={password}
+                      onChangeText={setPassword} />
+                  </LinearGradient>
+
+                  {/* Repetir contraseña */}
+                  <Text style={styles.label}>Repetir contraseña</Text>
+                  <LinearGradient
+                    colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+                    locations={[0, 0.15, 0.5, 0.85, 1]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={styles.inputGradient}>
+                    <TextInput
+                      style={styles.input}
+                      secureTextEntry
+                      value={repeatPassword}
+                      onChangeText={setRepeatPassword} />
+                  </LinearGradient>
+
+                  {/* Mensaje de error campos vacíos */}
+                  {error !== '' && (
+                    <Text style={styles.errorText}>
+                      {error}
+                    </Text>
+                  )}
+
+                  {/* Botón aceptar */}
+                  <View style={styles.buttonContainer}>
+                    <View style={[styles.leftEdge, styles.edge]} />
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={handleRegister}
+                      activeOpacity={0.8}>
+                      <Text style={styles.buttonText}>Aceptar</Text>
+                    </TouchableOpacity>
+                    <View style={[styles.rightEdge, styles.edge]} />
+                  </View>
+
+                  {/* Icono volver */}
                   <TouchableOpacity
-                    style={styles.button}
-                    onPress={handleNext}
-                    activeOpacity={0.8}>
-                    <Text style={styles.buttonText}>Siguiente</Text>
+                    style={styles.backButton}
+                    onPress={() => setShowPasswordCard(false)}>
+                    <Ionicons
+                      name="arrow-back"
+                      size={28}
+                      color="#2A134A" />
                   </TouchableOpacity>
-                  <View style={[styles.rightEdge, styles.edge]} />
-                </View>
-
-                {/* Enlace inicio de sesión */}
-                <View style={styles.registerContainer}>
-                  <Text style={styles.textBelow}>¿Ya tienes una cuenta?</Text>
-                  <TouchableOpacity onPress={() => router.push('/login')}>
-                    <Text style={styles.textBelow}>Entra aquí.</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            ) : (
-              <>
-
-                {/* Campo contraseña */}
-                <Text style={styles.label}>Contraseña</Text>
-                <LinearGradient
-                  colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-                  locations={[0, 0.15, 0.5, 0.85, 1]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={styles.inputGradient}>
-                  <TextInput
-                    style={styles.input}
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword} />
-                </LinearGradient>
-
-                {/* Repetir contraseña */}
-                <Text style={styles.label}>Repetir contraseña</Text>
-                <LinearGradient
-                  colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-                  locations={[0, 0.15, 0.5, 0.85, 1]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={styles.inputGradient}>
-                  <TextInput
-                    style={styles.input}
-                    secureTextEntry
-                    value={repeatPassword}
-                    onChangeText={setRepeatPassword} />
-                </LinearGradient>
-
-                {/* Mensaje de error campos vacíos */}
-                {error !== '' && (
-                  <Text style={styles.errorText}>
-                    {error}
-                  </Text>
-                )}
-
-                {/* Botón aceptar */}
-                <View style={styles.buttonContainer}>
-                  <View style={[styles.leftEdge, styles.edge]} />
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={handleRegister}
-                    activeOpacity={0.8}>
-                    <Text style={styles.buttonText}>Aceptar</Text>
-                  </TouchableOpacity>
-                  <View style={[styles.rightEdge, styles.edge]} />
-                </View>
-
-                {/* Icono volver */}
-                <TouchableOpacity
-                  style={styles.backButton}
-                  onPress={() => setShowPasswordCard(false)}>
-                  <Ionicons
-                    name="arrow-back"
-                    size={28}
-                    color="#2A134A" />
-                </TouchableOpacity>
-              </>
-            )}
+                </>
+              )}
+            </View>
           </View>
         </LinearGradient>
       </ScrollView>

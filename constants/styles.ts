@@ -324,6 +324,19 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
 
+  homeCard: {
+    width: '100%',
+    height: 150,
+    borderRadius: 15,
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+    marginBottom: 30,
+    flexDirection: 'row',
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+
   homeTitle: {
     color: '#9B00FF',
     fontSize: 22,
@@ -339,7 +352,7 @@ export const styles = StyleSheet.create({
     color: '#24123A',
     fontSize: 24,
     fontWeight: '700',
-    marginRight: 25,
+    textAlign: 'center',
   },
 
   bottomNav: {
@@ -509,19 +522,6 @@ export const styles = StyleSheet.create({
     elevation: 8,
   },
 
-  homeCard: {
-    width: '100%',
-    height: 150,
-    borderRadius: 15,
-    paddingVertical: 25,
-    paddingHorizontal: 20,
-    marginBottom: 30,
-    flexDirection: 'row',
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
-    elevation: 10,
-  },
-
   settingCard: {
     width: '86%',
     height: 160,
@@ -532,6 +532,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#000',
   },
+
+  // Estilos para interfaz profile
 
   profileCard: {
     width: '100%',
@@ -579,5 +581,203 @@ export const styles = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.3)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 3,
+  },
+
+
+  // Estilos modal añadir dispositivo
+  addDeviceModalCard: {
+    width: '86%',
+    maxWidth: 360,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    paddingVertical: 28,
+    paddingHorizontal: 25,
+    alignItems: 'center',
+    position: 'relative',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+
+  addDeviceBack: {
+    position: 'absolute',
+    top: 18,
+    left: 18,
+  },
+
+  addDeviceTitle: {
+    color: '#24123A',
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 25,
+  },
+
+  addDeviceInfo: {
+    color: '#9B00FF',
+    fontSize: 13,
+    fontWeight: '700',
+    marginBottom: 20,
+    alignSelf: 'flex-start',
+  },
+
+  devicesModalCard: {
+    width: '86%',
+    maxWidth: 360,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    alignItems: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+
+  devicesBack: {
+    position: 'absolute',
+    top: 18,
+    left: 18,
+    zIndex: 1,
+  },
+
+  devicesTitle: {
+    color: '#24123A',
+    fontSize: 22,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginTop: 25,
+    marginBottom: 15,
+  },
+
+  devicesList: {
+    width: '100%',
+  },
+
+  deviceItem: {
+    width: '100%',
+    paddingVertical: 14,
+    paddingHorizontal: 30,
+    borderTopWidth: 1,
+    borderTopColor: '#CFCFCF',
+  },
+
+  deviceText: {
+    color: '#9B00FF',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+
+  confirmDeviceModalCard: {
+    width: '75%',
+    maxWidth: 320,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 6,
+    paddingVertical: 28,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+
+  confirmDeviceText: {
+    color: '#9B00FF',
+    fontSize: 16,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 22,
+  },
+
+  confirmDeviceButtonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+
+  cancelDeviceButton: {
+    width: '45%',
+    height: 28,
+    backgroundColor: '#555',
+    borderRadius: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  acceptDeviceButton: {
+    width: '45%',
+    height: 28,
+    backgroundColor: '#9B00FF',
+    borderRadius: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  cancelDeviceButtonText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+
+  acceptDeviceButtonText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  deviceHistoryModalCard: {
+    width: '86%',
+    maxWidth: 360,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    alignItems: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+
+  deviceHistoryBack: {
+    position: 'absolute',
+    top: 18,
+    left: 18,
+    zIndex: 1,
+  },
+
+  deviceHistoryTitle: {
+    color: '#24123A',
+    fontSize: 22,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginTop: 25,
+    marginBottom: 15,
+  },
+
+  deviceHistoryList: {
+    width: '100%',
+  },
+
+  deviceHistoryItem: {
+    width: '100%',
+    paddingVertical: 13,
+    paddingHorizontal: 25,
+    borderTopWidth: 1,
+    borderTopColor: '#CFCFCF',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  deviceHistoryText: {
+    color: '#9B00FF',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });

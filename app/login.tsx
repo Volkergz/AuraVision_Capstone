@@ -44,27 +44,41 @@ export default function Login() {
       return;
     }
 
-    // Validar longitud de contraseña (8  caracteres)
-    if (password.length !== 8) {
-      setError('La contraseña debe tener 8 caracteres.');
+    //Validación contrañeseña
+    
+    // Validación campos vacios
+    if (!password.trim()) {
+      setError('Completa todos los campos.');
       return;
     }
 
-    // Validar que tenga al menos una letra (evitar que sean solo números)
-    if (!/[a-zA-Z]/.test(password)) {
-      setError('La contraseña debe tener al menos una letra.');
+    // Validación longitud mínimo 8 caracteres y máximo 20
+    if (password.length < 8 || password.length > 20) {
+      setError('La contraseña debe tener entre 8 y 20 caracteres.');
       return;
     }
 
-    // Validar que la contraseña tenga al menos un número
-    if (!/\d/.test(password)) {
-      setError('La contraseña debe tener al menos un número.');
-      return;
-    }
-
-    // Validar que la contraseña no tenga espacios
+    // Validación para no permitir espacios
     if (password.includes(' ')) {
-      setError('La contraseña no debe tener espacios.');
+      setError('La contraseña no debe contener espacios.');
+      return;
+    }
+
+    // Validación que al menos debe contener una letra
+    if (!/[a-zA-Z]/.test(password)) {
+      setError('La contraseña debe contener al menos una letra.');
+      return;
+    }
+
+    // Validación que al menos debe contener un número
+    if (!/\d/.test(password)) {
+      setError('La contraseña debe contener al menos un número.');
+      return;
+    }
+
+    // Validación que al menos debe contener un caracter especial
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=/\\[\];'`~]/.test(password)) {
+      setError('La contraseña debe contener al menos un carácter especial.');
       return;
     }
 

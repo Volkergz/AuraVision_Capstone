@@ -315,9 +315,6 @@ export const styles = StyleSheet.create({
   homeContainer: {
     flex: 1,
     paddingHorizontal: 25,
-    paddingTop: 45,
-    paddingBottom: 20,
-    justifyContent: 'center',
   },
 
   homeTextBox: {
@@ -326,11 +323,11 @@ export const styles = StyleSheet.create({
 
   homeCard: {
     width: '100%',
-    height: 150,
+    minHeight: 130,
     borderRadius: 15,
-    paddingVertical: 25,
+    paddingVertical: 22,
     paddingHorizontal: 20,
-    marginBottom: 30,
+    marginBottom: 22,
     flexDirection: 'row',
     shadowOpacity: 0.35,
     shadowRadius: 10,
@@ -779,5 +776,17 @@ export const styles = StyleSheet.create({
     color: '#9B00FF',
     fontSize: 16,
     fontWeight: '700',
+  },
+
+  homeScroll: {
+    flex: 1,
+    width: '100%',
+  },
+
+  homeScrollContent: {
+    flexGrow: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

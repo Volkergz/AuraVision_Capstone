@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 // Importación de estilos
 import { styles } from '../constants/styles';
+import { styles_register } from '../constants/styles_register';
 
 // Importación de componentes
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';

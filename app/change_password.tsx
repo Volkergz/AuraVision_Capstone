@@ -6,9 +6,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 // Importación de estilos
 import { styles } from '../constants/styles';
+import { styles_changepassword } from '../constants/styles_changepassword';
 
 // Importación de componentes para interfaz
-import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //Importación navegación entre pantallas
 import { router } from 'expo-router';
@@ -17,6 +19,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function ChangePassword() {
+  const insets = useSafeAreaInsets();
 
   // Estado para guardar la nueva contraseña
   const [password, setPassword] = useState('');
@@ -72,100 +75,111 @@ export default function ChangePassword() {
   };
 
   return (
-    // Comportamiento de la interfaz en dispositivos
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    // Fondo degrade 
+    <LinearGradient
+      colors={['#DEAFFF', '#773DC7']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}>
+
+      {/* Logo pequeño en derecha superior */}
+      <Image
+        source={require('../assets/images/logo.png')}
+        style={[
+          styles.logoSmall,
+          {
+            top: insets.top + 5,
+          },
+        ]}
+      />
+
+      {/* Contenido adaptable */}
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled">
+        style={styles.scroll}
+        contentContainerStyle={[
+          styles.scrollContent,
+          {
+            paddingTop: insets.top + 70,
+            paddingBottom: insets.bottom + 95,
+          },
+        ]}
+        showsVerticalScrollIndicator={false}>
 
-        {/* Fondo degrade */}
-        <LinearGradient
-          colors={['#DEAFFF', '#773DC7']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.container}>
 
-          {/* Logo pequeño en derecha superior */}
-          <Image
-            source={require('../assets/images/logo.png')}
-            style={styles.logoSmall} />
-          <View style={styles.cardWrapper}>
-            <View style={styles.card}>
+        <View style={styles.cardWrapper}>
+          <View style={styles.card}>
 
-              {/* Icono volver */}
+            {/* Icono volver */}
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => router.push('/forgot_password')}>
+              <Ionicons
+                name="arrow-back"
+                size={28}
+                color="#2A134A" />
+            </TouchableOpacity>
+
+            {/* Título principal */}
+            <Text style={[styles.subtittle, styles.subtittleForgot]}>
+              Cambiar contraseña
+            </Text>
+
+            {/* Campo nueva contraseña */}
+            <Text style={styles.label}>
+              Nueva contraseña
+            </Text>
+            <LinearGradient
+              colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+              locations={[0, 0.15, 0.5, 0.85, 1]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.inputGradient}>
+              <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry />
+            </LinearGradient>
+
+            {/* Campo repetir contraseña */}
+            <Text style={styles.label}>
+              Repetir contraseña
+            </Text>
+
+            <LinearGradient
+              colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+              locations={[0, 0.15, 0.5, 0.85, 1]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.inputGradient}>
+              <TextInput
+                style={styles.input}
+                value={repeatPassword}
+                onChangeText={setRepeatPassword}
+                secureTextEntry />
+            </LinearGradient>
+
+            {/* Mensaje de error campos vacíos */}
+            {error !== '' && (
+              <Text style={styles.errorText}>{error}</Text>
+            )}
+
+            {/* Botón aceptar */}
+            <View style={styles.buttonForgot}>
+              <View style={[styles.leftEdge, styles.edge]} />
               <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => router.push('/forgot_password')}>
-                <Ionicons
-                  name="arrow-back"
-                  size={28}
-                  color="#2A134A" />
+                style={styles.button}
+                onPress={handleChangePassword}
+                activeOpacity={0.8}>
+                <Text style={styles.buttonText}>
+                  Aceptar
+                </Text>
               </TouchableOpacity>
-
-              {/* Título principal */}
-              <Text style={[styles.subtittle, styles.subtittleForgot]}>
-                Cambiar contraseña
-              </Text>
-
-              {/* Campo nueva contraseña */}
-              <Text style={styles.label}>
-                Nueva contraseña
-              </Text>
-              <LinearGradient
-                colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-                locations={[0, 0.15, 0.5, 0.85, 1]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={styles.inputGradient}>
-                <TextInput
-                  style={styles.input}
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry />
-              </LinearGradient>
-
-              {/* Campo repetir contraseña */}
-              <Text style={styles.label}>
-                Repetir contraseña
-              </Text>
-
-              <LinearGradient
-                colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-                locations={[0, 0.15, 0.5, 0.85, 1]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={styles.inputGradient}>
-                <TextInput
-                  style={styles.input}
-                  value={repeatPassword}
-                  onChangeText={setRepeatPassword}
-                  secureTextEntry />
-              </LinearGradient>
-
-              {/* Mensaje de error campos vacíos */}
-              {error !== '' && (
-                <Text style={styles.errorText}>{error}</Text>
-              )}
-
-              {/* Botón aceptar */}
-              <View style={styles.buttonForgot}>
-                <View style={[styles.leftEdge, styles.edge]} />
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={handleChangePassword}
-                  activeOpacity={0.8}>
-                  <Text style={styles.buttonText}>
-                    Aceptar
-                  </Text>
-                </TouchableOpacity>
-                <View style={[styles.rightEdge, styles.edge]} />
-              </View>
+              <View style={[styles.rightEdge, styles.edge]} />
             </View>
           </View>
-        </LinearGradient>
+        </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </LinearGradient>
   );
 }

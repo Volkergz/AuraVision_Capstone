@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 
 // Importación de componentes para interfaz
-import { Image, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Modal, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //Importación de iconos
 import { Ionicons } from '@expo/vector-icons';
@@ -15,8 +16,12 @@ import { router } from 'expo-router';
 
 // Importación de estilos
 import { styles } from '../constants/styles';
+import { styles_settings } from '../constants/styles_settings';
 
 export default function Settings() {
+
+  //Interfaz
+  const insets = useSafeAreaInsets();
 
   // Modal volumen
   const [showVolumeModal, setShowVolumeModal] = useState(false);
@@ -92,166 +97,183 @@ export default function Settings() {
       {/* Logo pequeño en derecha superior */}
       <Image
         source={require('../assets/images/logo.png')}
-        style={styles.logoSmall} />
+        style={[
+          styles.logoSmall,
+          { top: insets.top + 5 },
+        ]}
+      />
 
-      {/* Card nivel de volumen */}
-      <View style={[styles.settingCard, styles.secondaryCard]}>
-        <Text style={styles.settingTitle}>Nivel de volumen</Text>
-        <Text style={styles.settingNumber}>{volume}</Text>
+    {/* Contenido adaptable */}
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[
+          styles.scrollContent,
+          {
+            paddingTop: insets.top + 70,
+            paddingBottom: insets.bottom + 95,
+          },
+        ]}
+        showsVerticalScrollIndicator={false}>
 
-        {/* Botón modificar */}
-        <TouchableOpacity
-          style={styles.settingButton}
-          onPress={() => {
-            setTempVolume(volume);
-            setShowVolumeModal(true);
+        {/* Card nivel de volumen */}
+        <View style={[styles_settings.settingCard, styles.secondaryCard]}>
+          <Text style={styles_settings.settingTitle}>Nivel de volumen</Text>
+          <Text style={styles_settings.settingNumber}>{volume}</Text>
+
+          {/* Botón modificar */}
+          <TouchableOpacity
+            style={styles_settings.settingButton}
+            onPress={() => {
+              setTempVolume(volume);
+              setShowVolumeModal(true);
+            }}>
+            <Text style={styles_settings.settingButtonText}>Modificar</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Modal nivel de volumen (se almacena temporalmente) */}
+        <Modal
+          visible={showVolumeModal}
+          transparent
+          animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles_settings.settingModalCard}>
+
+              {/* Botón cerrar modal */}
+              <TouchableOpacity
+                style={styles.closeModal}
+                onPress={() => setShowVolumeModal(false)}>
+                <Ionicons name="close" size={20} color="#000" />
+              </TouchableOpacity>
+
+              {/* Título modal */}
+              <Text style={styles_settings.settingModalTitle}>
+                Nivel de volumen
+              </Text>
+
+              {/* Configuración de volumen */}
+              <View style={styles_settings.settingCounterRow}>
+
+                {/* Botón bajar volumen */}
+                <TouchableOpacity
+                  onPress={() => setTempVolume(tempVolume > 0 ? tempVolume - 1 : 0)}>
+                  <Text style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}>-</Text>
+                </TouchableOpacity>
+                <Text style={[styles_settings.settingButtons, styles_settings.settingCounterNumber]}>
+                  {tempVolume}
+                </Text>
+
+                {/*Botón subir volumen (limite 100) */}
+                <TouchableOpacity
+                  onPress={() => setTempVolume(tempVolume < 100 ? tempVolume + 1 : 100)}>
+                  <Text style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}>+</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Botón aceptar */}
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => {
+                  setVolume(tempVolume);
+                  setShowVolumeModal(false);
+                }}>
+                <Text style={styles.buttonText}>Aceptar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        {/* Card nivel de vibración */}
+        <View style={[styles_settings.settingCard, styles.secondaryCard]}>
+          <Text style={styles_settings.settingTitle}>Nivel de vibración</Text>
+          <Text style={styles_settings.settingNumber}>{vibration}</Text>
+
+          {/* Botón modificar */}
+          <TouchableOpacity style={styles_settings.settingButton} onPress={() => {
+            setTempVibration(vibration);
+            setShowVibrationModal(true);
           }}>
-          <Text style={styles.settingButtonText}>Modificar</Text>
-        </TouchableOpacity>
-      </View>
+            <Text style={styles_settings.settingButtonText}>Modificar</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* Modal nivel de volumen (se almacena temporalmente) */}
-      <Modal
-        visible={showVolumeModal}
-        transparent
-        animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.settingModalCard}>
+        {/* Modal nivel de vibración(se almacena temporalmente) */}
+        <Modal
+          visible={showVibrationModal}
+          transparent
+          animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles_settings.settingModalCard}>
 
-            {/* Botón cerrar modal */}
-            <TouchableOpacity
-              style={styles.closeModal}
-              onPress={() => setShowVolumeModal(false)}>
-              <Ionicons name="close" size={20} color="#000" />
-            </TouchableOpacity>
-
-            {/* Título modal */}
-            <Text style={styles.settingModalTitle}>
-              Nivel de volumen
-            </Text>
-
-            {/* Configuración de volumen */}
-            <View style={styles.settingCounterRow}>
-
-              {/* Botón bajar volumen */}
+              {/* Botón cerrar modal */}
               <TouchableOpacity
-                onPress={() => setTempVolume(tempVolume > 0 ? tempVolume - 1 : 0)}>
-                <Text style={[styles.settingButtons, styles.settingCounterButton]}>-</Text>
+                style={styles.closeModal}
+                onPress={() => setShowVibrationModal(false)}>
+                <Ionicons name="close" size={20} color="#000" />
               </TouchableOpacity>
-              <Text style={[styles.settingButtons, styles.settingCounterNumber]}>
-                {tempVolume}
+
+              {/* Título modal */}
+              <Text style={styles_settings.settingModalTitle}>
+                Nivel de vibración
               </Text>
 
-              {/*Botón subir volumen (limite 100) */}
+              {/* Configuración de vibración */}
+              <View style={styles_settings.settingCounterRow}>
+
+                {/*  Botón bajar vibración */}
+                <TouchableOpacity
+                  onPress={() => setTempVibration(tempVibration > 0 ? tempVibration - 1 : 0)}>
+                  <Text style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}>-</Text>
+                </TouchableOpacity>
+
+                <Text style={[styles_settings.settingButtons, styles_settings.settingCounterNumber]}>
+                  {tempVibration}
+                </Text>
+
+                {/*  Botón subir vibración */}
+                <TouchableOpacity
+                  onPress={() => setTempVibration(tempVibration < 100 ? tempVibration + 1 : 100)}>
+                  <Text style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}>+</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Botón aceptar */}
               <TouchableOpacity
-                onPress={() => setTempVolume(tempVolume < 100 ? tempVolume + 1 : 100)}>
-                <Text style={[styles.settingButtons, styles.settingCounterButton]}>+</Text>
+                style={styles.modalButton}
+                onPress={() => {
+                  setVibration(tempVibration);
+                  setShowVibrationModal(false);
+                }}>
+                <Text style={styles.buttonText}>Aceptar</Text>
               </TouchableOpacity>
             </View>
-
-            {/* Botón aceptar */}
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setVolume(tempVolume);
-                setShowVolumeModal(false);
-              }}>
-              <Text style={styles.buttonText}>Aceptar</Text>
-            </TouchableOpacity>
           </View>
+        </Modal>
+
+        {/* Card agregar dispositivo */}
+        <View style={[styles_settings.settingCardSmall, styles.secondaryCard]}>
+          <Text style={styles_settings.settingTitle}>Nuevo dispositivo</Text>
+
+          {/* Botón añadir */}
+          <TouchableOpacity
+            style={styles_settings.settingButton}
+            onPress={() => setShowAddDeviceModal(true)}>
+            <Text style={styles_settings.settingButtonText}>Añadir</Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
 
-      {/* Card nivel de vibración */}
-      <View style={[styles.settingCard, styles.secondaryCard]}>
-        <Text style={styles.settingTitle}>Nivel de vibración</Text>
-        <Text style={styles.settingNumber}>{vibration}</Text>
+        {/* Card eliminar dispositivo */}
+        <View style={[styles_settings.settingCardSmall, styles.secondaryCard]}>
+          <Text style={styles_settings.settingTitle}>Eliminar dispositivo</Text>
 
-        {/* Botón modificar */}
-        <TouchableOpacity style={styles.settingButton} onPress={() => {
-          setTempVibration(vibration);
-          setShowVibrationModal(true);
-        }}>
-          <Text style={styles.settingButtonText}>Modificar</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Modal nivel de vibración(se almacena temporalmente) */}
-      <Modal
-        visible={showVibrationModal}
-        transparent
-        animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.settingModalCard}>
-
-            {/* Botón cerrar modal */}
-            <TouchableOpacity
-              style={styles.closeModal}
-              onPress={() => setShowVibrationModal(false)}>
-              <Ionicons name="close" size={20} color="#000" />
-            </TouchableOpacity>
-
-            {/* Título modal */}
-            <Text style={styles.settingModalTitle}>
-              Nivel de vibración
-            </Text>
-
-            {/* Configuración de vibración */}
-            <View style={styles.settingCounterRow}>
-
-              {/*  Botón bajar vibración */}
-              <TouchableOpacity
-                onPress={() => setTempVibration(tempVibration > 0 ? tempVibration - 1 : 0)}>
-                <Text style={[styles.settingButtons, styles.settingCounterButton]}>-</Text>
-              </TouchableOpacity>
-
-              <Text style={[styles.settingButtons, styles.settingCounterNumber]}>
-                {tempVibration}
-              </Text>
-
-              {/*  Botón subir vibración */}
-              <TouchableOpacity
-                onPress={() => setTempVibration(tempVibration < 100 ? tempVibration + 1 : 100)}>
-                <Text style={[styles.settingButtons, styles.settingCounterButton]}>+</Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Botón aceptar */}
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setVibration(tempVibration);
-                setShowVibrationModal(false);
-              }}>
-              <Text style={styles.buttonText}>Aceptar</Text>
-            </TouchableOpacity>
-          </View>
+          {/* Botón ver dispositivos */}
+          <TouchableOpacity
+            style={styles_settings.settingButton}
+            onPress={() => setShowDeviceHistoryModal(true)}>
+            <Text style={styles_settings.settingButtonText}>Ver dispositivos</Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
-
-      {/* Card agregar dispositivo */}
-      <View style={[styles.settingCardSmall, styles.secondaryCard]}>
-        <Text style={styles.settingTitle}>Nuevo dispositivo</Text>
-
-        {/* Botón añadir */}
-        <TouchableOpacity
-          style={styles.settingButton}
-          onPress={() => setShowAddDeviceModal(true)}>
-          <Text style={styles.settingButtonText}>Añadir</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Card eliminar dispositivo */}
-      <View style={[styles.settingCardSmall, styles.secondaryCard]}>
-        <Text style={styles.settingTitle}>Eliminar dispositivo</Text>
-
-        {/* Botón ver dispositivos */}
-        <TouchableOpacity
-          style={styles.settingButton}
-          onPress={() => setShowDeviceHistoryModal(true)}>
-          <Text style={styles.settingButtonText}>Ver dispositivos</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
 
       <Modal
         visible={showAddDeviceModal}
@@ -259,24 +281,24 @@ export default function Settings() {
         animationType="fade">
 
         <View style={styles.modalOverlay}>
-          <View style={styles.addDeviceModalCard}>
+          <View style={styles_settings.addDeviceModalCard}>
 
             <TouchableOpacity
-              style={styles.addDeviceBack}
+              style={styles_settings.addDeviceBack}
               onPress={() => setShowAddDeviceModal(false)}>
               <Ionicons name="arrow-back" size={24} color="#24123A" />
             </TouchableOpacity>
 
-            <Text style={styles.addDeviceTitle}>Añadir dispositivo</Text>
+            <Text style={styles_settings.addDeviceTitle}>Añadir dispositivo</Text>
 
-            <Text style={styles.addDeviceInfo}>
+            <Text style={styles_settings.addDeviceInfo}>
               Recuerda estar conectado a internet.
             </Text>
 
             <TouchableOpacity
-              style={styles.settingButton}
+              style={styles_settings.settingButton}
               onPress={handleSearchDevice}>
-              <Text style={styles.settingButtonText}>Buscar</Text>
+              <Text style={styles_settings.settingButtonText}>Buscar</Text>
             </TouchableOpacity>
 
           </View>
@@ -290,41 +312,41 @@ export default function Settings() {
         animationType="fade">
 
         <View style={styles.modalOverlay}>
-          <View style={styles.devicesModalCard}>
+          <View style={styles_settings.devicesModalCard}>
 
             <TouchableOpacity
-              style={styles.devicesBack}
+              style={styles_settings.devicesBack}
               onPress={() => setShowDevicesModal(false)}>
               <Ionicons name="arrow-back" size={24} color="#24123A" />
             </TouchableOpacity>
 
-            <Text style={styles.devicesTitle}>
+            <Text style={styles_settings.devicesTitle}>
               Dispositivos{'\n'}encontrados
             </Text>
 
-            <View style={styles.devicesList}>
+            <View style={styles_settings.devicesList}>
               <TouchableOpacity
-                style={styles.deviceItem}
+                style={styles_settings.deviceItem}
                 onPress={() => handleSelectDevice('AuraVisión-d1')}>
-                <Text style={styles.deviceText}>AuraVisión-d1</Text>
+                <Text style={styles_settings.deviceText}>AuraVisión-d1</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.deviceItem}
+                style={styles_settings.deviceItem}
                 onPress={() => handleSelectDevice('AuraVisión-d2')}>
-                <Text style={styles.deviceText}>AuraVisión-d2</Text>
+                <Text style={styles_settings.deviceText}>AuraVisión-d2</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.deviceItem}
+                style={styles_settings.deviceItem}
                 onPress={() => handleSelectDevice('AuraVisión-d3')}>
-                <Text style={styles.deviceText}>AuraVisión-d3</Text>
+                <Text style={styles_settings.deviceText}>AuraVisión-d3</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.deviceItem}
+                style={styles_settings.deviceItem}
                 onPress={() => handleSelectDevice('AuraVisión-AV2')}>
-                <Text style={styles.deviceText}>AuraVisión-AV2</Text>
+                <Text style={styles_settings.deviceText}>AuraVisión-AV2</Text>
               </TouchableOpacity>
             </View>
 
@@ -339,30 +361,30 @@ export default function Settings() {
         animationType="fade">
 
         <View style={styles.modalOverlay}>
-          <View style={styles.confirmDeviceModalCard}>
+          <View style={styles_settings.confirmDeviceModalCard}>
 
-            <Text style={styles.confirmDeviceText}>
+            <Text style={styles_settings.confirmDeviceText}>
               ¿Quieres agregar{'\n'}este dispositivo?
             </Text>
 
-            <View style={styles.confirmDeviceButtonRow}>
+            <View style={styles_settings.confirmDeviceButtonRow}>
 
               <TouchableOpacity
-                style={styles.cancelDeviceButton}
+                style={styles_settings.cancelDeviceButton}
                 onPress={() => {
                   setShowConfirmDeviceModal(false);
                   setShowDevicesModal(true);
                 }}>
-                <Text style={styles.cancelDeviceButtonText}>Cancelar</Text>
+                <Text style={styles_settings.cancelDeviceButtonText}>Cancelar</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.acceptDeviceButton}
+                style={styles_settings.acceptDeviceButton}
                 onPress={() => {
                   console.log('Dispositivo agregado:', selectedDevice);
                   setShowConfirmDeviceModal(false);
                 }}>
-                <Text style={styles.acceptDeviceButtonText}>Aceptar</Text>
+                <Text style={styles_settings.acceptDeviceButtonText}>Aceptar</Text>
               </TouchableOpacity>
 
             </View>
@@ -377,22 +399,22 @@ export default function Settings() {
         animationType="fade">
 
         <View style={styles.modalOverlay}>
-          <View style={styles.deviceHistoryModalCard}>
+          <View style={styles_settings.deviceHistoryModalCard}>
 
             <TouchableOpacity
-              style={styles.deviceHistoryBack}
+              style={styles_settings.deviceHistoryBack}
               onPress={() => setShowDeviceHistoryModal(false)}>
               <Ionicons name="arrow-back" size={24} color="#24123A" />
             </TouchableOpacity>
 
-            <Text style={styles.deviceHistoryTitle}>
+            <Text style={styles_settings.deviceHistoryTitle}>
               Historial de{'\n'}dispositivos
             </Text>
 
-            <View style={styles.deviceHistoryList}>
+            <View style={styles_settings.deviceHistoryList}>
               {devices.map((device) => (
-                <View key={device} style={styles.deviceHistoryItem}>
-                  <Text style={styles.deviceHistoryText}>{device}</Text>
+                <View key={device} style={styles_settings.deviceHistoryItem}>
+                  <Text style={styles_settings.deviceHistoryText}>{device}</Text>
 
                   <TouchableOpacity onPress={() => handleDeleteDevice(device)}>
                     <Ionicons name="trash-outline" size={20} color="red" />
@@ -412,30 +434,30 @@ export default function Settings() {
         animationType="fade">
 
         <View style={styles.modalOverlay}>
-          <View style={styles.confirmDeviceModalCard}>
+          <View style={styles_settings.confirmDeviceModalCard}>
 
-            <Text style={styles.confirmDeviceText}>
+            <Text style={styles_settings.confirmDeviceText}>
               ¿Estas seguro de eliminar{'\n'}este dispositivo?
             </Text>
 
-            <View style={styles.confirmDeviceButtonRow}>
+            <View style={styles_settings.confirmDeviceButtonRow}>
 
               <TouchableOpacity
-                style={styles.cancelDeviceButton}
+                style={styles_settings.cancelDeviceButton}
                 onPress={() => {
                   setShowDeleteDeviceModal(false);
                   setShowDeviceHistoryModal(true);
                 }}>
-                <Text style={styles.cancelDeviceButtonText}>Cancelar</Text>
+                <Text style={styles_settings.cancelDeviceButtonText}>Cancelar</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.acceptDeviceButton}
+                style={styles_settings.acceptDeviceButton}
                 onPress={() => {
                   console.log('Dispositivo eliminado:', deviceToDelete);
                   setShowDeleteDeviceModal(false);
                 }}>
-                <Text style={styles.acceptDeviceButtonText}>Aceptar</Text>
+                <Text style={styles_settings.acceptDeviceButtonText}>Aceptar</Text>
               </TouchableOpacity>
 
             </View>
@@ -444,11 +466,14 @@ export default function Settings() {
       </Modal>
 
       {/* Nav Bar */}
-      <View style={styles.bottomNav}>
+      <View style={[
+        styles.bottomNav,
+        { bottom: insets.bottom + 14 }
+      ]}>
 
         {/* Botón inicio */}
         <TouchableOpacity
-          style={styles.navItem}
+          style={[styles.navItem, styles.bottomHome2]}
           onPress={() => router.push('/home')}>
           <Ionicons name="home-outline" size={22} color="#555" />
           <Text style={styles.navText}>Inicio</Text>
@@ -456,7 +481,7 @@ export default function Settings() {
 
         {/* Botón ajustes */}
         <TouchableOpacity style={[styles.navItem, styles.bottomHome]}>
-          <Ionicons name="options-outline" size={22} color="#9B00FF" />
+          <Ionicons name="options-outline" size={26} color="#9B00FF" />
           <Text style={styles.navTextActive}>Ajustes</Text>
           <View style={styles.activeLine} />
         </TouchableOpacity>

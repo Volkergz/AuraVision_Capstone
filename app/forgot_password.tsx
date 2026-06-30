@@ -6,9 +6,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 // Importación de estilos
 import { styles } from '../constants/styles';
+import { styles_forgotpassword } from '../constants/styles_forgotpassword';
 
 // Importación de componentes para interfaz
-import { Image, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //Importaciín navegación entre pantallas
 import { router } from 'expo-router';
@@ -17,6 +19,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function ForgotPassword() {
+  const insets = useSafeAreaInsets();
 
   // Estado para guardar los datos del usuario
   const [email, setEmail] = useState('');
@@ -82,135 +85,144 @@ export default function ForgotPassword() {
   };
 
   return (
-    // Comportamiento de la interfaz en dispositivos
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    // Fondo degrade 
+    <LinearGradient
+      colors={['#DEAFFF', '#773DC7']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}>
+
+      {/* Logo pequeño en derecha superior */}
+      <Image
+        source={require('../assets/images/logo.png')}
+        style={[
+          styles.logoSmall,
+          {
+            top: insets.top + 5,
+          },
+        ]}
+      />
+
+      {/* Contenido adaptable */}
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled">
+        style={styles.scroll}
+        contentContainerStyle={[
+          styles.scrollContent,
+          {
+            paddingTop: insets.top + 70,
+            paddingBottom: insets.bottom + 95,
+          },
+        ]}
+        showsVerticalScrollIndicator={false}>
 
-        {/* Fondo degrade */}
-        <LinearGradient
-          colors={['#DEAFFF', '#773DC7']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.container}>
+        {/* Título principal */}
+        <View style={styles.cardWrapper}>
+          <View style={styles.card}>
+            <Text style={[styles.subtittle, styles.subtittleForgot]}>
+              ¿Olvidaste tu contraseña?
+            </Text>
 
-          {/* Logo pequeño en derecha superior */}
-          <Image
-            source={require('../assets/images/logo.png')}
-            style={styles.logoSmall} />
+            {/* Texto de información */}
+            <Text style={styles_forgotpassword.infoText}>
+              Ingresa tu email y te enviaremos un código de verificación.
+            </Text>
 
-          {/* Título principal */}
-          <View style={styles.cardWrapper}>
-            <View style={styles.card}>
-              <Text style={[styles.subtittle, styles.subtittleForgot]}>
-                ¿Olvidaste tu contraseña?
+            {/* Campo email */}
+            <Text style={styles.label}>Email</Text>
+            <LinearGradient
+              colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
+              locations={[0, 0.15, 0.5, 0.85, 1]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.inputGradient}>
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none" />
+            </LinearGradient>
+
+            {/* Mensaje de error campos vacíos */}
+            {error !== '' && (
+              <Text style={styles.errorText}>{error}</Text>
+            )}
+
+            {/* Botón enviar */}
+            <View style={styles.buttonForgot}>
+              <View style={[styles.leftEdge, styles.edge]} />
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleSend}
+                activeOpacity={0.8}>
+                <Text style={styles.buttonText}>Enviar</Text>
+              </TouchableOpacity>
+              <View style={[styles.rightEdge, styles.edge]} />
+            </View>
+
+            {/* Icono volver */}
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => router.push('/login')}>
+              <Ionicons
+                name="arrow-back"
+                size={28}
+                color="#2A134A" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Modal */}
+        <Modal
+          visible={showModal}
+          transparent
+          animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalCard}>
+
+              {/* Botón para cerrar el modal */}
+              <TouchableOpacity
+                style={styles.closeModal}
+                onPress={() => setShowModal(false)}>
+                <Text style={styles_forgotpassword.closeModalText}>×</Text>
+              </TouchableOpacity>
+
+              <Text style={styles.modalTitle}>
+                Ingresa el código de verificación
               </Text>
 
-              {/* Texto de información */}
-              <Text style={styles.infoText}>
-                Ingresa tu email y te enviaremos un código de verificación.
-              </Text>
-
-              {/* Campo email */}
-              <Text style={styles.label}>Email</Text>
-              <LinearGradient
-                colors={['#B4AEAE', '#EBEBEB', '#E6E6E6', '#EBEBEB', '#B4AEAE']}
-                locations={[0, 0.15, 0.5, 0.85, 1]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={styles.inputGradient}>
-                <TextInput
-                  style={styles.input}
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none" />
-              </LinearGradient>
-
-              {/* Mensaje de error campos vacíos */}
-              {error !== '' && (
-                <Text style={styles.errorText}>{error}</Text>
+              {/* Contenedor de código de verificación */}
+              <View style={styles_forgotpassword.codeContainer}>
+                {code.map((value, index) => (
+                  <TextInput
+                    key={index}
+                    style={styles_forgotpassword.codeInput}
+                    value={value}
+                    onChangeText={(text) => {
+                      const onlyNumber = text.replace(/[^0-9]/g, '');
+                      const newCode = [...code];
+                      newCode[index] = onlyNumber.slice(-1);
+                      setCode(newCode);
+                    }}
+                    keyboardType="number-pad"
+                    maxLength={1} />
+                ))}
+              </View>
+              {modalError !== '' && (
+                <Text style={styles_forgotpassword.modalErrorText}>{modalError}</Text>
               )}
 
-              {/* Botón enviar */}
-              <View style={styles.buttonForgot}>
-                <View style={[styles.leftEdge, styles.edge]} />
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={handleSend}
-                  activeOpacity={0.8}>
-                  <Text style={styles.buttonText}>Enviar</Text>
-                </TouchableOpacity>
-                <View style={[styles.rightEdge, styles.edge]} />
-              </View>
-
-              {/* Icono volver */}
+              {/* Botón aceptar */}
               <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => router.push('/login')}>
-                <Ionicons
-                  name="arrow-back"
-                  size={28}
-                  color="#2A134A" />
+                style={styles.modalButton}
+                activeOpacity={0.8}
+                onPress={handleVerifyCode}>
+                <Text style={styles.buttonText}>Aceptar</Text>
               </TouchableOpacity>
             </View>
           </View>
-
-          {/* Modal */}
-          <Modal
-            visible={showModal}
-            transparent
-            animationType="fade">
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalCard}>
-
-                {/* Botón para cerrar el modal */}
-                <TouchableOpacity
-                  style={styles.closeModal}
-                  onPress={() => setShowModal(false)}>
-                  <Text style={styles.closeModalText}>×</Text>
-                </TouchableOpacity>
-
-                <Text style={styles.modalTitle}>
-                  Ingresa el código de verificación
-                </Text>
-
-                {/* Contenedor de código de verificación */}
-                <View style={styles.codeContainer}>
-                  {code.map((value, index) => (
-                    <TextInput
-                      key={index}
-                      style={styles.codeInput}
-                      value={value}
-                      onChangeText={(text) => {
-                        const onlyNumber = text.replace(/[^0-9]/g, '');
-                        const newCode = [...code];
-                        newCode[index] = onlyNumber.slice(-1);
-                        setCode(newCode);
-                      }}
-                      keyboardType="number-pad"
-                      maxLength={1} />
-                  ))}
-                </View>
-                {modalError !== '' && (
-                  <Text style={styles.modalErrorText}>{modalError}</Text>
-                )}
-
-                {/* Botón aceptar */}
-                <TouchableOpacity
-                  style={styles.modalButton}
-                  activeOpacity={0.8}
-                  onPress={handleVerifyCode}>
-                  <Text style={styles.buttonText}>Aceptar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        </LinearGradient>
+        </Modal>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </LinearGradient>
   );
 }

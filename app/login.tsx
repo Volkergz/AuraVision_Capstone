@@ -9,6 +9,7 @@ import { router } from 'expo-router';
 
 // Importación de estilos
 import { styles } from '../constants/styles';
+import { styles_login} from '../constants/styles_login';
 
 // Importación de componentes para interfaz
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';

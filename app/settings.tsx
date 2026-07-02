@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 
 // Importación de componentes para interfaz
-import { Image, Modal, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import { Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //Importación de iconos
@@ -103,7 +103,7 @@ export default function Settings() {
         ]}
       />
 
-    {/* Contenido adaptable */}
+      {/* Contenido adaptable */}
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={[
@@ -156,17 +156,34 @@ export default function Settings() {
 
                 {/* Botón bajar volumen */}
                 <TouchableOpacity
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Bajar volumen"
                   onPress={() => setTempVolume(tempVolume > 0 ? tempVolume - 1 : 0)}>
-                  <Text style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}>-</Text>
+                  <Text
+                    style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}
+                    accessible={false}>
+                    -
+                  </Text>
                 </TouchableOpacity>
-                <Text style={[styles_settings.settingButtons, styles_settings.settingCounterNumber]}>
+
+                <Text
+                  style={[styles_settings.settingButtons, styles_settings.settingCounterNumber]}
+                  accessibilityLabel={`Volumen actual ${tempVolume}`}>
                   {tempVolume}
                 </Text>
 
-                {/*Botón subir volumen (limite 100) */}
+                {/* Botón subir volumen */}
                 <TouchableOpacity
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Subir volumen"
                   onPress={() => setTempVolume(tempVolume < 100 ? tempVolume + 1 : 100)}>
-                  <Text style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}>+</Text>
+                  <Text
+                    style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}
+                    accessible={false}>
+                    +
+                  </Text>
                 </TouchableOpacity>
               </View>
 
@@ -220,20 +237,36 @@ export default function Settings() {
               {/* Configuración de vibración */}
               <View style={styles_settings.settingCounterRow}>
 
-                {/*  Botón bajar vibración */}
+                {/* Botón bajar vibración */}
                 <TouchableOpacity
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Bajar vibración"
                   onPress={() => setTempVibration(tempVibration > 0 ? tempVibration - 1 : 0)}>
-                  <Text style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}>-</Text>
+                  <Text
+                    style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}
+                    accessible={false}>
+                    -
+                  </Text>
                 </TouchableOpacity>
 
-                <Text style={[styles_settings.settingButtons, styles_settings.settingCounterNumber]}>
+                <Text
+                  style={[styles_settings.settingButtons, styles_settings.settingCounterNumber]}
+                  accessibilityLabel={`Vibración actual ${tempVibration}`}>
                   {tempVibration}
                 </Text>
 
-                {/*  Botón subir vibración */}
+                {/* Botón subir vibración */}
                 <TouchableOpacity
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel="Subir vibración"
                   onPress={() => setTempVibration(tempVibration < 100 ? tempVibration + 1 : 100)}>
-                  <Text style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}>+</Text>
+                  <Text
+                    style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}
+                    accessible={false}>
+                    +
+                  </Text>
                 </TouchableOpacity>
               </View>
 
@@ -416,8 +449,18 @@ export default function Settings() {
                 <View key={device} style={styles_settings.deviceHistoryItem}>
                   <Text style={styles_settings.deviceHistoryText}>{device}</Text>
 
-                  <TouchableOpacity onPress={() => handleDeleteDevice(device)}>
-                    <Ionicons name="trash-outline" size={20} color="red" />
+                  <TouchableOpacity
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Eliminar"
+                    onPress={() => handleDeleteDevice(device)}>
+                    <Ionicons
+                      name="trash-outline"
+                      size={20}
+                      color="red"
+                      accessible={false}
+                      importantForAccessibility="no"
+                    />
                   </TouchableOpacity>
                 </View>
               ))}

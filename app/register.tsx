@@ -80,6 +80,14 @@ export default function Register() {
       return;
     }
 
+    // Validación máximo 3 nombres
+    const nameCount = valNames.trim().split(/\s+/).length;
+
+    if (nameCount > 3) {
+      setError('Ingresa máximo tres nombres.');
+      return;
+    }
+
     // Validación apellidos
     const surnameCount = valSurnames.trim().split(/\s+/).length;
 
@@ -224,7 +232,9 @@ export default function Register() {
                     <TextInput
                       style={styles.input}
                       value={names}
-                      onChangeText={setNames} />
+                      onChangeText={setNames}
+                      placeholder="Ingresa tus nombres"
+                      placeholderTextColor="#777" />
                   </LinearGradient>
 
                   {/* Campo apellidos */}
@@ -238,7 +248,9 @@ export default function Register() {
                     <TextInput
                       style={styles.input}
                       value={surnames}
-                      onChangeText={setSurnames} />
+                      onChangeText={setSurnames}
+                      placeholder="Ingresa tus apellidos"
+                      placeholderTextColor="#777" />
                   </LinearGradient>
 
                   {/* Campo fecha de nacimiento */}
@@ -251,12 +263,12 @@ export default function Register() {
                     style={styles.inputGradient}>
                     <TextInput
                       style={styles.input}
-                      placeholder="DD-MM-AAAA"
-                      placeholderTextColor="#666"
                       keyboardType="numeric"
                       maxLength={10}
                       value={birthdate}
-                      onChangeText={handleBirthdateChange} />
+                      onChangeText={handleBirthdateChange}
+                      placeholder="Ingresa tu fecha de nacimiento"
+                      placeholderTextColor="#666" />
                   </LinearGradient>
 
                   {/* Campo email */}
@@ -272,7 +284,9 @@ export default function Register() {
                       keyboardType="email-address"
                       autoCapitalize="none"
                       value={email}
-                      onChangeText={setEmail} />
+                      onChangeText={setEmail}
+                      placeholder="Ingresa tu email"
+                      placeholderTextColor="#777" />
                   </LinearGradient>
 
                   {/* Mensaje de error campos vacíos */}
@@ -318,7 +332,9 @@ export default function Register() {
                       style={styles.input}
                       secureTextEntry
                       value={password}
-                      onChangeText={setPassword} />
+                      onChangeText={setPassword}
+                      placeholder="Ingresa tu contraseña"
+                      placeholderTextColor="#777" />
                   </LinearGradient>
 
                   {/* Repetir contraseña */}
@@ -333,7 +349,9 @@ export default function Register() {
                       style={styles.input}
                       secureTextEntry
                       value={repeatPassword}
-                      onChangeText={setRepeatPassword} />
+                      onChangeText={setRepeatPassword} 
+                      placeholder="Repite tu contraseña"
+                      placeholderTextColor="#777"/>
                   </LinearGradient>
 
                   {/* Mensaje de error campos vacíos */}

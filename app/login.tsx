@@ -9,7 +9,7 @@ import { router } from 'expo-router';
 
 // Importación de estilos
 import { styles } from '../constants/styles';
-import { styles_login} from '../constants/styles_login';
+import { styles_login } from '../constants/styles_login';
 
 // Importación de componentes para interfaz
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
@@ -46,7 +46,7 @@ export default function Login() {
     }
 
     //Validación contrañeseña
-    
+
     // Validación campos vacios
     if (!password.trim()) {
       setError('Completa todos los campos.');
@@ -126,11 +126,11 @@ export default function Login() {
                 style={styles.inputGradient}>
                 <TextInput
                   style={styles.input}
-                  placeholder=""
-                  placeholderTextColor=""
                   value={email}
                   onChangeText={setEmail}
-                  autoCapitalize="none" />
+                  autoCapitalize="none"
+                  placeholder="Ingresa tu email"
+                  placeholderTextColor="#666" />
               </LinearGradient>
 
               {/* Campo contraseña */}
@@ -143,11 +143,11 @@ export default function Login() {
                 style={styles.inputGradient}>
                 <TextInput
                   style={styles.input}
-                  placeholder=""
-                  placeholderTextColor=""
                   value={password}
                   onChangeText={setPassword}
-                  secureTextEntry />
+                  secureTextEntry
+                  placeholder="Ingresa tu contraseña"
+                  placeholderTextColor="#666" />
               </LinearGradient>
 
               {/* Mensaje de error campos vacíos */}

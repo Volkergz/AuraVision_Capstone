@@ -51,7 +51,9 @@ export default function Home() {
 
         {/* Card estado de conexión */}
         <View style={[styles_home.homeCard, styles.secondaryCard]}>
-          <Ionicons name="git-network-outline" size={58} color="#9B00FF" />
+          <Ionicons name="git-network-outline" size={58} color="#9B00FF" accessible={false}
+            accessibilityElementsHidden={true}
+            importantForAccessibility="no-hide-descendants" />
           <View style={styles.homeTextBox}>
             <Text style={styles.homeTitle}>Dispositivo</Text>
             <Text style={styles.homeValue}>Sin conexión</Text>
@@ -60,7 +62,9 @@ export default function Home() {
 
         {/* Card porcentaje de batería */}
         <View style={[styles_home.homeCard, styles.secondaryCard]}>
-          <Ionicons name="battery-half-outline" size={58} color="#9B00FF" />
+          <Ionicons name="battery-half-outline" size={58} color="#9B00FF" accessible={false}
+            accessibilityElementsHidden={true}
+            importantForAccessibility="no-hide-descendants" />
           <View style={styles.homeTextBox}>
             <Text style={styles.homeTitle}>Porcentaje de batería</Text>
             <Text style={styles.homeValue}>50%</Text>
@@ -69,7 +73,9 @@ export default function Home() {
 
         {/* Card tiempo restante de funcionamiento */}
         <View style={[styles_home.homeCard, styles.secondaryCard]}>
-          <Ionicons name="time-outline" size={58} color="#9B00FF" />
+          <Ionicons name="time-outline" size={58} color="#9B00FF" accessible={false}
+            accessibilityElementsHidden={true}
+            importantForAccessibility="no-hide-descendants" />
           <View style={styles.homeTextBox}>
             <Text style={styles.homeTitle}>Tiempo restante</Text>
             <Text style={styles.homeValue}>4 horas</Text>
@@ -78,7 +84,9 @@ export default function Home() {
 
         {/* Card última alerta detectada */}
         <View style={[styles_home.homeCard, styles.secondaryCard]}>
-          <Ionicons name="notifications-outline" size={52} color="#9B00FF" />
+          <Ionicons name="notifications-outline" size={52} color="#9B00FF" accessible={false}
+            accessibilityElementsHidden={true}
+            importantForAccessibility="no-hide-descendants" />
           <View style={styles.homeTextBox}>
             <Text style={styles.homeTitle}>Última alerta detectada</Text>
             <Text style={styles.homeValue}>21-06-2026 18:40</Text>

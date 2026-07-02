@@ -102,7 +102,7 @@ export default function Profile() {
             <Text style={styles_profile.profileLabel}>Tipo de Alerta</Text>
             <Text style={styles_profile.profileValue}>Detección semáforo</Text>
             <Text style={styles_profile.profileLabel}>Fecha y hora</Text>
-            <Text style={styles_profile.profileValue}>05-05-2026 12:38 hrs</Text>
+            <Text style={styles_profile.profileValue}>05-05-2026 12:38 horas</Text>
           <TouchableOpacity style={styles_profile.moreButton}>
                 <Text style={styles_profile.moreButtonText}>
                   Ver más

@@ -16,8 +16,11 @@ import { styles_register } from '../constants/styles_register';
 
 // Importación de componentes
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Register() {
+  const insets = useSafeAreaInsets();
+
   // Controlar la primera y segunda parte del registro (contraseña)
   const [showPasswordCard, setShowPasswordCard] = useState(false);
 
@@ -191,20 +194,28 @@ export default function Register() {
   };
 
   return (
-    // Comportamiento de la interfaz en dispositivos
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled">
+    // Fondo degrade
+    <LinearGradient
+      colors={['#DEAFFF', '#773DC7']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}>
 
-        {/* Fondo degrade */}
-        <LinearGradient
-          colors={['#DEAFFF', '#773DC7']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.container}>
+      <KeyboardAvoidingView
+        style={{ flex: 1, width: '100%' }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={[
+            styles.scrollContent,
+            {
+              paddingTop: insets.top + 30,
+              paddingBottom: insets.bottom + 30,
+            },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}>
 
           <View style={styles.cardWrapper}>
             <View style={styles.card}>
@@ -349,9 +360,9 @@ export default function Register() {
                       style={styles.input}
                       secureTextEntry
                       value={repeatPassword}
-                      onChangeText={setRepeatPassword} 
+                      onChangeText={setRepeatPassword}
                       placeholder="Repite tu contraseña"
-                      placeholderTextColor="#777"/>
+                      placeholderTextColor="#777" />
                   </LinearGradient>
 
                   {/* Mensaje de error campos vacíos */}
@@ -376,18 +387,24 @@ export default function Register() {
                   {/* Icono volver */}
                   <TouchableOpacity
                     style={styles.backButton}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Volver"
                     onPress={() => setShowPasswordCard(false)}>
                     <Ionicons
                       name="arrow-back"
                       size={28}
-                      color="#2A134A" />
+                      color="#2A134A"
+                      accessible={false}
+                      importantForAccessibility="no"
+                    />
                   </TouchableOpacity>
                 </>
               )}
             </View>
           </View>
-        </LinearGradient>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 }

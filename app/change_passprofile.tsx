@@ -110,11 +110,17 @@ export default function ChangePassProfile() {
                         {/* Icono volver */}
                         <TouchableOpacity
                             style={styles.backButton}
+                            accessible={true}
+                            accessibilityRole="button"
+                            accessibilityLabel="Volver"
                             onPress={() => router.push('/profile')}>
                             <Ionicons
                                 name="arrow-back"
                                 size={28}
-                                color="#2A134A" />
+                                color="#2A134A"
+                                accessible={false}
+                                importantForAccessibility="no"
+                            />
                         </TouchableOpacity>
 
                         {/* Título principal */}

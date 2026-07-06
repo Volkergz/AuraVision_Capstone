@@ -13,8 +13,10 @@ import { styles_login } from '../constants/styles_login';
 
 // Importación de componentes para interfaz
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Login() {
+  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -88,20 +90,28 @@ export default function Login() {
   };
 
   return (
-    // Comportamiento de la interfaz en dispositivos
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled">
+    //  Fondo degrade 
+    <LinearGradient
+      colors={['#DEAFFF', '#773DC7']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}>
 
-        {/* Fondo degrade */}
-        <LinearGradient
-          colors={['#DEAFFF', '#773DC7']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.container}>
+      <KeyboardAvoidingView
+        style={{ flex: 1, width: '100%' }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={[
+            styles.scrollContent,
+            {
+              paddingTop: insets.top + 20,
+              paddingBottom: insets.bottom + 20,
+            },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}>
 
           {/* Título principal */}
           <Text style={styles.tittle}>¡Bienvenido!</Text>
@@ -183,8 +193,8 @@ export default function Login() {
               </View>
             </View>
           </View>
-        </LinearGradient>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 }

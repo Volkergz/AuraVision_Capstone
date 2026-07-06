@@ -232,7 +232,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-
   modalTitle: {
     color: '#9B00FF',
     fontSize: 26,
@@ -303,7 +302,6 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
-
   },
 
   bottomHome: {

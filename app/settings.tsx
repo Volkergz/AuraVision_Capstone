@@ -419,7 +419,6 @@ export default function Settings() {
                 }}>
                 <Text style={styles_settings.acceptDeviceButtonText}>Aceptar</Text>
               </TouchableOpacity>
-
             </View>
           </View>
         </View>
@@ -465,7 +464,6 @@ export default function Settings() {
                 </View>
               ))}
             </View>
-
           </View>
         </View>
       </Modal>
@@ -502,7 +500,6 @@ export default function Settings() {
                 }}>
                 <Text style={styles_settings.acceptDeviceButtonText}>Aceptar</Text>
               </TouchableOpacity>
-
             </View>
           </View>
         </View>

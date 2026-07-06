@@ -113,7 +113,6 @@ export const styles_profile = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-
   profileValue: {
     color: '#24123A',
     fontSize: 22,
@@ -142,4 +141,5 @@ export const styles_profile = StyleSheet.create({
   profileContent: {
     width: '100%',
   },
+
 });

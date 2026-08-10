@@ -3,40 +3,45 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Configuracion(BaseSettings):
     """
-    Configuración global de la aplicación.
+    Configuración general de AURA Vision.
 
     Los valores se obtienen desde las variables
-    de entorno o desde el archivo .env.
+    de entorno definidas en el archivo .env.
     """
 
     # ---------------------------------------------------------
     # INFORMACIÓN DE LA APLICACIÓN
     # ---------------------------------------------------------
 
-    # Información general de la aplicación
     app_nombre: str = "Aura Vision API"
+
     app_version: str = "1.0.0"
+
     app_debug: bool = True
 
     # ---------------------------------------------------------
     # BASE DE DATOS
     # ---------------------------------------------------------
 
-    # Configuración de PostgreSQL
     database_url: str
 
     # ---------------------------------------------------------
     # JWT
     # ---------------------------------------------------------
 
-    # Configuración JWT
+    # Clave utilizada para firmar Access Tokens.
     jwt_secret_key: str
+
+    # Clave independiente para Refresh Tokens.
+    jwt_refresh_secret_key: str
+
+    # Algoritmo utilizado para firmar los JWT.
     jwt_algorithm: str = "HS256"
 
-    # Tiempo de vida del Access Token
+    # Tiempo de vida del Access Token.
     access_token_expire_minutes: int = 15
 
-    # Tiempo de vida del Refresh Token
+    # Tiempo de vida del Refresh Token.
     refresh_token_expire_days: int = 7
 
     # ---------------------------------------------------------
@@ -49,8 +54,6 @@ class Configuracion(BaseSettings):
         case_sensitive=False,
     )
 
-# Instancia única de configuración.
-#
-# El resto de la aplicación importará esta instancia
-# en lugar de crear nuevas configuraciones.
+
+# Instancia global de configuración.
 configuracion = Configuracion()

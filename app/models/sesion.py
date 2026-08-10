@@ -1,6 +1,6 @@
 import uuid
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
@@ -67,13 +67,13 @@ class Sesion(Base):
     # ---------------------------------------------------------
 
     fecha_creacion: Mapped[datetime] = mapped_column(
-        DateTime,
-        default=datetime.utcnow,
+        DateTime(timezone.utc),
+        default=lambda: datetime.now(timezone.utc),
         nullable=False
     )
 
     fecha_expiracion: Mapped[datetime] = mapped_column(
-        DateTime,
+        DateTime(timezone.utc),
         nullable=False
     )
 
@@ -94,6 +94,6 @@ class Sesion(Base):
     # Puede ser NULL porque una sesión recién creada
     # todavía no necesariamente ha utilizado el refresh token.
     ultimo_acceso: Mapped[datetime | None] = mapped_column(
-        DateTime,
+        DateTime(timezone.utc),
         nullable=True
     )

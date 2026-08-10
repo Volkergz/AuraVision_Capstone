@@ -7,7 +7,7 @@ Resumen breve:
 - `api/`: rutas y endpoints HTTP.
 - `core/`: configuración y utilidades de aplicación (p. ej. `config.py`, `security.py`).
 - `db/`: inicialización y sesión de la base de datos.
-- `models/`: modelos ORM (p. ej. SQLAlchemy).
+- `models/`: modelos ORM.
 - `repositories/`: capa de acceso a datos (abstracciones sobre los modelos).
 - `schemas/`: esquemas Pydantic / DTOs para validación y serialización.
 - `services/`: lógica de negocio y orquestación entre repositorios y modelos.

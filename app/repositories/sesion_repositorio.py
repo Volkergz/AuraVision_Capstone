@@ -60,16 +60,15 @@ class SesionRepositorio:
     # BUSCAR SESIÓN ACTIVA
     # =========================================================
 
-    def buscar_activa(
+    def buscar_sesiones_activas(
         self,
-        sesion_id: UUID,
-    ) -> Sesion | None:
+    ) -> list[Sesion]:
         """
-        Busca una sesión que:
+        Obtiene las sesiones que todavía podrían ser válidas.
 
-        - exista
-        - no esté revocada
-        - todavía no haya expirado
+        Se filtran por:
+        - no revocadas
+        - no expiradas
         """
 
         ahora = datetime.now(timezone.utc)
@@ -77,13 +76,14 @@ class SesionRepositorio:
         consulta = (
             select(Sesion)
             .where(
-                Sesion.id == sesion_id,
                 Sesion.revocada.is_(False),
                 Sesion.fecha_expiracion > ahora,
             )
         )
 
-        return self.db.scalar(consulta)
+        return list(
+            self.db.scalars(consulta).all()
+        )
 
     # =========================================================
     # REVOCAR SESIÓN
@@ -126,3 +126,26 @@ class SesionRepositorio:
         self.db.flush()
 
         return sesion
+
+    # =========================================================
+    # BUSCAR SESIONES POR USUARIO
+    # =========================================================
+
+def buscar_por_usuario(
+    self,
+    usuario_id: UUID,
+) -> list[Sesion]:
+    """
+    Obtiene las sesiones pertenecientes a un usuario.
+    """
+
+    consulta = (
+        select(Sesion)
+        .where(
+            Sesion.usuario_id == usuario_id
+        )
+    )
+
+    return list(
+        self.db.scalars(consulta).all()
+    )

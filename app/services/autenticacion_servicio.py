@@ -9,6 +9,7 @@ from app.core.seguridad import (
     generar_password_hash,
     generar_refresh_token_hash,
     verificar_password,
+    verificar_refresh_token,
 )
 from app.models.sesion import Sesion
 from app.models.usuario import Usuario
@@ -21,6 +22,7 @@ from app.repositories.usuario_repositorio import (
 from app.schemas.autenticacion_esquema import (
     LoginRequest,
     TokenResponse,
+    RefreshTokenRequest,
 )
 from app.schemas.usuario_esquema import (
     UsuarioRegistro,
@@ -245,6 +247,263 @@ class AutenticacionServicio:
                 refresh_token=refresh_token,
                 token_type="bearer",
             )
+
+        except Exception:
+
+            self.db.rollback()
+
+            raise
+
+    # =========================================================
+    # REFRESCAR SESION
+    # =========================================================
+
+    def refrescar_sesion(
+        self,
+        refresh_token: str,
+    ) -> TokenResponse:
+        """
+        Renueva una sesión utilizando un Refresh Token válido.
+
+        Se utiliza rotación de Refresh Tokens.
+
+        Flujo:
+
+            Refresh Token
+                ↓
+            buscar sesiones activas
+                ↓
+            verificar hash
+                ↓
+            comprobar usuario
+                ↓
+            revocar sesión anterior
+                ↓
+            crear nueva sesión
+                ↓
+            generar nuevos tokens
+                ↓
+            guardar hash
+                ↓
+            commit
+        """
+
+        # =====================================================
+        # 1. BUSCAR SESIONES ACTIVAS
+        # =====================================================
+
+        sesiones = (
+            self.sesion_repositorio
+            .buscar_sesiones_activas()
+        )
+
+        sesion_encontrada = None
+
+        # =====================================================
+        # 2. BUSCAR EL REFRESH TOKEN
+        # =====================================================
+
+        for sesion in sesiones:
+
+            if verificar_refresh_token(
+                refresh_token,
+                sesion.refresh_token_hash,
+            ):
+
+                sesion_encontrada = sesion
+
+                break
+
+        # =====================================================
+        # 3. TOKEN NO VÁLIDO
+        # =====================================================
+
+        if not sesion_encontrada:
+
+            raise ValueError(
+                "Refresh Token inválido o expirado."
+            )
+
+        try:
+
+            # =================================================
+            # 4. BUSCAR USUARIO
+            # =================================================
+
+            usuario = (
+                self.usuario_repositorio.buscar_por_id(
+                    sesion_encontrada.usuario_id
+                )
+            )
+
+            if not usuario:
+
+                raise ValueError(
+                    "El usuario asociado a la sesión no existe."
+                )
+
+            # =================================================
+            # 5. COMPROBAR USUARIO ACTIVO
+            # =================================================
+
+            if not usuario.activo:
+
+                raise ValueError(
+                    "La cuenta se encuentra desactivada."
+                )
+
+            # =================================================
+            # 6. REVOCAR SESIÓN ANTERIOR
+            # =================================================
+
+            self.sesion_repositorio.revocar(
+                sesion_encontrada
+            )
+
+            # =================================================
+            # 7. CREAR NUEVA SESIÓN
+            # =================================================
+
+            ahora = datetime.now(timezone.utc)
+
+            fecha_expiracion = (
+                ahora
+                + timedelta(
+                    days=configuracion.refresh_token_expire_days
+                )
+            )
+
+            nueva_sesion = Sesion(
+                usuario_id=usuario.id,
+                refresh_token_hash="PENDIENTE",
+                fecha_expiracion=fecha_expiracion,
+            )
+
+            self.sesion_repositorio.crear(
+                nueva_sesion
+            )
+
+            # =================================================
+            # 8. GENERAR NUEVOS TOKENS
+            # =================================================
+
+            nuevo_access_token = crear_access_token(
+                usuario_id=usuario.id,
+                sesion_id=nueva_sesion.id,
+            )
+
+            nuevo_refresh_token = crear_refresh_token(
+                usuario_id=usuario.id,
+                sesion_id=nueva_sesion.id,
+            )
+
+            # =================================================
+            # 9. GUARDAR HASH
+            # =================================================
+
+            nueva_sesion.refresh_token_hash = (
+                generar_refresh_token_hash(
+                    nuevo_refresh_token
+                )
+            )
+
+            self.db.flush()
+
+            # =================================================
+            # 10. ACTUALIZAR ÚLTIMO ACCESO
+            # =================================================
+
+            nueva_sesion.ultimo_acceso = ahora
+
+            # =================================================
+            # 11. COMMIT
+            # =================================================
+
+            self.db.commit()
+
+            # =================================================
+            # 12. RESPUESTA
+            # =================================================
+
+            return TokenResponse(
+                access_token=nuevo_access_token,
+                refresh_token=nuevo_refresh_token,
+                token_type="bearer",
+            )
+
+        except Exception:
+
+            self.db.rollback()
+
+            raise
+
+    # =====================================================
+    # CERRAR SESIÓN 
+    # =====================================================
+
+    def cerrar_sesion(
+        self,
+        refresh_token: str,
+    ) -> None:
+        """
+        Cierra una sesión existente.
+
+        El Refresh Token se utiliza para localizar
+        y validar la sesión.
+
+        La sesión no se elimina de PostgreSQL.
+        Simplemente se marca como revocada.
+        """
+
+        # =====================================================
+        # 1. BUSCAR SESIONES ACTIVAS
+        # =====================================================
+
+        sesiones = (
+            self.sesion_repositorio
+            .buscar_sesiones_activas()
+        )
+
+        sesion_encontrada = None
+
+        # =====================================================
+        # 2. BUSCAR REFRESH TOKEN
+        # =====================================================
+
+        for sesion in sesiones:
+
+            if verificar_refresh_token(
+                refresh_token,
+                sesion.refresh_token_hash,
+            ):
+                sesion_encontrada = sesion
+                break
+
+        # =====================================================
+        # 3. TOKEN INVÁLIDO
+        # =====================================================
+
+        if not sesion_encontrada:
+
+            raise ValueError(
+                "Refresh Token inválido o sesión no encontrada."
+            )
+
+        try:
+
+            # =================================================
+            # 4. REVOCAR SESIÓN
+            # =================================================
+
+            self.sesion_repositorio.revocar(
+                sesion_encontrada
+            )
+
+            # =================================================
+            # 5. COMMIT
+            # =================================================
+
+            self.db.commit()
 
         except Exception:
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 
 class UsuarioBase(BaseModel):
@@ -36,9 +36,47 @@ class UsuarioRegistro(UsuarioBase):
     password: str = Field(
         ...,
         min_length=8,
-        max_length=128,
+        max_length=20,
         description="Contraseña del usuario",
     )
+
+    @field_validator("password")
+    @classmethod
+    def validar_password(cls, password: str) -> str:
+
+        if not any(
+            caracter.isupper()
+            for caracter in password
+        ):
+            raise ValueError(
+                "La contraseña debe contener al menos una mayúscula"
+            )
+
+        if not any(
+            caracter.islower()
+            for caracter in password
+        ):
+            raise ValueError(
+                "La contraseña debe contener al menos una minúscula"
+            )
+
+        if not any(
+            caracter.isdigit()
+            for caracter in password
+        ):
+            raise ValueError(
+                "La contraseña debe contener al menos un número"
+            )
+
+        if not any(
+            not caracter.isalnum()
+            for caracter in password
+        ):
+            raise ValueError(
+                "La contraseña debe contener al menos un carácter especial"
+            )
+
+        return password
 
 
 class UsuarioRespuesta(UsuarioBase):

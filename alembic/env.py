@@ -6,7 +6,17 @@ from sqlalchemy import pool
 from alembic import context
 
 from app.db.base import Base
-from app.models import Usuario, Sesion
+from app.models import (
+    Componente,
+    Configuracion,
+    Deteccion,
+    Dispositivo,
+    EstadoComponente,
+    Rol,
+    Sesion,
+    Telemetria,
+    Usuario,
+)
 from app.core.configuracion import configuracion
 
 # this is the Alembic Config object, which provides

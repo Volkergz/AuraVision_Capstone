@@ -62,10 +62,25 @@ class UsuarioRepositorio:
         """
 
         consulta = select(Usuario).where(
-            Usuario.id == usuario_id
+            Usuario.id_usuario == usuario_id
         )
 
         return self.db.scalar(consulta)
+
+    # =========================================================
+    # LISTAR USUARIOS
+    # =========================================================
+
+    def listar(self) -> list[Usuario]:
+        """
+        Devuelve todos los usuarios.
+        """
+
+        consulta = select(Usuario)
+
+        return list(
+            self.db.scalars(consulta).all()
+        )
 
     # =========================================================
     # CREAR USUARIO
@@ -108,3 +123,18 @@ class UsuarioRepositorio:
         self.db.flush()
 
         return usuario
+
+    # =========================================================
+    # ELIMINAR USUARIO
+    # =========================================================
+
+    def eliminar(
+        self,
+        usuario: Usuario,
+    ) -> None:
+        """
+        Elimina un usuario de la sesión actual.
+        """
+
+        self.db.delete(usuario)
+        self.db.flush()

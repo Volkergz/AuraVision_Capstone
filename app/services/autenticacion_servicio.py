@@ -13,16 +13,11 @@ from app.core.seguridad import (
 )
 from app.models.sesion import Sesion
 from app.models.usuario import Usuario
-from app.repositories.sesion_repositorio import (
-    SesionRepositorio,
-)
-from app.repositories.usuario_repositorio import (
-    UsuarioRepositorio,
-)
+from app.repositories.sesion_repositorio import SesionRepositorio
+from app.repositories.usuario_repositorio import UsuarioRepositorio
 from app.schemas.autenticacion_esquema import (
     LoginRequest,
     TokenResponse,
-    RefreshTokenRequest,
 )
 from app.schemas.usuario_esquema import (
     UsuarioRegistro,
@@ -36,28 +31,12 @@ class AutenticacionServicio:
     con autenticación y sesiones.
 
     Esta clase NO maneja HTTP directamente.
-
-    No sabe si la petición viene de:
-    - Expo
-    - navegador
-    - Postman
-    - otra aplicación
-
-    Su única responsabilidad es ejecutar las reglas
-    de autenticación de AURA Vision.
     """
 
     def __init__(self, db: Session):
-
         self.db = db
-
-        self.usuario_repositorio = UsuarioRepositorio(
-            db
-        )
-
-        self.sesion_repositorio = SesionRepositorio(
-            db
-        )
+        self.usuario_repositorio = UsuarioRepositorio(db)
+        self.sesion_repositorio = SesionRepositorio(db)
 
     # =========================================================
     # REGISTRO
@@ -69,25 +48,10 @@ class AutenticacionServicio:
     ) -> UsuarioRespuesta:
         """
         Registra un nuevo usuario.
-
-        Flujo:
-
-        1. Comprobar si el email ya existe.
-        2. Generar hash de contraseña.
-        3. Crear usuario.
-        4. Guardar usuario.
-        5. Confirmar transacción.
-        6. Devolver información pública.
         """
 
-        # -----------------------------------------------------
-        # 1. COMPROBAR EMAIL
-        # -----------------------------------------------------
-
-        usuario_existente = (
-            self.usuario_repositorio.buscar_por_email(
-                datos.email
-            )
+        usuario_existente = self.usuario_repositorio.buscar_por_email(
+            datos.email,
         )
 
         if usuario_existente:
@@ -95,41 +59,26 @@ class AutenticacionServicio:
                 "El correo electrónico ya está registrado."
             )
 
-        # -----------------------------------------------------
-        # 2. GENERAR HASH
-        # -----------------------------------------------------
-
-        password_hash = generar_password_hash(
-            datos.password
-        )
-
-        # -----------------------------------------------------
-        # 3. CREAR MODELO
-        # -----------------------------------------------------
+        password_hash = generar_password_hash(datos.password)
 
         usuario = Usuario(
+            id_rol_fk= 1, # Siempre es 1 para que se cree como usuario
             nombre=datos.nombre,
+            apellido=datos.apellido,
+            fecha_nacimiento=datos.fecha_nacimiento,
             email=datos.email,
             password_hash=password_hash,
+            estado=True,
         )
 
-        # -----------------------------------------------------
-        # 4. GUARDAR
-        # -----------------------------------------------------
         try:
-
             self.usuario_repositorio.crear(usuario)
-
             self.db.commit()
 
-            return UsuarioRespuesta.model_validate(
-                usuario
-            )
+            return UsuarioRespuesta.model_validate(usuario)
 
         except Exception:
-
             self.db.rollback()
-
             raise
 
     # =========================================================
@@ -142,104 +91,60 @@ class AutenticacionServicio:
     ) -> TokenResponse:
         """
         Autentica un usuario y crea una nueva sesión.
-
-        Flujo:
-
-        1. Buscar usuario.
-        2. Verificar que exista.
-        3. Verificar que esté activo.
-        4. Verificar contraseña.
-        5. Crear sesión.
-        6. Crear Access Token.
-        7. Crear Refresh Token.
-        8. Guardar hash del Refresh Token.
-        9. Confirmar transacción.
-        10. Devolver tokens.
         """
 
-        # -----------------------------------------------------
-        # 1. BUSCAR USUARIO
-        # -----------------------------------------------------
-
-        usuario = (
-            self.usuario_repositorio.buscar_por_email(
-                datos.email
-            )
+        usuario = self.usuario_repositorio.buscar_por_email(
+            datos.email,
         )
-
-        # -----------------------------------------------------
-        # 2. USUARIO NO EXISTE
-        # -----------------------------------------------------
 
         if not usuario:
             raise ValueError(
                 "Credenciales incorrectas."
             )
 
-        # -----------------------------------------------------
-        # 3. USUARIO DESACTIVADO
-        # -----------------------------------------------------
-
-        if not usuario.activo:
+        if not usuario.estado:
             raise ValueError(
                 "La cuenta se encuentra desactivada."
             )
 
-        # -----------------------------------------------------
-        # 4. VERIFICAR PASSWORD
-        # -----------------------------------------------------
-
-        password_correcta = verificar_password(
+        if not verificar_password(
             datos.password,
             usuario.password_hash,
-        )
-
-        if not password_correcta:
+        ):
             raise ValueError(
                 "Credenciales incorrectas."
             )
 
-        # -----------------------------------------------------
-        # 5. CREAR SESIÓN
-        # -----------------------------------------------------
-
         try:
-
             ahora = datetime.now(timezone.utc)
-
-            fecha_expiracion = (
-                ahora
-                + timedelta(
-                    days=configuracion.refresh_token_expire_days
-                )
+            fecha_expiracion = ahora + timedelta(
+                days=configuracion.refresh_token_expire_days,
             )
 
             sesion = Sesion(
-                usuario_id=usuario.id,
-                refresh_token_hash="PENDIENTE",
+                id_usuario_fk=usuario.id_usuario,
+                token_hash="PENDIENTE",
                 fecha_expiracion=fecha_expiracion,
+                ultimo_acceso=ahora,
             )
 
             self.sesion_repositorio.crear(sesion)
 
             access_token = crear_access_token(
-                usuario_id=usuario.id,
-                sesion_id=sesion.id,
+                usuario_id=usuario.id_usuario,
+                sesion_id=sesion.id_sesion,
             )
 
             refresh_token = crear_refresh_token(
-                usuario_id=usuario.id,
-                sesion_id=sesion.id,
+                usuario_id=usuario.id_usuario,
+                sesion_id=sesion.id_sesion,
             )
 
-            sesion.refresh_token_hash = (
-                generar_refresh_token_hash(
-                    refresh_token
-                )
+            sesion.token_hash = generar_refresh_token_hash(
+                refresh_token,
             )
 
             self.db.flush()
-
             self.db.commit()
 
             return TokenResponse(
@@ -249,13 +154,11 @@ class AutenticacionServicio:
             )
 
         except Exception:
-
             self.db.rollback()
-
             raise
 
     # =========================================================
-    # REFRESCAR SESION
+    # REFRESCAR SESIÓN
     # =========================================================
 
     def refrescar_sesion(
@@ -264,166 +167,71 @@ class AutenticacionServicio:
     ) -> TokenResponse:
         """
         Renueva una sesión utilizando un Refresh Token válido.
-
-        Se utiliza rotación de Refresh Tokens.
-
-        Flujo:
-
-            Refresh Token
-                ↓
-            buscar sesiones activas
-                ↓
-            verificar hash
-                ↓
-            comprobar usuario
-                ↓
-            revocar sesión anterior
-                ↓
-            crear nueva sesión
-                ↓
-            generar nuevos tokens
-                ↓
-            guardar hash
-                ↓
-            commit
         """
 
-        # =====================================================
-        # 1. BUSCAR SESIONES ACTIVAS
-        # =====================================================
-
-        sesiones = (
-            self.sesion_repositorio
-            .buscar_sesiones_activas()
-        )
-
+        sesiones = self.sesion_repositorio.buscar_sesiones_activas()
         sesion_encontrada = None
 
-        # =====================================================
-        # 2. BUSCAR EL REFRESH TOKEN
-        # =====================================================
-
         for sesion in sesiones:
-
             if verificar_refresh_token(
                 refresh_token,
-                sesion.refresh_token_hash,
+                sesion.token_hash,
             ):
-
                 sesion_encontrada = sesion
-
                 break
 
-        # =====================================================
-        # 3. TOKEN NO VÁLIDO
-        # =====================================================
-
         if not sesion_encontrada:
-
             raise ValueError(
                 "Refresh Token inválido o expirado."
             )
 
         try:
-
-            # =================================================
-            # 4. BUSCAR USUARIO
-            # =================================================
-
-            usuario = (
-                self.usuario_repositorio.buscar_por_id(
-                    sesion_encontrada.usuario_id
-                )
+            usuario = self.usuario_repositorio.buscar_por_id(
+                sesion_encontrada.id_usuario_fk,
             )
 
             if not usuario:
-
                 raise ValueError(
                     "El usuario asociado a la sesión no existe."
                 )
 
-            # =================================================
-            # 5. COMPROBAR USUARIO ACTIVO
-            # =================================================
-
-            if not usuario.activo:
-
+            if not usuario.estado:
                 raise ValueError(
                     "La cuenta se encuentra desactivada."
                 )
 
-            # =================================================
-            # 6. REVOCAR SESIÓN ANTERIOR
-            # =================================================
-
-            self.sesion_repositorio.revocar(
-                sesion_encontrada
-            )
-
-            # =================================================
-            # 7. CREAR NUEVA SESIÓN
-            # =================================================
+            self.sesion_repositorio.revocar(sesion_encontrada)
 
             ahora = datetime.now(timezone.utc)
-
-            fecha_expiracion = (
-                ahora
-                + timedelta(
-                    days=configuracion.refresh_token_expire_days
-                )
+            fecha_expiracion = ahora + timedelta(
+                days=configuracion.refresh_token_expire_days,
             )
 
             nueva_sesion = Sesion(
-                usuario_id=usuario.id,
-                refresh_token_hash="PENDIENTE",
+                id_usuario_fk=usuario.id_usuario,
+                token_hash="PENDIENTE",
                 fecha_expiracion=fecha_expiracion,
+                ultimo_acceso=ahora,
             )
 
-            self.sesion_repositorio.crear(
-                nueva_sesion
-            )
-
-            # =================================================
-            # 8. GENERAR NUEVOS TOKENS
-            # =================================================
+            self.sesion_repositorio.crear(nueva_sesion)
 
             nuevo_access_token = crear_access_token(
-                usuario_id=usuario.id,
-                sesion_id=nueva_sesion.id,
+                usuario_id=usuario.id_usuario,
+                sesion_id=nueva_sesion.id_sesion,
             )
 
             nuevo_refresh_token = crear_refresh_token(
-                usuario_id=usuario.id,
-                sesion_id=nueva_sesion.id,
+                usuario_id=usuario.id_usuario,
+                sesion_id=nueva_sesion.id_sesion,
             )
 
-            # =================================================
-            # 9. GUARDAR HASH
-            # =================================================
-
-            nueva_sesion.refresh_token_hash = (
-                generar_refresh_token_hash(
-                    nuevo_refresh_token
-                )
+            nueva_sesion.token_hash = generar_refresh_token_hash(
+                nuevo_refresh_token,
             )
 
             self.db.flush()
-
-            # =================================================
-            # 10. ACTUALIZAR ÚLTIMO ACCESO
-            # =================================================
-
-            nueva_sesion.ultimo_acceso = ahora
-
-            # =================================================
-            # 11. COMMIT
-            # =================================================
-
             self.db.commit()
-
-            # =================================================
-            # 12. RESPUESTA
-            # =================================================
 
             return TokenResponse(
                 access_token=nuevo_access_token,
@@ -432,13 +240,11 @@ class AutenticacionServicio:
             )
 
         except Exception:
-
             self.db.rollback()
-
             raise
 
     # =====================================================
-    # CERRAR SESIÓN 
+    # CERRAR SESIÓN
     # =====================================================
 
     def cerrar_sesion(
@@ -447,66 +253,28 @@ class AutenticacionServicio:
     ) -> None:
         """
         Cierra una sesión existente.
-
-        El Refresh Token se utiliza para localizar
-        y validar la sesión.
-
-        La sesión no se elimina de PostgreSQL.
-        Simplemente se marca como revocada.
         """
 
-        # =====================================================
-        # 1. BUSCAR SESIONES ACTIVAS
-        # =====================================================
-
-        sesiones = (
-            self.sesion_repositorio
-            .buscar_sesiones_activas()
-        )
-
+        sesiones = self.sesion_repositorio.buscar_sesiones_activas()
         sesion_encontrada = None
 
-        # =====================================================
-        # 2. BUSCAR REFRESH TOKEN
-        # =====================================================
-
         for sesion in sesiones:
-
             if verificar_refresh_token(
                 refresh_token,
-                sesion.refresh_token_hash,
+                sesion.token_hash,
             ):
                 sesion_encontrada = sesion
                 break
 
-        # =====================================================
-        # 3. TOKEN INVÁLIDO
-        # =====================================================
-
         if not sesion_encontrada:
-
             raise ValueError(
                 "Refresh Token inválido o sesión no encontrada."
             )
 
         try:
-
-            # =================================================
-            # 4. REVOCAR SESIÓN
-            # =================================================
-
-            self.sesion_repositorio.revocar(
-                sesion_encontrada
-            )
-
-            # =================================================
-            # 5. COMMIT
-            # =================================================
-
+            self.sesion_repositorio.revocar(sesion_encontrada)
             self.db.commit()
 
         except Exception:
-
             self.db.rollback()
-
             raise

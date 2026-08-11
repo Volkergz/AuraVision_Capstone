@@ -24,9 +24,9 @@ class Sesion(Base):
     # IDENTIFICADOR
     # ---------------------------------------------------------
 
-    id: Mapped[uuid.UUID] = mapped_column(
+    id_sesion: Mapped[uuid.UUID] = mapped_column(
         primary_key=True,
-        default=uuid.uuid4
+        default=uuid.uuid4,
     )
 
     # ---------------------------------------------------------
@@ -37,13 +37,13 @@ class Sesion(Base):
     #
     # Si el usuario se elimina, sus sesiones también
     # serán eliminadas gracias a ON DELETE CASCADE.
-    usuario_id: Mapped[uuid.UUID] = mapped_column(
+    id_usuario_fk: Mapped[uuid.UUID] = mapped_column(
         ForeignKey(
-            "usuarios.id",
-            ondelete="CASCADE"
+            "usuarios.id_usuario",
+            ondelete="CASCADE",
         ),
         nullable=False,
-        index=True
+        index=True,
     )
 
     # ---------------------------------------------------------
@@ -57,9 +57,9 @@ class Sesion(Base):
     # De esta forma, incluso si alguien obtiene acceso
     # a la base de datos, no tendrá directamente los
     # Refresh Tokens utilizables.
-    refresh_token_hash: Mapped[str] = mapped_column(
+    token_hash: Mapped[str] = mapped_column(
         String(255),
-        nullable=False
+        nullable=False,
     )
 
     # ---------------------------------------------------------
@@ -67,14 +67,14 @@ class Sesion(Base):
     # ---------------------------------------------------------
 
     fecha_creacion: Mapped[datetime] = mapped_column(
-        DateTime(timezone.utc),
+        DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
-        nullable=False
+        nullable=False,
     )
 
     fecha_expiracion: Mapped[datetime] = mapped_column(
-        DateTime(timezone.utc),
-        nullable=False
+        DateTime(timezone=True),
+        nullable=False,
     )
 
     # ---------------------------------------------------------
@@ -86,14 +86,11 @@ class Sesion(Base):
     revocada: Mapped[bool] = mapped_column(
         Boolean,
         default=False,
-        nullable=False
+        nullable=False,
     )
 
-    # Última vez que se utilizó esta sesión.
-    #
-    # Puede ser NULL porque una sesión recién creada
-    # todavía no necesariamente ha utilizado el refresh token.
-    ultimo_acceso: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone.utc),
-        nullable=True
+    ultimo_acceso: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )

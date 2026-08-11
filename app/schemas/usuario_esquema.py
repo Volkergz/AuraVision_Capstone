@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
@@ -17,6 +17,18 @@ class UsuarioBase(BaseModel):
         min_length=2,
         max_length=100,
         description="Nombre del usuario",
+    )
+
+    apellido: str = Field(
+        ...,
+        min_length=2,
+        max_length=100,
+        description="Apellido del usuario",
+    )
+
+    fecha_nacimiento: date = Field(
+        ...,
+        description="Fecha de nacimiento del usuario",
     )
 
     email: EmailStr = Field(
@@ -91,16 +103,46 @@ class UsuarioRespuesta(UsuarioBase):
     información del usuario al cliente.
     """
 
-    id: UUID
+    id_usuario: UUID
 
-    activo: bool
+    id_rol_fk: int
+
+    estado: bool
 
     fecha_creacion: datetime
-
-    fecha_actualizacion: datetime
 
     # Permite que Pydantic pueda convertir
     # objetos SQLAlchemy en schemas.
     model_config = ConfigDict(
-        from_attributes=True
+        from_attributes=True,
     )
+
+
+class UsuarioActualizacion(BaseModel):
+    """
+    Datos para actualizar un usuario de forma parcial.
+    """
+
+    id_rol_fk: int | None = Field(
+        default=None,
+        ge=1,
+        description="Rol del usuario",
+    )
+
+    nombre: str | None = Field(
+        default=None,
+        min_length=2,
+        max_length=100,
+    )
+
+    apellido: str | None = Field(
+        default=None,
+        min_length=2,
+        max_length=100,
+    )
+
+    fecha_nacimiento: date | None = None
+
+    email: EmailStr | None = None
+
+    estado: bool | None = None

@@ -51,7 +51,7 @@ class SesionRepositorio:
         """
 
         consulta = select(Sesion).where(
-            Sesion.id == sesion_id
+            Sesion.id_sesion == sesion_id
         )
 
         return self.db.scalar(consulta)
@@ -131,21 +131,18 @@ class SesionRepositorio:
     # BUSCAR SESIONES POR USUARIO
     # =========================================================
 
-def buscar_por_usuario(
-    self,
-    usuario_id: UUID,
-) -> list[Sesion]:
-    """
-    Obtiene las sesiones pertenecientes a un usuario.
-    """
+    def buscar_por_usuario(
+        self,
+        usuario_id: UUID,
+    ) -> list[Sesion]:
+        """
+        Obtiene las sesiones pertenecientes a un usuario.
+        """
 
-    consulta = (
-        select(Sesion)
-        .where(
-            Sesion.usuario_id == usuario_id
+        consulta = select(Sesion).where(
+            Sesion.id_usuario_fk == usuario_id,
         )
-    )
 
-    return list(
-        self.db.scalars(consulta).all()
-    )
+        return list(
+            self.db.scalars(consulta).all()
+        )

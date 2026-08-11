@@ -97,8 +97,8 @@ def obtener_usuario_actual(
     sesion = (
         db.query(Sesion)
         .filter(
-            Sesion.id == sesion_id,
-            Sesion.usuario_id == usuario_id,
+            Sesion.id_sesion == sesion_id,
+            Sesion.id_usuario_fk == usuario_id,
         )
         .first()
     )
@@ -152,7 +152,7 @@ def obtener_usuario_actual(
     usuario = (
         db.query(Usuario)
         .filter(
-            Usuario.id == usuario_id
+            Usuario.id_usuario == usuario_id
         )
         .first()
     )
@@ -171,7 +171,7 @@ def obtener_usuario_actual(
     # 9. COMPROBAR USUARIO ACTIVO
     # =====================================================
 
-    if not usuario.activo:
+    if not usuario.estado:
 
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

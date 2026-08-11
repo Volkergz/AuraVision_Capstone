@@ -1,1 +1,1 @@
-# AuraVisi-n_Capstone
+# AuraVisión_Capstone

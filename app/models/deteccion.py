@@ -43,11 +43,6 @@ class Deteccion(Base):
         nullable=False,
     )
 
-    distancia_estimada: Mapped[int] = mapped_column(
-        Integer,
-        nullable=False,
-    )
-
     fecha_deteccion: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),

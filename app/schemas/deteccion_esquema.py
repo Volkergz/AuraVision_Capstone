@@ -13,7 +13,6 @@ class DeteccionBase(BaseModel):
     tipo_objeto: str = Field(..., min_length=2, max_length=100)
     descripcion: str = Field(..., min_length=2, max_length=255)
     confianza: float = Field(..., ge=0, le=1)
-    distancia_estimada: int = Field(..., ge=0)
 
 
 class DeteccionCrear(DeteccionBase):

@@ -44,7 +44,6 @@ class DeteccionServicio:
             tipo_objeto=datos.tipo_objeto,
             descripcion=datos.descripcion,
             confianza=datos.confianza,
-            distancia_estimada=datos.distancia_estimada,
         )
 
         try:

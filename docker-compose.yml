@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
 
   postgres:
@@ -37,7 +35,7 @@ services:
       JWT_ALGORITHM: ${JWT_ALGORITHM}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
       REFRESH_TOKEN_EXPIRE_DAYS: ${REFRESH_TOKEN_EXPIRE_DAYS}
-      
+
     ports:
       - "8000:8000"
 

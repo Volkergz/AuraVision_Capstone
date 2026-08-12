@@ -7,6 +7,7 @@ from app.core.seguridad import decodificar_access_token
 from app.db.sesion import obtener_sesion
 from app.models.usuario import Usuario
 from app.models.sesion import Sesion
+from app.models.rol import Rol
 
 # =========================================================
 # ESQUEMA DE AUTENTICACIÓN
@@ -181,5 +182,43 @@ def obtener_usuario_actual(
     # =====================================================
     # 10. DEVOLVER USUARIO
     # =====================================================
+
+    return usuario
+
+def obtener_usuario_administrador(
+    usuario: Usuario = Depends(obtener_usuario_actual),
+    db: Session = Depends(obtener_sesion),
+) -> Usuario:
+    """
+    Obtiene el usuario autenticado y verifica que
+    pertenezca al rol de administrador.
+    """
+
+    rol = (
+        db.query(Rol)
+        .filter(Rol.id_rol == usuario.id_rol_fk)
+        .first()
+    )
+
+    if not rol:
+
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="El usuario no tiene un rol válido.",
+        )
+
+    if not rol.estado:
+
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="El rol del usuario se encuentra desactivado.",
+        )
+
+    if rol.nombre.lower() != "administrador":
+
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Se requieren permisos de administrador.",
+        )
 
     return usuario

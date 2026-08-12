@@ -4,6 +4,7 @@ from app.models.usuario import Usuario
 from app.repositories.usuario_repositorio import UsuarioRepositorio
 from app.schemas.usuario_esquema import (
     UsuarioActualizacion,
+    UsuarioPerfilActualizacion,
     UsuarioRespuesta,
 )
 
@@ -56,6 +57,37 @@ class UsuarioServicio:
 
         if datos.estado is not None:
             usuario.estado = datos.estado
+
+        try:
+            self.usuario_repositorio.actualizar(usuario)
+            self.db.commit()
+            return UsuarioRespuesta.model_validate(usuario)
+
+        except Exception:
+            self.db.rollback()
+            raise
+
+    def actualizar_perfil(
+        self,
+        usuario_id,
+        datos: UsuarioPerfilActualizacion,
+    ) -> UsuarioRespuesta:
+        usuario = self.usuario_repositorio.buscar_por_id(usuario_id)
+
+        if not usuario:
+            raise ValueError("El usuario no existe.")
+
+        if datos.nombre is not None:
+            usuario.nombre = datos.nombre
+
+        if datos.apellido is not None:
+            usuario.apellido = datos.apellido
+
+        if datos.fecha_nacimiento is not None:
+            usuario.fecha_nacimiento = datos.fecha_nacimiento
+
+        if datos.email is not None:
+            usuario.email = datos.email
 
         try:
             self.usuario_repositorio.actualizar(usuario)

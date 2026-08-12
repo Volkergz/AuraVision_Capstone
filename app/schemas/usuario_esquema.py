@@ -146,3 +146,25 @@ class UsuarioActualizacion(BaseModel):
     email: EmailStr | None = None
 
     estado: bool | None = None
+
+
+class UsuarioPerfilActualizacion(BaseModel):
+    """
+    Datos permitidos para que un usuario edite su propio perfil.
+    """
+
+    nombre: str | None = Field(
+        default=None,
+        min_length=2,
+        max_length=100,
+    )
+
+    apellido: str | None = Field(
+        default=None,
+        min_length=2,
+        max_length=100,
+    )
+
+    fecha_nacimiento: date | None = None
+
+    email: EmailStr | None = None

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.core.dependencias import obtener_usuario_administrador
 from app.db.sesion import obtener_sesion
 from app.schemas.rol_esquema import RolActualizar, RolCrear, RolRespuesta
 from app.services.rol_servicio import RolServicio
@@ -9,6 +10,7 @@ from app.services.rol_servicio import RolServicio
 router = APIRouter(
     prefix="/roles",
     tags=["Roles"],
+    dependencies=[Depends(obtener_usuario_administrador)],
 )
 
 

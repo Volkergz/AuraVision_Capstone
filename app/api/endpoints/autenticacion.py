@@ -9,11 +9,13 @@ from app.schemas.autenticacion_esquema import (
 )
 from app.schemas.usuario_esquema import (
     UsuarioRegistro,
+    UsuarioPerfilActualizacion,
     UsuarioRespuesta,
 )
 from app.services.autenticacion_servicio import (
     AutenticacionServicio,
 )
+from app.services.usuario_servicio import UsuarioServicio
 from app.core.dependencias import obtener_usuario_actual
 
 
@@ -203,3 +205,37 @@ def obtener_usuario_actual_endpoint(
     """
 
     return usuario
+
+
+# =========================================================
+# ACTUALIZAR PERFIL
+# =========================================================
+
+@router.put(
+    "/me",
+    response_model=UsuarioRespuesta,
+)
+def actualizar_perfil_usuario_actual(
+    datos: UsuarioPerfilActualizacion,
+    usuario = Depends(obtener_usuario_actual),
+    db: Session = Depends(obtener_sesion),
+):
+    """
+    Permite que el usuario autenticado actualice solo su propio perfil.
+    """
+
+    servicio = UsuarioServicio(db)
+
+    try:
+
+        return servicio.actualizar_perfil(
+            usuario.id_usuario,
+            datos,
+        )
+
+    except ValueError as error:
+
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(error),
+        )

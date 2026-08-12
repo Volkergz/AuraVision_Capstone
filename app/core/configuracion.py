@@ -50,6 +50,7 @@ class Configuracion(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_file=".env",
+        extra = "ignore",
         env_file_encoding="utf-8",
         case_sensitive=False,
     )

@@ -18,10 +18,10 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[EstadoComponenteRespuesta])
+""" @router.get("", response_model=list[EstadoComponenteRespuesta])
 def listar_estados(db: Session = Depends(obtener_sesion)):
     servicio = EstadoComponenteServicio(db)
-    return servicio.listar_estados()
+    return servicio.listar_estados() """
 
 
 @router.get("/{estado_id}", response_model=EstadoComponenteRespuesta)
@@ -65,7 +65,7 @@ def crear_estado(
     return servicio.crear_estado(datos)
 
 
-@router.put("/{estado_id}", response_model=EstadoComponenteRespuesta)
+""" @router.put("/{estado_id}", response_model=EstadoComponenteRespuesta)
 def actualizar_estado(
     estado_id: int,
     datos: EstadoComponenteActualizar,
@@ -77,10 +77,10 @@ def actualizar_estado(
         return servicio.actualizar_estado(estado_id, datos)
 
     except ValueError as error:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error)) """
 
 
-@router.delete("/{estado_id}", status_code=status.HTTP_204_NO_CONTENT)
+""" @router.delete("/{estado_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_estado(
     estado_id: int,
     db: Session = Depends(obtener_sesion),
@@ -93,4 +93,4 @@ def eliminar_estado(
     except ValueError as error:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
 
-    return None
+    return None """

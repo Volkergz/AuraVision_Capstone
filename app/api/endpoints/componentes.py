@@ -36,7 +36,7 @@ def obtener_componente(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
 
 
-@router.post("", response_model=ComponenteRespuesta, status_code=status.HTTP_201_CREATED)
+""" @router.post("", response_model=ComponenteRespuesta, status_code=status.HTTP_201_CREATED)
 def crear_componente(
     datos: ComponenteCrear,
     db: Session = Depends(obtener_sesion),
@@ -47,10 +47,10 @@ def crear_componente(
         return servicio.crear_componente(datos)
 
     except ValueError as error:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(error))
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(error)) """
 
 
-@router.put("/{componente_id}", response_model=ComponenteRespuesta)
+""" @router.put("/{componente_id}", response_model=ComponenteRespuesta)
 def actualizar_componente(
     componente_id: int,
     datos: ComponenteActualizar,
@@ -62,10 +62,10 @@ def actualizar_componente(
         return servicio.actualizar_componente(componente_id, datos)
 
     except ValueError as error:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error)) """
 
 
-@router.delete("/{componente_id}", status_code=status.HTTP_204_NO_CONTENT)
+""" @router.delete("/{componente_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_componente(
     componente_id: int,
     db: Session = Depends(obtener_sesion),
@@ -78,4 +78,4 @@ def eliminar_componente(
     except ValueError as error:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
 
-    return None
+    return None """

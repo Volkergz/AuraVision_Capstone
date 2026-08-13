@@ -18,7 +18,7 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[ConfiguracionRespuesta])
+""" @router.get("", response_model=list[ConfiguracionRespuesta])
 def listar_configuraciones(db: Session = Depends(obtener_sesion)):
     servicio = ConfiguracionServicio(db)
     return servicio.listar_configuraciones()
@@ -35,7 +35,7 @@ def obtener_configuracion(
         return servicio.obtener_por_id(configuracion_id)
 
     except ValueError as error:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error)) """
 
 
 @router.get("/usuario/{usuario_id}", response_model=ConfiguracionRespuesta)
@@ -52,7 +52,7 @@ def obtener_por_usuario(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
 
 
-@router.post("", response_model=ConfiguracionRespuesta, status_code=status.HTTP_201_CREATED)
+""" @router.post("", response_model=ConfiguracionRespuesta, status_code=status.HTTP_201_CREATED)
 def crear_configuracion(
     datos: ConfiguracionCrear,
     db: Session = Depends(obtener_sesion),
@@ -63,7 +63,7 @@ def crear_configuracion(
         return servicio.crear_configuracion(datos)
 
     except ValueError as error:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(error))
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(error)) """
 
 
 @router.put("/usuario/{usuario_id}", response_model=ConfiguracionRespuesta)
@@ -81,7 +81,7 @@ def actualizar_configuracion(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
 
 
-@router.delete("/usuario/{usuario_id}", status_code=status.HTTP_204_NO_CONTENT)
+""" @router.delete("/usuario/{usuario_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_configuracion(
     usuario_id: UUID,
     db: Session = Depends(obtener_sesion),
@@ -94,4 +94,4 @@ def eliminar_configuracion(
     except ValueError as error:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(error))
 
-    return None
+    return None """

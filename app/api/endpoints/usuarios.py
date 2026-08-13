@@ -60,7 +60,7 @@ def actualizar_usuario(
         )
 
 
-@router.delete("/{usuario_id}", status_code=status.HTTP_204_NO_CONTENT)
+""" @router.delete("/{usuario_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_usuario(
     usuario_id: UUID,
     db: Session = Depends(obtener_sesion),
@@ -76,4 +76,4 @@ def eliminar_usuario(
             detail=str(error),
         )
 
-    return None
+    return None """

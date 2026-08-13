@@ -96,7 +96,7 @@ def upgrade() -> None:
     sa.Column('id_dispositivo_fk', sa.Uuid(), nullable=False),
     sa.Column('id_componente_fk', sa.Integer(), nullable=False),
     sa.Column('estado', sa.String(length=100), nullable=False),
-    sa.Column('mensaje_error', sa.String(length=255), nullable=False),
+    sa.Column('mensaje', sa.String(length=255), nullable=False),
     sa.Column('fecha_revision', sa.Date(), nullable=False),
     sa.ForeignKeyConstraint(['id_componente_fk'], ['componente.id_componente'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['id_dispositivo_fk'], ['dispositivos.id_dispositivo'], ondelete='CASCADE'),

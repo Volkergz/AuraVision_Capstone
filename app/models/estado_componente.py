@@ -41,7 +41,7 @@ class EstadoComponente(Base):
         nullable=False,
     )
 
-    mensaje_error: Mapped[str] = mapped_column(
+    mensaje: Mapped[str] = mapped_column(
         String(255),
         nullable=False,
     )

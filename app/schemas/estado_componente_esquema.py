@@ -12,7 +12,7 @@ class EstadoComponenteBase(BaseModel):
     id_dispositivo_fk: UUID
     id_componente_fk: int = Field(..., ge=1)
     estado: str = Field(..., min_length=1, max_length=100)
-    mensaje_error: str = Field(..., min_length=1, max_length=255)
+    mensaje: str = Field(..., min_length=1, max_length=255)
     fecha_revision: date
 
 
@@ -28,7 +28,7 @@ class EstadoComponenteActualizar(BaseModel):
     """
 
     estado: str | None = Field(default=None, min_length=1, max_length=100)
-    mensaje_error: str | None = Field(default=None, min_length=1, max_length=255)
+    mensaje: str | None = Field(default=None, min_length=1, max_length=255)
     fecha_revision: date | None = None
 
 

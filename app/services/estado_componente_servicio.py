@@ -65,7 +65,7 @@ class EstadoComponenteServicio:
             id_dispositivo_fk=datos.id_dispositivo_fk,
             id_componente_fk=datos.id_componente_fk,
             estado=datos.estado,
-            mensaje_error=datos.mensaje_error,
+            mensaje=datos.mensaje,
             fecha_revision=datos.fecha_revision,
         )
 
@@ -91,8 +91,8 @@ class EstadoComponenteServicio:
         if datos.estado is not None:
             estado.estado = datos.estado
 
-        if datos.mensaje_error is not None:
-            estado.mensaje_error = datos.mensaje_error
+        if datos.mensaje is not None:
+            estado.mensaje = datos.mensaje
 
         if datos.fecha_revision is not None:
             estado.fecha_revision = datos.fecha_revision

@@ -54,7 +54,6 @@ class DispositivoServicio:
             raise ValueError("El número de serie ya está registrado.")
 
         dispositivo = Dispositivo(
-            id_usuario_fk=datos.id_usuario_fk,
             nombre=datos.nombre,
             numero_serie=datos.numero_serie,
             version_firmware=datos.version_firmware,
@@ -79,9 +78,6 @@ class DispositivoServicio:
 
         if not dispositivo:
             raise ValueError("El dispositivo no existe.")
-
-        if datos.id_usuario_fk is not None:
-            dispositivo.id_usuario_fk = datos.id_usuario_fk
 
         if datos.nombre is not None:
             dispositivo.nombre = datos.nombre

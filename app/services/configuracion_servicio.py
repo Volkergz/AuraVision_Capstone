@@ -37,16 +37,16 @@ class ConfiguracionServicio:
 
         return ConfiguracionRespuesta.model_validate(configuracion)
 
-    def obtener_por_dispositivo(
+    def obtener_por_usuario(
         self,
-        dispositivo_id: UUID,
+        usuario_id: UUID,
     ) -> ConfiguracionRespuesta:
-        configuracion = self.configuracion_repositorio.buscar_por_dispositivo(
-            dispositivo_id,
+        configuracion = self.configuracion_repositorio.buscar_por_usuario(
+            usuario_id,
         )
 
         if not configuracion:
-            raise ValueError("La configuración no existe para este dispositivo.")
+            raise ValueError("La configuración no existe para este usuario.")
 
         return ConfiguracionRespuesta.model_validate(configuracion)
 
@@ -54,15 +54,15 @@ class ConfiguracionServicio:
         self,
         datos: ConfiguracionCrear,
     ) -> ConfiguracionRespuesta:
-        configuracion_existente = self.configuracion_repositorio.buscar_por_dispositivo(
-            datos.id_dispositivo_fk,
+        configuracion_existente = self.configuracion_repositorio.buscar_por_usuario(
+            datos.id_usuario_fk,
         )
 
         if configuracion_existente:
-            raise ValueError("El dispositivo ya tiene configuración.")
+            raise ValueError("El usuario ya tiene configuración.")
 
         configuracion = Configuracion(
-            id_dispositivo_fk=datos.id_dispositivo_fk,
+            id_usuario_fk=datos.id_usuario_fk,
             volumen=datos.volumen,
             auto_conexion=datos.auto_conexion,
         )
@@ -78,15 +78,15 @@ class ConfiguracionServicio:
 
     def actualizar_configuracion(
         self,
-        dispositivo_id: UUID,
+        usuario_id: UUID,
         datos: ConfiguracionActualizar,
     ) -> ConfiguracionRespuesta:
-        configuracion = self.configuracion_repositorio.buscar_por_dispositivo(
-            dispositivo_id,
+        configuracion = self.configuracion_repositorio.buscar_por_usuario(
+            usuario_id,
         )
 
         if not configuracion:
-            raise ValueError("La configuración no existe para este dispositivo.")
+            raise ValueError("La configuración no existe para este usuario.")
 
         if datos.volumen is not None:
             configuracion.volumen = datos.volumen
@@ -103,13 +103,13 @@ class ConfiguracionServicio:
             self.db.rollback()
             raise
 
-    def eliminar_configuracion(self, dispositivo_id: UUID) -> None:
-        configuracion = self.configuracion_repositorio.buscar_por_dispositivo(
-            dispositivo_id,
+    def eliminar_configuracion(self, usuario_id: UUID) -> None:
+        configuracion = self.configuracion_repositorio.buscar_por_usuario(
+            usuario_id,
         )
 
         if not configuracion:
-            raise ValueError("La configuración no existe para este dispositivo.")
+            raise ValueError("La configuración no existe para este usuario.")
 
         try:
             self.configuracion_repositorio.eliminar(configuracion)

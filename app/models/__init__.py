@@ -5,5 +5,6 @@ from app.models.dispositivo import Dispositivo
 from app.models.estado_componente import EstadoComponente
 from app.models.rol import Rol
 from app.models.sesion import Sesion
+from app.models.sesion_dispositivo import SesionDispositivo
 from app.models.telemetria import Telemetria
 from app.models.usuario import Usuario

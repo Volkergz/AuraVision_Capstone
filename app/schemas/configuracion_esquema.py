@@ -18,7 +18,7 @@ class ConfiguracionCrear(ConfiguracionBase):
     Datos para crear una configuración.
     """
 
-    id_dispositivo_fk: UUID = Field(...)
+    id_usuario_fk: UUID = Field(...)
 
 
 class ConfiguracionActualizar(BaseModel):
@@ -36,7 +36,7 @@ class ConfiguracionRespuesta(ConfiguracionBase):
     """
 
     id_configuracion: int
-    id_dispositivo_fk: UUID
+    id_usuario_fk: UUID
     fecha_actualizacion: datetime
 
     model_config = ConfigDict(from_attributes=True)

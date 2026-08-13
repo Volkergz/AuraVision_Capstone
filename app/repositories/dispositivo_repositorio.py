@@ -4,6 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.dispositivo import Dispositivo
+from app.models.sesion_dispositivo import SesionDispositivo
 
 
 class DispositivoRepositorio:
@@ -31,8 +32,11 @@ class DispositivoRepositorio:
         self,
         usuario_id: UUID,
     ) -> list[Dispositivo]:
-        consulta = select(Dispositivo).where(
-            Dispositivo.id_usuario_fk == usuario_id,
+        consulta = (
+            select(Dispositivo)
+            .join(SesionDispositivo, SesionDispositivo.id_dispositivo_fk == Dispositivo.id_dispositivo)
+            .where(SesionDispositivo.id_usuario_fk == usuario_id)
+            .distinct()
         )
         return list(self.db.scalars(consulta).all())
 

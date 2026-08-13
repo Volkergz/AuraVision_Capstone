@@ -27,12 +27,12 @@ class ConfiguracionRepositorio:
         )
         return self.db.scalar(consulta)
 
-    def buscar_por_dispositivo(
+    def buscar_por_usuario(
         self,
-        dispositivo_id: UUID,
+        usuario_id: UUID,
     ) -> Configuracion | None:
         consulta = select(Configuracion).where(
-            Configuracion.id_dispositivo_fk == dispositivo_id,
+            Configuracion.id_usuario_fk == usuario_id,
         )
         return self.db.scalar(consulta)
 

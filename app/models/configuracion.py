@@ -3,14 +3,14 @@ import uuid
 from datetime import datetime, timezone
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 
 
 class Configuracion(Base):
     """
-    Representa la configuración activa de un dispositivo.
+    Representa la configuración activa de un usuario.
     """
 
     __tablename__ = "configuracion"
@@ -20,9 +20,9 @@ class Configuracion(Base):
         autoincrement=True,
     )
 
-    id_dispositivo_fk: Mapped[uuid.UUID] = mapped_column(
+    id_usuario_fk: Mapped[uuid.UUID] = mapped_column(
         ForeignKey(
-            "dispositivos.id_dispositivo",
+            "usuarios.id_usuario",
             ondelete="CASCADE",
         ),
         unique=True,
@@ -44,4 +44,8 @@ class Configuracion(Base):
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
         nullable=False,
+    )
+
+    usuario: Mapped["Usuario"] = relationship(
+        back_populates="configuraciones",
     )

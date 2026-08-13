@@ -11,6 +11,7 @@ from app.core.seguridad import (
     verificar_password,
     verificar_refresh_token,
 )
+from app.models.configuracion import Configuracion
 from app.models.sesion import Sesion
 from app.models.usuario import Usuario
 from app.repositories.sesion_repositorio import SesionRepositorio
@@ -73,6 +74,16 @@ class AutenticacionServicio:
 
         try:
             self.usuario_repositorio.crear(usuario)
+            self.db.flush()
+
+            configuracion_predeterminada = Configuracion(
+                id_usuario_fk=usuario.id_usuario,
+                volumen=100,
+                auto_conexion=False,
+            )
+
+            self.db.add(configuracion_predeterminada)
+            self.db.flush()
             self.db.commit()
 
             return UsuarioRespuesta.model_validate(usuario)

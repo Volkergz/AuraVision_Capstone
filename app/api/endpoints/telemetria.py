@@ -14,10 +14,10 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[TelemetriaRespuesta])
+""" @router.get("", response_model=list[TelemetriaRespuesta])
 def listar_telemetria(db: Session = Depends(obtener_sesion)):
     servicio = TelemetriaServicio(db)
-    return servicio.listar_telemetria()
+    return servicio.listar_telemetria() """
 
 
 @router.get("/{telemetria_id}", response_model=TelemetriaRespuesta)

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 
 from app.models.configuracion import Configuracion
 from app.models.rol import Rol
@@ -15,7 +15,7 @@ def crear_usuario(db_session, email="usuario@test.com"):
         id_rol_fk=1,
         nombre="Test",
         apellido="User",
-        fecha_nacimiento="1990-01-01",
+        fecha_nacimiento=date(1990, 1, 1),
         email=email,
         password_hash="hash-test",
         estado=True,

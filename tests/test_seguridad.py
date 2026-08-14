@@ -1,7 +1,10 @@
 import uuid
+from datetime import datetime, timedelta, timezone
 
+import jwt
 import pytest
 
+from app.core.configuracion import configuracion
 from app.core.seguridad import (
     crear_access_token,
     crear_refresh_token,
@@ -56,7 +59,19 @@ def test_refresh_token_hash_verifica_igualdad():
 
 
 def test_decofificar_access_token_falla_si_no_es_access():
-    refresh_token = crear_refresh_token(uuid.uuid4(), uuid.uuid4())
+    payload = {
+        "sub": str(uuid.uuid4()),
+        "sid": str(uuid.uuid4()),
+        "type": "refresh",
+        "iat": datetime.now(timezone.utc),
+        "exp": datetime.now(timezone.utc) + timedelta(days=1),
+        "jti": str(uuid.uuid4()),
+    }
+    token = jwt.encode(
+        payload,
+        configuracion.jwt_secret_key,
+        algorithm=configuracion.jwt_algorithm,
+    )
 
-    with pytest.raises(ValueError):
-        decodificar_access_token(refresh_token)
+    with pytest.raises(ValueError, match="El token no es un Access Token"):
+        decodificar_access_token(token)

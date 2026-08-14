@@ -1,7 +1,9 @@
-from datetime import date, timedelta
+import uuid
+from datetime import date
 
 import pytest
 
+from app.core.seguridad import generar_password_hash
 from app.models.configuracion import Configuracion
 from app.models.rol import Rol
 from app.models.usuario import Usuario
@@ -93,7 +95,7 @@ def test_autenticacion_servicio_login_rechaza_credenciales_invalidas(db_session)
         apellido="Ruiz",
         fecha_nacimiento=date(2000, 1, 1),
         email="lucia@demo.com",
-        password_hash="hash-falso",
+        password_hash=generar_password_hash("PasswordReal1!"),
         estado=True,
     )
     db_session.add(usuario)
@@ -119,9 +121,10 @@ def test_usuario_servicio_actualiza_y_obtiene_usuario(db_session):
 
 def test_usuario_servicio_lanza_error_si_usuario_no_existe(db_session):
     servicio = UsuarioServicio(db_session)
+    usuario_inexistente = uuid.uuid4()
 
     with pytest.raises(ValueError, match="El usuario no existe"):
-        servicio.obtener_usuario("00000000-0000-0000-0000-000000000001")
+        servicio.obtener_usuario(usuario_inexistente)
 
 
 def test_configuracion_servicio_crea_actualiza_y_elimina(db_session):

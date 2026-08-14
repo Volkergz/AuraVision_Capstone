@@ -1,4 +1,5 @@
 import uuid
+from datetime import date, datetime
 
 from app.models.configuracion import Configuracion
 from app.models.dispositivo import Dispositivo
@@ -30,7 +31,7 @@ def test_modelos_pueden_crearse_con_instancias_minimas():
         id_rol_fk=1,
         nombre="Marta",
         apellido="Luna",
-        fecha_nacimiento="2001-03-14",
+        fecha_nacimiento=date(2001, 3, 14),
         email="marta@demo.com",
         password_hash="hash",
         estado=True,
@@ -39,8 +40,8 @@ def test_modelos_pueden_crearse_con_instancias_minimas():
     sesion = Sesion(
         id_usuario_fk=uuid.uuid4(),
         token_hash="token-hash",
-        fecha_expiracion="2030-01-01T00:00:00+00:00",
-        ultimo_acceso="2025-01-01T00:00:00+00:00",
+        fecha_expiracion=datetime(2030, 1, 1, tzinfo=None),
+        ultimo_acceso=datetime(2025, 1, 1, tzinfo=None),
     )
     dispositivo = Dispositivo(
         nombre="Camara 1",

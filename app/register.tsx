@@ -18,6 +18,8 @@ import { styles_register } from '../constants/styles_register';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+
 export default function Register() {
   const insets = useSafeAreaInsets();
 
@@ -144,7 +146,7 @@ export default function Register() {
   };
 
   // Validar contraseña y terminar el registro
-  const handleRegister = () => {
+  const handleRegister = async () => {
     setError('');
 
     // Validación campos vacios
@@ -189,8 +191,42 @@ export default function Register() {
       return;
     }
 
-    console.log('Usuario registrado con éxito.');
-    router.replace('/home');
+    const [day, month, year] = birthdate.split('-');
+
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/v1/auth/register`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nombre: names.trim(),
+            apellido: surnames.trim(),
+            fecha_nacimiento: `${year}-${month}-${day}`,
+            email: email.trim(),
+            password: password,
+          }),
+        },
+      );
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        const message =
+          typeof data.detail === 'string'
+            ? data.detail
+            : 'No fue posible registrar el usuario.';
+
+        setError(message);
+        return;
+      }
+
+      router.replace('/login');
+    } catch {
+      setError('No fue posible conectar con el servidor.');
+    }
   };
 
   return (

@@ -15,6 +15,8 @@ import { styles_login } from '../constants/styles_login';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+
 export default function Login() {
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
@@ -24,7 +26,7 @@ export default function Login() {
   const [error, setError] = useState('');
 
   // Función para manejar el inicio de sesión
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setError('');
 
     // Validación para que los campos no esten vacios
@@ -84,9 +86,34 @@ export default function Login() {
       setError('La contraseña debe contener al menos un carácter especial.');
       return;
     }
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/v1/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: cleanEmail,
+            password: password,
+          }),
+        },
+      );
 
-    console.log('Inicio de sesión con éxito.');
-    router.replace('/home');
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setError(data.detail || 'Email o contraseña incorrectos.');
+        return;
+      }
+
+      router.replace('/home');
+    } catch {
+      setError('No fue posible conectar con el servidor.');
+    }
+
+
   };
 
   return (

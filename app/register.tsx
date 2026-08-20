@@ -18,6 +18,7 @@ import { styles_register } from '../constants/styles_register';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+// URL del backend
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
 export default function Register() {
@@ -193,6 +194,7 @@ export default function Register() {
 
     const [day, month, year] = birthdate.split('-');
 
+    // Envía al backend los datos validados para registrar un nuevo usuario
     try {
       const response = await fetch(
         `${BACKEND_URL}/api/v1/auth/register`,

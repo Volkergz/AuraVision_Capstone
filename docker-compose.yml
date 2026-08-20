@@ -1,5 +1,4 @@
 services:
-
   postgres:
     image: postgres:17
     container_name: auravision_postgres
@@ -16,31 +15,96 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  backend:
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
-    build: .
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
 
     container_name: auravision_backend
+    restart: unless-stopped
 
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      vision-service:
+        condition: service_started
 
     environment:
       DATABASE_URL: ${DATABASE_URL}
+
       APP_NOMBRE: ${APP_NOMBRE}
       APP_VERSION: ${APP_VERSION}
       APP_DEBUG: ${APP_DEBUG}
+
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       JWT_REFRESH_SECRET_KEY: ${JWT_REFRESH_SECRET_KEY}
       JWT_ALGORITHM: ${JWT_ALGORITHM}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
       REFRESH_TOKEN_EXPIRE_DAYS: ${REFRESH_TOKEN_EXPIRE_DAYS}
 
+      VISION_SERVICE_URL: ${VISION_SERVICE_URL}
+
     ports:
       - "8000:8000"
 
     volumes:
       - .:/app
+
+  vision-service:
+    build:
+      context: ./vision_service
+      dockerfile: Dockerfile
+
+    container_name: auravision_vision_service
+    restart: unless-stopped
+
+    environment:
+      DEVICE: cuda:0
+      CONFIDENCE_THRESHOLD: "0.60"
+
+      # Modelo para personas, objetos y obstáculos.
+      MODEL_PATH: /models/yoloe-11l-seg.pt
+
+      # Modelo para guía podotáctil.
+      #BLIND_PATH_MODEL_PATH: /models/yolo-seg.pt
+
+      # Modelo para semáforos.
+      # TRAFFIC_LIGHT_MODEL_PATH: /models/trafficlight.pt
+
+    volumes:
+      - ./model_weights:/models:ro
+
+    ports:
+      - "8001:8001"
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\""
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 180s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 
 volumes:
   postgres_data:

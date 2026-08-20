@@ -17,3 +17,6 @@ __pycache__/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# Modelos Visión Artificial
+model_weights/

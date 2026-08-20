@@ -15,6 +15,10 @@ import { styles_login } from '../constants/styles_login';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+// Importación de SecureStore para guardar tokens de sesión
+import * as SecureStore from 'expo-secure-store';
+
+// URL del backend
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
 export default function Login() {
@@ -86,6 +90,8 @@ export default function Login() {
       setError('La contraseña debe contener al menos un carácter especial.');
       return;
     }
+
+    // Enviar credenciales al backend y controlar posibles errores (conexión o autenticación)
     try {
       const response = await fetch(
         `${BACKEND_URL}/api/v1/auth/login`,
@@ -108,12 +114,25 @@ export default function Login() {
         return;
       }
 
+      // Verifica que el backend haya enviado el token de acceso
+      if (!data.access_token) {
+        setError('El servidor no entregó un token de acceso.');
+        return;
+      }
+
+      // Guarda los tokens de sesión 
+      await SecureStore.setItemAsync('access_token', data.access_token);
+
+      if (data.refresh_token) {
+        await SecureStore.setItemAsync('refresh_token', data.refresh_token);
+      }
+
+      // Redirige al home solo después de guardar la sesión
       router.replace('/home');
+
     } catch {
       setError('No fue posible conectar con el servidor.');
     }
-
-
   };
 
   return (

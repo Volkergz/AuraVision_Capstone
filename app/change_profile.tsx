@@ -1,5 +1,5 @@
 // Importación de hook para manejar estados
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { styles } from '../constants/styles';
 
 // Importación de componentes para interfaz
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //Importación navegación entre pantallas
@@ -17,8 +17,19 @@ import { router } from 'expo-router';
 // Importación para iconos
 import { Ionicons } from '@expo/vector-icons';
 
+// Importación de SecureStore para guardar tokens de sesión
+import * as SecureStore from 'expo-secure-store';
+
+// URL del backend
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+
 export default function ChangeProfile() {
     const insets = useSafeAreaInsets();
+
+    // Estados para comparar los datos originales con los modificados
+    const [originalNames, setOriginalNames] = useState('');
+    const [originalSurnames, setOriginalSurnames] = useState('');
+    const [loading, setLoading] = useState(true);
 
     // Estado para guardar el nuevo nombre
     const [names, setNames] = useState('');
@@ -29,14 +40,120 @@ export default function ChangeProfile() {
     // Estado para mostrar mensajes de error
     const [error, setError] = useState('');
 
-    // Función para validar y actualizar contraseña
+    // Carga los datos actuales del usuario autenticado
+    useEffect(() => {
+        const loadCurrentProfile = async () => {
+            const token = await SecureStore.getItemAsync('access_token');
+
+            if (!token) {
+                setError('No se encontró el token de sesión.');
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `${BACKEND_URL}/api/v1/auth/me`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    setError('No fue posible cargar los datos actuales.');
+                    return;
+                }
+
+                const profileData = data.user || data;
+                const currentNames = profileData.nombre || profileData.nombres || '';
+                const currentSurnames = profileData.apellido || profileData.apellidos || '';
+
+                setNames(currentNames);
+                setSurnames(currentSurnames);
+
+                setOriginalNames(currentNames);
+                setOriginalSurnames(currentSurnames);
+            } catch {
+                setError('No fue posible cargar los datos actuales.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadCurrentProfile();
+    }, []);
+
+    // Función para actualizar los datos del perfil
+    // Actualiza solamente los datos que fueron modificados
     const handleChangeProfile = () => {
         setError('');
 
-        console.log('Datos actualizados correctamente.');
-        router.replace('/profile');
-    };
+        const updatedData: { nombre?: string; apellido?: string } = {};
 
+        if (names.trim() !== originalNames) {
+            updatedData.nombre = names.trim();
+        }
+
+        if (surnames.trim() !== originalSurnames) {
+            updatedData.apellido = surnames.trim();
+        }
+
+        if (Object.keys(updatedData).length === 0) {
+            setError('No realizaste ningún cambio en el perfil.');
+            return;
+        }
+
+        Alert.alert(
+            'Confirmar modificación',
+            '¿Estás seguro de guardar los cambios realizados en tu perfil?',
+            [
+                {
+                    text: 'Cancelar',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Aceptar',
+                    onPress: async () => {
+                        const token = await SecureStore.getItemAsync('access_token');
+
+                        if (!token) {
+                            setError('No se encontró el token de sesión.');
+                            return;
+                        }
+
+                        try {
+                            const response = await fetch(
+                                `${BACKEND_URL}/api/v1/auth/me`,
+                                {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        Authorization: `Bearer ${token}`,
+                                    },
+                                    body: JSON.stringify(updatedData),
+                                },
+                            );
+
+                            const data = await response.json().catch(() => ({}));
+
+                            if (!response.ok) {
+                                setError(data.detail || 'No fue posible actualizar el perfil.');
+                                return;
+                            }
+
+                            router.replace('/profile');
+                        } catch {
+                            setError('No fue posible conectar con el servidor.');
+                        }
+                    },
+                },
+            ],
+        );
+    };
     return (
         // Fondo degrade 
         <LinearGradient
@@ -106,7 +223,10 @@ export default function ChangeProfile() {
                                 style={styles.input}
                                 value={names}
                                 onChangeText={setNames}
-                                secureTextEntry />
+                                placeholder="Ingresa tus nuevos nombres"
+                                placeholderTextColor="#666"
+                                editable={!loading}
+                            />
                         </LinearGradient>
 
                         {/* Campo apellidos */}
@@ -123,7 +243,10 @@ export default function ChangeProfile() {
                                 style={styles.input}
                                 value={surnames}
                                 onChangeText={setSurnames}
-                                secureTextEntry />
+                                placeholder="Ingresa tus nuevos apellidos"
+                                placeholderTextColor="#666"
+                                editable={!loading}
+                            />
                         </LinearGradient>
 
                         {/* Mensaje de error campos vacíos */}
@@ -137,7 +260,9 @@ export default function ChangeProfile() {
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={handleChangeProfile}
-                                activeOpacity={0.8}>
+                                activeOpacity={0.8}
+                                disabled={loading}>
+
                                 <Text style={styles.buttonText}>
                                     Aceptar
                                 </Text>

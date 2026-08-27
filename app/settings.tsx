@@ -1,5 +1,5 @@
 // Importación de hook para manejar estados
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Importación para fondo degradado
 import { LinearGradient } from 'expo-linear-gradient';
@@ -18,6 +18,12 @@ import { router } from 'expo-router';
 import { styles } from '../constants/styles';
 import { styles_settings } from '../constants/styles_settings';
 
+// Importación de SecureStore para guardar tokens de sesión
+import * as SecureStore from 'expo-secure-store';
+
+// URL del backend
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+
 export default function Settings() {
 
   //Interfaz
@@ -31,6 +37,12 @@ export default function Settings() {
 
   // Valor temporal volumen
   const [tempVolume, setTempVolume] = useState(40);
+
+  // Valor requerido por el backend para guardar la configuración
+  const [autoConnection, setAutoConnection] = useState(false);
+
+  // Estados para cargar y mostrar errores
+  const [error, setError] = useState('');
 
   // Modal vibración
   const [showVibrationModal, setShowVibrationModal] = useState(false);
@@ -61,6 +73,91 @@ export default function Settings() {
 
   // Dispositivo seleccionado para eliminar
   const [deviceToDelete, setDeviceToDelete] = useState('');
+
+  // Carga la configuración actual del usuario
+  useEffect(() => {
+    const loadConfiguration = async () => {
+      const token = await SecureStore.getItemAsync('access_token');
+
+      if (!token) {
+        setError('No se encontró el token de sesión.');
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${BACKEND_URL}/api/v1/configuracion/mi`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          setError('No fue posible cargar la configuración.');
+          return;
+        }
+
+        setVolume(data.volumen ?? 40);
+        setTempVolume(data.volumen ?? 40);
+        setAutoConnection(data.auto_conexion ?? false);
+      } catch {
+        setError('No fue posible conectar con el servidor.');
+      } finally {
+      }
+    };
+
+    loadConfiguration();
+  }, []);
+
+  // Guarda la configuración en el backend
+  const saveConfiguration = async (
+    newVolume: number,
+    newAutoConnection: boolean,
+  ) => {
+    const token = await SecureStore.getItemAsync('access_token');
+
+    if (!token) {
+      setError('No se encontró el token de sesión.');
+      return false;
+    }
+
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/v1/configuracion/mi`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            volumen: newVolume,
+            auto_conexion: newAutoConnection,
+          }),
+        },
+      );
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setError(data.detail || 'No fue posible guardar la configuración.');
+        return false;
+      }
+
+      setVolume(data.volumen ?? newVolume);
+      setTempVolume(data.volumen ?? newVolume);
+      setAutoConnection(data.auto_conexion ?? newAutoConnection);
+
+      return true;
+    } catch {
+      setError('No fue posible conectar con el servidor.');
+      return false;
+    }
+  };
 
   const handleSearchDevice = () => {
     setShowAddDeviceModal(false);
@@ -115,6 +212,10 @@ export default function Settings() {
         ]}
         showsVerticalScrollIndicator={false}>
 
+        {error !== '' && (
+          <Text style={styles.errorText}>{error}</Text>
+        )}
+
         {/* Card nivel de volumen */}
         <View style={[styles_settings.settingCard, styles.secondaryCard]}>
           <Text style={styles_settings.settingTitle}>Nivel de volumen</Text>
@@ -131,7 +232,7 @@ export default function Settings() {
           </TouchableOpacity>
         </View>
 
-        {/* Modal nivel de volumen (se almacena temporalmente) */}
+        {/* Modal nivel de volumen  */}
         <Modal
           visible={showVolumeModal}
           transparent
@@ -190,9 +291,12 @@ export default function Settings() {
               {/* Botón aceptar */}
               <TouchableOpacity
                 style={styles.modalButton}
-                onPress={() => {
-                  setVolume(tempVolume);
-                  setShowVolumeModal(false);
+                onPress={async () => {
+                  const saved = await saveConfiguration(tempVolume, autoConnection);
+
+                  if (saved) {
+                    setShowVolumeModal(false);
+                  }
                 }}>
                 <Text style={styles.buttonText}>Aceptar</Text>
               </TouchableOpacity>

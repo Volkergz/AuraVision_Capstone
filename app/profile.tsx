@@ -36,6 +36,10 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const [alertas, setAlertas] = useState<any[]>([]);
+  const [loadingAlertas, setLoadingAlertas] = useState(true);
+  const [hasDevices, setHasDevices] = useState<boolean | null>(null);
+
   const insets = useSafeAreaInsets();
 
   // Obtiene los datos del usuario usando el token guardado al iniciar sesión
@@ -46,6 +50,7 @@ export default function Profile() {
       if (!token) {
         setError('No se encontró el token de sesión.');
         setLoading(false);
+        setLoadingAlertas(false);
         return;
       }
 
@@ -82,8 +87,67 @@ export default function Profile() {
           apellido: profileData.apellido || profileData.apellidos || '',
           email: profileData.email || '',
         });
+
+        const userId = profileData.id_usuario || profileData.id;
+
+        if (!userId) {
+          setLoadingAlertas(false);
+          return;
+        }
+
+        const devicesResponse = await fetch(
+          `${BACKEND_URL}/api/v1/dispositivos/usuario/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const devicesData = await devicesResponse.json().catch(() => []);
+
+        const devices = Array.isArray(devicesData)
+          ? devicesData
+          : devicesData.dispositivos || [];
+
+        if (!devicesResponse.ok || devices.length === 0) {
+          setHasDevices(false);
+          setLoadingAlertas(false);
+          return;
+        }
+
+        setHasDevices(true);
+
+        const deviceId =
+          devices[0].id_dispositivo ||
+          devices[0].id_dispositivo_pk ||
+          devices[0].id;
+
+        if (!deviceId) {
+          setLoadingAlertas(false);
+          return;
+        }
+
+        const alertasResponse = await fetch(
+          `${BACKEND_URL}/api/v1/estado-componentes/dispositivo/${deviceId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const alertasData = await alertasResponse.json().catch(() => []);
+
+        if (alertasResponse.ok) {
+          setAlertas(Array.isArray(alertasData) ? alertasData : []);
+        }
+
+        setLoadingAlertas(false);
+
       } catch {
         setError('No fue posible cargar los datos del perfil.');
+        setLoadingAlertas(false);
       } finally {
         setLoading(false);
       }
@@ -187,16 +251,40 @@ export default function Profile() {
         {/* Card historial de alertas */}
         <View style={[styles_profile.profileCardT, styles.secondaryCard]}>
           <View style={styles_profile.profileContent}>
-            <Text style={styles_profile.profileTittle}>Historial de alertas</Text>
-            <Text style={styles_profile.profileLabel}>Tipo de Alerta</Text>
-            <Text style={styles_profile.profileValue}>Detección semáforo</Text>
-            <Text style={styles_profile.profileLabel}>Fecha y hora</Text>
-            <Text style={styles_profile.profileValue}>05-05-2026 12:38 horas</Text>
-            <TouchableOpacity style={styles_profile.moreButton}>
-              <Text style={styles_profile.moreButtonText}>
-                Ver más
+            <Text style={styles_profile.profileTittle}>
+              Estado de componentes
+            </Text>
+
+            {loadingAlertas ? (
+              <Text style={styles_profile.profileValue}>Cargando...</Text>
+            ) : hasDevices === false ? (
+              <Text style={styles_profile.profileValue}>
+                Aún no tienes dispositivos asociados.
               </Text>
-            </TouchableOpacity>
+            ) : alertas.length === 0 ? (
+              <Text style={styles_profile.profileValue}>
+                No hay estados de componentes registrados.
+              </Text>
+            ) : (
+              alertas.map((alerta) => (
+                <View key={String(alerta.id_estado)}>
+                  <Text style={styles_profile.profileLabel}>Estado</Text>
+                  <Text style={styles_profile.profileValue}>
+                    {alerta.estado}
+                  </Text>
+
+                  <Text style={styles_profile.profileLabel}>Mensaje</Text>
+                  <Text style={styles_profile.profileValue}>
+                    {alerta.mensaje}
+                  </Text>
+
+                  <Text style={styles_profile.profileLabel}>Fecha de revisión</Text>
+                  <Text style={styles_profile.profileValue}>
+                    {alerta.fecha_revision}
+                  </Text>
+                </View>
+              ))
+            )}
           </View>
         </View>
       </ScrollView>

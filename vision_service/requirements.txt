@@ -5,3 +5,4 @@ pillow
 ultralytics
 pydantic-settings
 opencv-python-headless
+websockets

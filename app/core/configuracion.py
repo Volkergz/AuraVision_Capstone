@@ -25,6 +25,8 @@ class Configuracion(BaseSettings):
 
     database_url: str
 
+    vision_service_url: str = "http://vision-service:8001"
+
     # ---------------------------------------------------------
     # JWT
     # ---------------------------------------------------------

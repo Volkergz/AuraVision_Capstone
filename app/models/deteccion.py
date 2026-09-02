@@ -28,6 +28,15 @@ class Deteccion(Base):
         nullable=False,
     )
 
+    id_usuario_fk: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey(
+            "usuarios.id_usuario",
+            ondelete="SET NULL",
+        ),
+        nullable=True,
+        index=True,
+    )
+
     tipo_objeto: Mapped[str] = mapped_column(
         String(100),
         nullable=False,

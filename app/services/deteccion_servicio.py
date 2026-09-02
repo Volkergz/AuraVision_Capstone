@@ -41,6 +41,7 @@ class DeteccionServicio:
     def crear_deteccion(self, datos: DeteccionCrear) -> DeteccionRespuesta:
         deteccion = Deteccion(
             id_dispositivo_fk=datos.id_dispositivo_fk,
+            id_usuario_fk=datos.id_usuario_fk,
             tipo_objeto=datos.tipo_objeto,
             descripcion=datos.descripcion,
             confianza=datos.confianza,

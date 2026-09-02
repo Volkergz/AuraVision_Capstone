@@ -11,7 +11,9 @@ from app.api.endpoints.estado_componentes import (
     router as estado_componentes_router,
 )
 from app.api.endpoints.roles import router as roles_router
+from app.api.endpoints.sesiones_dispositivo import router as sesiones_dispositivo_router
 from app.api.endpoints.telemetria import router as telemetria_router
+from app.api.websocket.dispositivo_vision_ws import dispositivo_vision
 from app.api.endpoints.usuarios import router as usuarios_router
 
 
@@ -40,3 +42,6 @@ router.include_router(configuracion_router)
 router.include_router(detecciones_router)
 router.include_router(estado_componentes_router)
 router.include_router(telemetria_router)
+router.include_router(sesiones_dispositivo_router)
+
+router.websocket("/ws/dispositivos/{dispositivo_id}/vision")(dispositivo_vision)

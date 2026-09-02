@@ -10,6 +10,7 @@ class DeteccionBase(BaseModel):
     """
 
     id_dispositivo_fk: UUID
+    id_usuario_fk: UUID | None = None
     tipo_objeto: str = Field(..., min_length=2, max_length=100)
     descripcion: str = Field(..., min_length=2, max_length=255)
     confianza: float = Field(..., ge=0, le=1)

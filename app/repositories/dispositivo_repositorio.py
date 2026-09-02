@@ -35,7 +35,10 @@ class DispositivoRepositorio:
         consulta = (
             select(Dispositivo)
             .join(SesionDispositivo, SesionDispositivo.id_dispositivo_fk == Dispositivo.id_dispositivo)
-            .where(SesionDispositivo.id_usuario_fk == usuario_id)
+            .where(
+                SesionDispositivo.id_usuario_fk == usuario_id,
+                SesionDispositivo.activa.is_(True),
+            )
             .distinct()
         )
         return list(self.db.scalars(consulta).all())

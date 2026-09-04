@@ -5,7 +5,7 @@ import os
 DEVICE = os.getenv("DEVICE", "cuda:0")
 
 CONFIDENCE_THRESHOLD = float(
-    os.getenv("CONFIDENCE_THRESHOLD", "0.85")
+    os.getenv("CONFIDENCE_THRESHOLD", "0.60")
 )
 
 MODEL_PATH = os.getenv(

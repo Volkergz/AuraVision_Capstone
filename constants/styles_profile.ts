@@ -142,4 +142,14 @@ export const styles_profile = StyleSheet.create({
     width: '100%',
   },
 
+  componentStatus: {
+    paddingVertical: 12,
+  },
+
+  componentDivider: {
+    borderTopWidth: 1,
+    borderTopColor: '#D6B4E8',
+    marginTop: 8,
+  },
+
 });

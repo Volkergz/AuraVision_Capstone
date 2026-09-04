@@ -44,15 +44,6 @@ export default function Settings() {
   // Estados para cargar y mostrar errores
   const [error, setError] = useState('');
 
-  // Modal vibración
-  const [showVibrationModal, setShowVibrationModal] = useState(false);
-
-  // Valor guardado vibración
-  const [vibration, setVibration] = useState(15);
-
-  // Valor temporalvibración
-  const [tempVibration, setTempVibration] = useState(15);
-
   // Modal añadir dispositivo
   const [showAddDeviceModal, setShowAddDeviceModal] = useState(false);
 
@@ -297,89 +288,6 @@ export default function Settings() {
                   if (saved) {
                     setShowVolumeModal(false);
                   }
-                }}>
-                <Text style={styles.buttonText}>Aceptar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-
-        {/* Card nivel de vibración */}
-        <View style={[styles_settings.settingCard, styles.secondaryCard]}>
-          <Text style={styles_settings.settingTitle}>Nivel de vibración</Text>
-          <Text style={styles_settings.settingNumber}>{vibration}</Text>
-
-          {/* Botón modificar */}
-          <TouchableOpacity style={styles_settings.settingButton} onPress={() => {
-            setTempVibration(vibration);
-            setShowVibrationModal(true);
-          }}>
-            <Text style={styles_settings.settingButtonText}>Modificar</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Modal nivel de vibración(se almacena temporalmente) */}
-        <Modal
-          visible={showVibrationModal}
-          transparent
-          animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles_settings.settingModalCard}>
-
-              {/* Botón cerrar modal */}
-              <TouchableOpacity
-                style={styles.closeModal}
-                onPress={() => setShowVibrationModal(false)}>
-                <Ionicons name="close" size={20} color="#000" />
-              </TouchableOpacity>
-
-              {/* Título modal */}
-              <Text style={styles_settings.settingModalTitle}>
-                Nivel de vibración
-              </Text>
-
-              {/* Configuración de vibración */}
-              <View style={styles_settings.settingCounterRow}>
-
-                {/* Botón bajar vibración */}
-                <TouchableOpacity
-                  accessible={true}
-                  accessibilityRole="button"
-                  accessibilityLabel="Bajar vibración"
-                  onPress={() => setTempVibration(tempVibration > 0 ? tempVibration - 1 : 0)}>
-                  <Text
-                    style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}
-                    accessible={false}>
-                    -
-                  </Text>
-                </TouchableOpacity>
-
-                <Text
-                  style={[styles_settings.settingButtons, styles_settings.settingCounterNumber]}
-                  accessibilityLabel={`Vibración actual ${tempVibration}`}>
-                  {tempVibration}
-                </Text>
-
-                {/* Botón subir vibración */}
-                <TouchableOpacity
-                  accessible={true}
-                  accessibilityRole="button"
-                  accessibilityLabel="Subir vibración"
-                  onPress={() => setTempVibration(tempVibration < 100 ? tempVibration + 1 : 100)}>
-                  <Text
-                    style={[styles_settings.settingButtons, styles_settings.settingCounterButton]}
-                    accessible={false}>
-                    +
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* Botón aceptar */}
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => {
-                  setVibration(tempVibration);
-                  setShowVibrationModal(false);
                 }}>
                 <Text style={styles.buttonText}>Aceptar</Text>
               </TouchableOpacity>

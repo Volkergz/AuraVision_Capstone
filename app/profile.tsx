@@ -106,11 +106,21 @@ export default function Profile() {
 
         const devicesData = await devicesResponse.json().catch(() => []);
 
+        console.log('Usuario consultado:', userId);
+        console.log('Estado dispositivos:', devicesResponse.status);
+        console.log('Respuesta dispositivos:', devicesData);
+
         const devices = Array.isArray(devicesData)
           ? devicesData
           : devicesData.dispositivos || [];
 
-        if (!devicesResponse.ok || devices.length === 0) {
+        if (!devicesResponse.ok) {
+          setError(`Error al cargar dispositivos: ${devicesResponse.status}`);
+          setLoadingAlertas(false);
+          return;
+        }
+
+        if (devices.length === 0) {
           setHasDevices(false);
           setLoadingAlertas(false);
           return;
@@ -118,12 +128,12 @@ export default function Profile() {
 
         setHasDevices(true);
 
-        const deviceId =
-          devices[0].id_dispositivo ||
-          devices[0].id_dispositivo_pk ||
-          devices[0].id;
+        const deviceId = devices[0].id_dispositivo;
+
+        console.log('ID de dispositivo usado:', deviceId);
 
         if (!deviceId) {
+          setError('El backend devolvió un dispositivo sin id_dispositivo.');
           setLoadingAlertas(false);
           return;
         }
@@ -139,10 +149,16 @@ export default function Profile() {
 
         const alertasData = await alertasResponse.json().catch(() => []);
 
-        if (alertasResponse.ok) {
-          setAlertas(Array.isArray(alertasData) ? alertasData : []);
+        console.log('Estado componentes:', alertasResponse.status);
+        console.log('Respuesta componentes:', alertasData);
+
+        if (!alertasResponse.ok) {
+          setError(`Error al cargar estados: ${alertasResponse.status}`);
+          setLoadingAlertas(false);
+          return;
         }
 
+        setAlertas(Array.isArray(alertasData) ? alertasData : []);
         setLoadingAlertas(false);
 
       } catch {
@@ -266,8 +282,14 @@ export default function Profile() {
                 No hay estados de componentes registrados.
               </Text>
             ) : (
-              alertas.map((alerta) => (
-                <View key={String(alerta.id_estado)}>
+              alertas.map((alerta, index) => (
+                <View
+                  key={String(alerta.id_estado)}
+                  style={[
+                    styles_profile.componentStatus,
+                    index > 0 && styles_profile.componentDivider,
+                  ]}
+                >
                   <Text style={styles_profile.profileLabel}>Estado</Text>
                   <Text style={styles_profile.profileValue}>
                     {alerta.estado}

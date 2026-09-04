@@ -49,4 +49,10 @@ def crear_deteccion(
     db: Session = Depends(obtener_sesion),
 ):
     servicio = DeteccionServicio(db)
-    return servicio.crear_deteccion(datos)
+    try:
+        return servicio.crear_deteccion(datos)
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(error),
+        )

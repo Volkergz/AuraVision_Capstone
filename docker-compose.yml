@@ -54,6 +54,7 @@ services:
       REFRESH_TOKEN_EXPIRE_DAYS: ${REFRESH_TOKEN_EXPIRE_DAYS}
 
       VISION_SERVICE_URL: ${VISION_SERVICE_URL}
+      CONFIDENCE_THRESHOLD: ${CONFIDENCE_THRESHOLD}
 
     ports:
       - "8000:8000"
@@ -71,7 +72,7 @@ services:
 
     environment:
       DEVICE: cuda:0
-      CONFIDENCE_THRESHOLD: "0.85"
+      CONFIDENCE_THRESHOLD: ${CONFIDENCE_THRESHOLD}
 
       # Modelo para personas, objetos y obstáculos.
       MODEL_PATH: /models/yoloe-11l-seg.pt

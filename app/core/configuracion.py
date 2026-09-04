@@ -27,6 +27,8 @@ class Configuracion(BaseSettings):
 
     vision_service_url: str = "http://vision-service:8001"
 
+    confidence_threshold: float = 0.85
+
     # ---------------------------------------------------------
     # JWT
     # ---------------------------------------------------------

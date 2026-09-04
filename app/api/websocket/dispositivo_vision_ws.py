@@ -17,9 +17,6 @@ from app.models.sesion_dispositivo import SesionDispositivo
 
 
 MAX_IMAGE_SIZE = 8 * 1024 * 1024
-MIN_CONFIDENCE = 0.85
-
-
 def _consultar_autorizacion(token: str, dispositivo_id: uuid.UUID):
     payload = decodificar_access_token(token)
     if not payload or payload.get("type") != "access":
@@ -82,7 +79,7 @@ def _guardar_detecciones(
     try:
         for deteccion in detecciones:
             confianza = float(deteccion.get("confidence", 0))
-            if confianza < MIN_CONFIDENCE:
+            if confianza < configuracion.confidence_threshold:
                 continue
 
             db.add(Deteccion(

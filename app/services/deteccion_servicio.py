@@ -2,6 +2,7 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
+from app.core.configuracion import configuracion
 from app.models.deteccion import Deteccion
 from app.repositories.deteccion_repositorio import DeteccionRepositorio
 from app.schemas.deteccion_esquema import DeteccionCrear, DeteccionRespuesta
@@ -39,6 +40,11 @@ class DeteccionServicio:
         ]
 
     def crear_deteccion(self, datos: DeteccionCrear) -> DeteccionRespuesta:
+        if datos.confianza < configuracion.confidence_threshold:
+            raise ValueError(
+                f"La confianza debe ser igual o mayor a {configuracion.confidence_threshold:.2f}."
+            )
+
         deteccion = Deteccion(
             id_dispositivo_fk=datos.id_dispositivo_fk,
             id_usuario_fk=datos.id_usuario_fk,

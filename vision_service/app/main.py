@@ -24,4 +24,4 @@ app = FastAPI(
 )
 
 app.include_router(health_router)
-app.include_router(predict_router, prefix="/api/")
+app.include_router(predict_router, prefix="/api")

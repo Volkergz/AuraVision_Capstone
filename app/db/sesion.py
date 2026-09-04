@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 
 from app.core.configuracion import configuracion
@@ -18,6 +18,18 @@ engine = create_engine(
     configuracion.database_url,
     pool_pre_ping=True,
 )
+
+
+@event.listens_for(engine, "connect")
+def configurar_zona_horaria_chile(dbapi_connection, connection_record):
+    if engine.dialect.name != "postgresql":
+        return
+
+    cursor = dbapi_connection.cursor()
+    try:
+        cursor.execute("SET TIME ZONE 'America/Santiago'")
+    finally:
+        cursor.close()
 
 
 # ---------------------------------------------------------

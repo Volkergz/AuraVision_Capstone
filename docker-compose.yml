@@ -1,30 +1,30 @@
 services:
-  postgres:
-    image: postgres:17
-    container_name: auravision_postgres
-    restart: unless-stopped
-
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-
-    ports:
-      - "5432:5432"
-
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+# postgres:
+#   image: postgres:17
+#    container_name: auravision_postgres
+#    restart: unless-stopped
+#
+#    environment:
+#      POSTGRES_DB: ${POSTGRES_DB}
+#      POSTGRES_USER: ${POSTGRES_USER}
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#
+#    ports:
+#     - "5432:5432"
+#
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#
+#    healthcheck:
+#      test:
+#        [
+#          "CMD-SHELL",
+#          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+#        ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 10s
 
   backend:
     build:
@@ -35,8 +35,8 @@ services:
     restart: unless-stopped
 
     depends_on:
-      postgres:
-        condition: service_healthy
+      #postgres:
+      #  condition: service_healthy
       vision-service:
         condition: service_started
 
@@ -106,5 +106,5 @@ services:
               count: 1
               capabilities: [gpu]
 
-volumes:
-  postgres_data:
+#volumes:
+#  postgres_data:

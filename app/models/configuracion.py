@@ -1,11 +1,12 @@
 import uuid
 
-from datetime import datetime, timezone
+from datetime import datetime
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
+from app.core.fecha import ahora_chile
 
 
 class Configuracion(Base):
@@ -42,7 +43,7 @@ class Configuracion(Base):
 
     fecha_actualizacion: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=ahora_chile,
         nullable=False,
     )
 

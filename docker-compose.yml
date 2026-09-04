@@ -71,7 +71,7 @@ services:
 
     environment:
       DEVICE: cuda:0
-      CONFIDENCE_THRESHOLD: "0.60"
+      CONFIDENCE_THRESHOLD: "0.85"
 
       # Modelo para personas, objetos y obstáculos.
       MODEL_PATH: /models/yoloe-11l-seg.pt

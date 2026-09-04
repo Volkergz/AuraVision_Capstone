@@ -3,12 +3,12 @@ import json
 import urllib.error
 import urllib.request
 import uuid
-from datetime import datetime, timezone
 
 from fastapi import WebSocket, WebSocketDisconnect
 from sqlalchemy import select
 
 from app.core.configuracion import configuracion
+from app.core.fecha import ahora_chile
 from app.core.seguridad import decodificar_access_token
 from app.db.sesion import SessionLocal
 from app.models.deteccion import Deteccion
@@ -17,6 +17,7 @@ from app.models.sesion_dispositivo import SesionDispositivo
 
 
 MAX_IMAGE_SIZE = 8 * 1024 * 1024
+MIN_CONFIDENCE = 0.85
 
 
 def _consultar_autorizacion(token: str, dispositivo_id: uuid.UUID):
@@ -44,7 +45,7 @@ def _consultar_autorizacion(token: str, dispositivo_id: uuid.UUID):
         ))
         if not sesion or not vinculacion:
             return None
-        if sesion.fecha_expiracion <= datetime.now(timezone.utc):
+        if sesion.fecha_expiracion <= ahora_chile():
             return None
         return usuario_id
     finally:
@@ -80,12 +81,16 @@ def _guardar_detecciones(
     db = SessionLocal()
     try:
         for deteccion in detecciones:
+            confianza = float(deteccion.get("confidence", 0))
+            if confianza < MIN_CONFIDENCE:
+                continue
+
             db.add(Deteccion(
                 id_usuario_fk=usuario_id,
                 id_dispositivo_fk=dispositivo_id,
                 tipo_objeto=str(deteccion.get("label", "desconocido")),
                 descripcion=f"Detectado: {deteccion.get('label', 'desconocido')}",
-                confianza=float(deteccion.get("confidence", 0)),
+                confianza=confianza,
             ))
         db.commit()
     except Exception:

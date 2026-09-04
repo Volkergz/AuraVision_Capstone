@@ -3,6 +3,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 from app.core.configuracion import configuracion
+from app.core.fecha import ahora_chile
 from app.core.seguridad import decodificar_access_token
 from app.db.sesion import obtener_sesion
 from app.models.usuario import Usuario
@@ -132,9 +133,7 @@ def obtener_usuario_actual(
     # 7. COMPROBAR EXPIRACIÓN DE SESIÓN
     # =====================================================
 
-    from datetime import datetime, timezone
-
-    ahora = datetime.now(timezone.utc)
+    ahora = ahora_chile()
 
     if sesion.fecha_expiracion <= ahora:
 

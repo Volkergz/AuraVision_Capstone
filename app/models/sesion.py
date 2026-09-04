@@ -1,11 +1,12 @@
 import uuid
 
-from datetime import datetime, timezone
+from datetime import datetime
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
+from app.core.fecha import ahora_chile
 
 
 class Sesion(Base):
@@ -68,7 +69,7 @@ class Sesion(Base):
 
     fecha_creacion: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=ahora_chile,
         nullable=False,
     )
 
@@ -91,6 +92,6 @@ class Sesion(Base):
 
     ultimo_acceso: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=ahora_chile,
         nullable=False,
     )

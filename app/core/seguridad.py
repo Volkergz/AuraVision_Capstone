@@ -1,12 +1,13 @@
 import uuid
 
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
 import jwt
 
 from pwdlib import PasswordHash
 
 from app.core.configuracion import configuracion
+from app.core.fecha import ahora_chile
 
 
 # =========================================================
@@ -111,7 +112,7 @@ def crear_access_token(
         jti  -> identificador único del token
     """
 
-    ahora = datetime.now(timezone.utc)
+    ahora = ahora_chile()
 
     expiracion = ahora + timedelta(
         minutes=configuracion.access_token_expire_minutes
@@ -147,7 +148,7 @@ def crear_refresh_token(
     nuevos tokens de acceso.
     """
 
-    ahora = datetime.now(timezone.utc)
+    ahora = ahora_chile()
 
     expiracion = ahora + timedelta(
         days=configuracion.refresh_token_expire_days

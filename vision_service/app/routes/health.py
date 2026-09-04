@@ -5,7 +5,7 @@ router = APIRouter()
 
 
 # Endpoint para saber si el servicio está activo, cuda disponible y si el modelo está cargado
-@router.get("/")
+@router.get("/health")
 async def health(request: Request):
     model_loaded = getattr(request.app.state, "model", None) is not None
 

@@ -1,12 +1,11 @@
 import uuid
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import DateTime, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
-from app.core.fecha import ahora_chile
 
 
 class Deteccion(Base):
@@ -55,6 +54,6 @@ class Deteccion(Base):
 
     fecha_deteccion: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=ahora_chile,
+        default=lambda: datetime.now(timezone.utc),
         nullable=False,
     )

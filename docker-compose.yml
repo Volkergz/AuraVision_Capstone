@@ -42,7 +42,6 @@ services:
 
     environment:
       DATABASE_URL: ${DATABASE_URL}
-      TZ: America/Santiago
 
       APP_NOMBRE: ${APP_NOMBRE}
       APP_VERSION: ${APP_VERSION}
@@ -71,7 +70,6 @@ services:
     restart: unless-stopped
 
     environment:
-      TZ: America/Santiago
       DEVICE: cuda:0
       CONFIDENCE_THRESHOLD: "0.85"
 

@@ -1,9 +1,8 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy.orm import Session
 
 from app.core.configuracion import configuracion
-from app.core.fecha import ahora_chile
 from app.core.seguridad import (
     crear_access_token,
     crear_refresh_token,
@@ -128,7 +127,7 @@ class AutenticacionServicio:
             )
 
         try:
-            ahora = ahora_chile()
+            ahora = datetime.now(timezone.utc)
             fecha_expiracion = ahora + timedelta(
                 days=configuracion.refresh_token_expire_days,
             )
@@ -214,7 +213,7 @@ class AutenticacionServicio:
 
             self.sesion_repositorio.revocar(sesion_encontrada)
 
-            ahora = ahora_chile()
+            ahora = datetime.now(timezone.utc)
             fecha_expiracion = ahora + timedelta(
                 days=configuracion.refresh_token_expire_days,
             )

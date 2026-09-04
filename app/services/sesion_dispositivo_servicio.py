@@ -1,8 +1,8 @@
+from datetime import datetime, timezone
 from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from app.core.fecha import ahora_chile
 from app.models.sesion_dispositivo import SesionDispositivo
 from app.repositories.dispositivo_repositorio import DispositivoRepositorio
 from app.repositories.sesion_dispositivo_repositorio import SesionDispositivoRepositorio
@@ -59,7 +59,7 @@ class SesionDispositivoServicio:
             raise ValueError("El usuario no tiene un dispositivo vinculado.")
 
         sesion.activa = False
-        sesion.fecha_fin = ahora_chile()
+        sesion.fecha_fin = datetime.now(timezone.utc)
 
         try:
             self.db.commit()

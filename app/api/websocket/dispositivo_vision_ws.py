@@ -3,12 +3,12 @@ import json
 import urllib.error
 import urllib.request
 import uuid
+from datetime import datetime, timezone
 
 from fastapi import WebSocket, WebSocketDisconnect
 from sqlalchemy import select
 
 from app.core.configuracion import configuracion
-from app.core.fecha import ahora_chile
 from app.core.seguridad import decodificar_access_token
 from app.db.sesion import SessionLocal
 from app.models.deteccion import Deteccion
@@ -45,7 +45,7 @@ def _consultar_autorizacion(token: str, dispositivo_id: uuid.UUID):
         ))
         if not sesion or not vinculacion:
             return None
-        if sesion.fecha_expiracion <= ahora_chile():
+        if sesion.fecha_expiracion <= datetime.now(timezone.utc):
             return None
         return usuario_id
     finally:

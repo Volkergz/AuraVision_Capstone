@@ -1,12 +1,11 @@
 import uuid
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 from sqlalchemy import Boolean, Date, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
-from app.core.fecha import ahora_chile
 
 
 class Usuario(Base):
@@ -73,7 +72,7 @@ class Usuario(Base):
     # ---------------------------------------------------------
     fecha_creacion: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=ahora_chile,
+        default=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
 

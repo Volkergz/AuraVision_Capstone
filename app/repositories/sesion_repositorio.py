@@ -1,9 +1,9 @@
+from datetime import datetime, timezone
 from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.core.fecha import ahora_chile
 from app.models.sesion import Sesion
 
 
@@ -71,7 +71,7 @@ class SesionRepositorio:
         - no expiradas
         """
 
-        ahora = ahora_chile()
+        ahora = datetime.now(timezone.utc)
 
         consulta = (
             select(Sesion)
@@ -121,7 +121,7 @@ class SesionRepositorio:
         una sesión.
         """
 
-        sesion.ultimo_acceso = ahora_chile()
+        sesion.ultimo_acceso = datetime.now(timezone.utc)
 
         self.db.flush()
 

@@ -21,6 +21,17 @@ def _relative_position(
     return "frente"
 
 
+def _image_position(object_center_x: float, image_width: int) -> str:
+    tolerance = image_width * 0.1
+    difference = object_center_x - (image_width / 2)
+
+    if difference < -tolerance:
+        return "frente_izquierda"
+    if difference > tolerance:
+        return "frente_derecha"
+    return "frente"
+
+
 def predict_image(model, image_bytes: bytes) -> dict:
     started_at = time.perf_counter()
 
@@ -75,7 +86,14 @@ def predict_image(model, image_bytes: bytes) -> dict:
 
         for detection in detections:
             if detection["label"] == "person":
-                detection["relative_position"] = "frente"
+                detection_bbox = detection["bbox"]
+                detection_center_x = (
+                    detection_bbox["x1"] + detection_bbox["x2"]
+                ) / 2
+                detection["relative_position"] = _image_position(
+                    object_center_x=detection_center_x,
+                    image_width=image_width,
+                )
                 continue
 
             bbox = detection["bbox"]

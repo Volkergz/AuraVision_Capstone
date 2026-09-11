@@ -86,7 +86,10 @@ def _guardar_detecciones(
                 id_usuario_fk=usuario_id,
                 id_dispositivo_fk=dispositivo_id,
                 tipo_objeto=str(deteccion.get("label", "desconocido")),
-                descripcion=f"Detectado: {deteccion.get('label', 'desconocido')}",
+                descripcion=(
+                    f"Detectado: {deteccion.get('label', 'desconocido')} - "
+                    f"Posición: {deteccion.get('relative_position') or 'no determinada'}"
+                ),
                 confianza=confianza,
             ))
         db.commit()

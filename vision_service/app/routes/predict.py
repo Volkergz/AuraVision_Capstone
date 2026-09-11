@@ -9,6 +9,7 @@ from fastapi import (
 )
 
 from app.predictor import predict_image
+from app.schemas import PredictionResponse
 
 router = APIRouter()
 
@@ -17,7 +18,7 @@ router = APIRouter()
 
 # Endpoint interno que recibe el JPEG desde la API principal:
 
-@router.post("/predict")
+@router.post("/predict", response_model=PredictionResponse)
 async def predict(
     request: Request,
     file: UploadFile = File(...),

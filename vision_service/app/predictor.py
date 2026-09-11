@@ -6,6 +6,21 @@ from PIL import Image
 from app.config import CONFIDENCE_THRESHOLD, DEVICE
 
 
+def _relative_position(
+    object_center_x: float,
+    person_center_x: float,
+    image_width: int,
+) -> str:
+    tolerance = image_width * 0.1
+    difference = object_center_x - person_center_x
+
+    if difference < -tolerance:
+        return "frente_izquierda"
+    if difference > tolerance:
+        return "frente_derecha"
+    return "frente"
+
+
 def predict_image(model, image_bytes: bytes) -> dict:
     started_at = time.perf_counter()
 
@@ -43,7 +58,32 @@ def predict_image(model, image_bytes: bytes) -> dict:
                         "x2": round(x2, 2),
                         "y2": round(y2, 2),
                     },
+                    "relative_position": None,
                 }
+            )
+
+    people = [
+        detection
+        for detection in detections
+        if detection["label"] == "person"
+    ]
+
+    if people:
+        person = max(people, key=lambda detection: detection["confidence"])
+        person_bbox = person["bbox"]
+        person_center_x = (person_bbox["x1"] + person_bbox["x2"]) / 2
+
+        for detection in detections:
+            if detection["label"] == "person":
+                detection["relative_position"] = "frente"
+                continue
+
+            bbox = detection["bbox"]
+            object_center_x = (bbox["x1"] + bbox["x2"]) / 2
+            detection["relative_position"] = _relative_position(
+                object_center_x=object_center_x,
+                person_center_x=person_center_x,
+                image_width=image_width,
             )
 
     return {

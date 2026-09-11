@@ -16,6 +16,7 @@ class Detection(BaseModel):
     label: str
     confidence: float
     bbox: BoundingBox
+    relative_position: str | None = None
 
 
 class PredictionResponse(BaseModel):

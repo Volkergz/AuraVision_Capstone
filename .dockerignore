@@ -1,0 +1,7 @@
+venv/
+vision_service/venv/
+__pycache__/
+.pytest_cache/
+.git/
+.env
+model_weights/
